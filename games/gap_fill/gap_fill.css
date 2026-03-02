@@ -1,13 +1,13 @@
 /* games/gap_fill/gap_fill.css */
 
 .gf-card {
-  position: relative; /* für Ghost-Chip Positionierung */
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 10px;
   max-width: 960px;
   width: 100%;
-  margin: 24px auto 0;
+  margin: 0 auto;
 }
 
 .gf-card--auto-advance .game-footer-row {
@@ -32,12 +32,25 @@
   opacity: 0.7;
 }
 
+/* Question-Box: Satz + Hint */
+.gf-question {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+  background: linear-gradient(135deg, #f7f7fb, #eef0f7);
+  border: 1px solid rgba(28, 35, 66, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 24px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
 /* Satz + Lücke */
 .gf-sentence {
-  margin: 24px 0 8px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  color: #222;
+  color: #1c2342;
   line-height: 1.8;
   text-align: center;
 }
@@ -57,19 +70,20 @@
   font-weight: 700;
 }
 
-/* Hinweistext */
+/* Hinweis innerhalb der Question-Box */
 .gf-hint {
-  margin-top: 6px;
-  font-size: 0.9rem;
-  color: #6b6f76;
-  text-align: center;
+  font-size: 0.82rem;
+  color: rgba(28, 35, 66, 0.45);
+  font-style: italic;
+  border-top: 1px solid rgba(28, 35, 66, 0.07);
+  padding-top: 6px;
 }
 
-/* Antwort-Optionen wie beim Single Choice untereinander */
+/* Antwort-Optionen */
 .gf-options {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 14px;
   margin-top: 12px;
 }
 
@@ -92,9 +106,17 @@
     transform 0.06s ease;
 }
 
-.gf-option:hover {
+.gf-option:hover:not(.gf-option--disabled) {
   transform: translateY(-1px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* Hover-Transform auf Touch deaktivieren */
+@media (hover: none) {
+  .gf-option:hover:not(.gf-option--disabled) {
+    transform: none;
+    box-shadow: none;
+  }
 }
 
 /* gewählte Option */
@@ -142,7 +164,6 @@
   border-bottom-width: 2px;
 }
 
-/* KORREKT: Pop + Firework */
 .gf-gap--correct {
   color: #2e7d32;
   border-color: #2e7d32;
@@ -165,7 +186,6 @@
   animation: gf-gap-firework 0.6s ease-out forwards;
 }
 
-/* FALSCH: rotes Blinken */
 .gf-gap--wrong {
   color: #c62828;
   border-color: #c62828;
@@ -177,42 +197,21 @@
    ====================================== */
 
 @keyframes gf-gap-pop {
-  0% {
-    transform: scale(0.9);
-  }
-  40% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
+  0%   { transform: scale(0.9); }
+  40%  { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 @keyframes gf-gap-firework {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(0);
-  }
-  60% {
-    opacity: 0.9;
-    transform: translate(-50%, -50%) scale(1.6);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(2.0);
-  }
+  0%   { opacity: 1; transform: translate(-50%, -50%) scale(0); }
+  60%  { opacity: 0.9; transform: translate(-50%, -50%) scale(1.6); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(2.0); }
 }
 
 @keyframes gf-gap-blink {
-  0% {
-    background: transparent;
-  }
-  50% {
-    background: rgba(198, 40, 40, 0.12);
-  }
-  100% {
-    background: transparent;
-  }
+  0%   { background: transparent; }
+  50%  { background: rgba(198, 40, 40, 0.12); }
+  100% { background: transparent; }
 }
 
 /* ======================================
@@ -222,17 +221,23 @@
 @media (max-width: 600px) {
   .gf-card {
     gap: 8px;
-    margin: 12px auto 0;
+    padding-top: 28px;
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 44px);
+    min-height: 100%;
   }
 
   .gf-meta-row {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .gf-question {
+    padding: 14px 12px;
+    margin-top: 20px;
   }
 
   .gf-sentence {
     font-size: 1rem;
-    margin: 12px 0 6px;
-    line-height: 1.55;
+    line-height: 1.6;
   }
 
   .gf-gap {
@@ -240,11 +245,22 @@
   }
 
   .gf-options {
-    gap: 10px;
+    gap: 14px;
+    margin-top: auto;
   }
 
   .gf-option {
-    padding: 10px 12px;
-    font-size: 0.9rem;
+    font-size: 17px;
+    padding: 14px 12px;
+  }
+
+  .gf-card .game-footer-row {
+    margin-top: 0;
+    padding-bottom: 0;
+  }
+
+  .gf-card .game-feedback {
+    min-height: 0;
+    margin-bottom: 0;
   }
 }

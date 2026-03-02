@@ -1,10 +1,11 @@
 /* games/match_pairs/match_pairs.css */
 
+/* Spielkarte */
 .mp-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   max-width: 960px;
   width: 100%;
   margin: 0 auto;
@@ -16,11 +17,7 @@
   overflow: hidden;
 }
 
-.mp-card--auto-advance .game-footer-row {
-  display: none;
-}
-
-/* dezentes „Schimmer“-Overlay */
+/* dezentes Schimmer-Overlay */
 .mp-card::before {
   content: "";
   position: absolute;
@@ -30,7 +27,7 @@
   pointer-events: none;
 }
 
-/* Meta-Infos oben */
+/* Meta-Infos */
 .mp-meta-row {
   position: relative;
   display: flex;
@@ -52,342 +49,347 @@
   opacity: 0.8;
 }
 
-/* Aufgaben-Text */
-.mp-prompt {
-  position: relative;
-  margin-top: 2px;
-  font-size: 1.2rem;
-  color: #4a4d57;
-  z-index: 1;
-}
+/* ==============================
+   Question-Box: echte Frage
+   ============================== */
 
-/* Board mit zwei Spalten: links Begriffe, rechts Erklärungen */
-.mp-board {
+.mp-question {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 25px;
-  margin-top: 4px;
   z-index: 1;
-}
-
-/* Spalten */
-.mp-column {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
+  text-align: center;
+  background: linear-gradient(135deg, #f7f7fb, #eef0f7);
+  border: 1px solid rgba(28, 35, 66, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
-/* Slide-in Animations für links/rechts */
-.mp-column:first-child {
-  animation: mp-slide-in-left 0.45s ease-out;
-}
-
-.mp-column:last-child {
-  animation: mp-slide-in-right 0.45s ease-out;
-}
-
-.mp-column-title {
-  font-size: 1rem;
+.mp-question-text {
+  font-size: 1.05rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #888c99;
-  margin-bottom: 0;
-}
-
-/* Items in den Spalten */
-.mp-item {
-  position: relative;
-  display: flex;
-  align-items: center;
-  text-align: left;
-  padding: 16px 18px;
-  border-radius: 14px;
-  border: 1px solid #d6d8e0;
-  background: #f7f7fb;
-  font-size: 1rem;
+  color: #1c2342;
   line-height: 1.4;
-  cursor: pointer;
-  word-break: normal;
-  overflow-wrap: normal;
-  hyphens: auto;
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.2s ease,
-    transform 0.12s ease,
-    color 0.18s ease;
-  min-height: 34px;
 }
 
-/* Hover-Effekt */
-.mp-item:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
+.mp-hint {
+  font-size: 0.82rem;
+  color: rgba(28, 35, 66, 0.45);
+  font-style: italic;
+  border-top: 1px solid rgba(28, 35, 66, 0.07);
+  padding-top: 6px;
 }
 
-/* Links ein kleiner Icon-Kreis, um Links/Rechts optisch zu unterscheiden */
-.mp-item-left::before,
-.mp-item-right::before {
+/* ==============================
+   Begriff-Karte (fliegt ein/aus)
+   ============================== */
+
+.mp-term-section {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 22px;
+}
+
+.mp-term-progress {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(28, 35, 66, 0.4);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Dunkle Begriff-Karte */
+.mp-term-box {
+  width: 100%;
+  text-align: center;
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: radial-gradient(circle at top left, #2b355e 0, #1c2342 45%, #151a30 100%);
+  color: #f9fafb;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.4;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 8px 24px rgba(15, 23, 42, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Golddot oben rechts */
+.mp-term-box::after {
   content: "";
   position: absolute;
-  left: 10px;
-  top: 50%;
+  top: 10px;
+  right: 14px;
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  transform: translateY(-50%);
-}
-
-.mp-item-left {
-  padding-left: 22px;
-}
-
-.mp-item-right {
-  padding-left: 22px;
-}
-
-/* --- Deutlicher Unterschied: linke vs. rechte Spalte --- */
-
-/* Linke Seite: dunkler, „Tag“-Style */
-.mp-item-left {
-  background: radial-gradient(circle at top left, #2b355e 0, #1c2342 45%, #151a30 100%);
-  color: #f9fafb;
-  border-color: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.45);
-}
-
-.mp-item-left::before {
   background: #e8bd4f;
+  opacity: 0.8;
 }
 
-/* dezentes Glimmen auf Hover links */
-.mp-item-left:hover {
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.55);
+/* Fly-in: von unten mit Bounce */
+.mp-term-box--in {
+  animation: mp-term-fly-in 0.55s cubic-bezier(0.34, 1.45, 0.64, 1) forwards;
 }
 
-/* Rechte Seite: hell, „Notizkarte“ mit Goldrahmen */
-.mp-item-right {
-  background: #fffaf0;
-  border-color: rgba(232, 189, 79, 0.8);
-  box-shadow: 0 4px 12px rgba(232, 189, 79, 0.32);
+/* Fly-out: nach oben mit kurzem Rückzieher */
+.mp-term-box--out {
+  animation: mp-term-fly-out 0.32s cubic-bezier(0.55, 0, 1, 0.45) forwards;
 }
 
-.mp-item-right::before {
-  background: #1c2342;
+@keyframes mp-term-fly-in {
+  0%   { opacity: 0; transform: translateY(52px) scale(0.86) rotate(-2deg); }
+  55%  { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
 }
 
-/* leichtes Wackeln / float beim Hovern rechts */
-.mp-item-right:hover {
-  animation: mp-hover-float 0.6s ease-out;
+@keyframes mp-term-fly-out {
+  0%   { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+  25%  { transform: translateY(5px) scale(1.03) rotate(0.5deg); }
+  100% { opacity: 0; transform: translateY(-36px) scale(0.88) rotate(1.5deg); }
 }
 
 /* ==============================
-   AUSGEWÄHLTE ELEMENTE – deutlich sichtbarer Zustand
+   Options (Matching-Phase)
    ============================== */
 
-.mp-item--selected {
-  border-color: #e8bd4f;
-  box-shadow:
-    0 0 0 2px rgba(232, 189, 79, 0.7),
-    0 10px 24px rgba(15, 23, 42, 0.5);
-  transform: translateY(-2px) scale(1.02);
-  animation: mp-selected-pulse 0.55s ease-out;
+.mp-options-wrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 10px;
 }
 
-/* großer Haken für ALLE ausgewählten Karten */
-.mp-item--selected::after {
-  content: "✓";
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
+.mp-option {
+  width: 100%;
+  text-align: center;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(232, 189, 79, 0.6);
+  background: #fffaf0;
+  color: #1c2342;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.06s ease,
+    opacity 0.2s ease;
+  box-shadow: 0 3px 10px rgba(232, 189, 79, 0.2);
+}
+
+.mp-option:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(232, 189, 79, 0.35);
+}
+
+.mp-option:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.mp-option--used {
+  opacity: 0.28;
+  cursor: default;
+  border-color: rgba(28, 35, 66, 0.1);
+  background: #f7f7fb;
+  box-shadow: none;
+}
+
+@media (hover: none) {
+  .mp-option:hover:not(:disabled) {
+    transform: none;
+    box-shadow: 0 3px 10px rgba(232, 189, 79, 0.2);
+  }
+}
+
+/* ==============================
+   Review-Phase: Step-by-Step
+   ============================== */
+
+.mp-review-wrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.mp-review-pair {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+
+  /* Step-by-step: startet unsichtbar */
+  opacity: 0;
+  animation: mp-review-pair-in 0.45s ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+.mp-review-pair--correct {
+  background: linear-gradient(135deg, #e8f5e9, #f7fff9);
+  border-color: #2e7d32;
+}
+
+.mp-review-pair--wrong {
+  background: linear-gradient(135deg, #ffebee, #fff5f5);
+  border-color: #c62828;
+}
+
+.mp-review-term {
+  font-weight: 700;
   font-size: 0.9rem;
-  opacity: 0.95;
-}
-
-/* Linke Karten: im ausgewählten Zustand hell/gold → maximaler Kontrast */
-.mp-item-left.mp-item--selected {
-  background: linear-gradient(135deg, #fff9e6, #fff3c4);
   color: #1c2342;
 }
 
-/* Rechte Karten: etwas intensiver, bleiben aber im hellen Look */
-.mp-item-right.mp-item--selected {
-  background: linear-gradient(135deg, #fff9e6, #ffe9b5);
+/* Icon stampft nach kurzer Verzögerung rein */
+.mp-review-icon {
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  opacity: 0;
+  animation: mp-icon-stamp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: calc(var(--delay, 0s) + 0.3s);
 }
 
-/* ==============================
-   MATCHED / FALSCH / DISABLED
-   ============================== */
+.mp-review-pair--correct .mp-review-icon { color: #2e7d32; }
+.mp-review-pair--wrong  .mp-review-icon { color: #c62828; }
 
-/* Bereits korrekt gematchte Paare */
-.mp-item--matched {
-  cursor: default;
-  border-color: #2e7d32;
-  background: linear-gradient(135deg, #e8f5e9, #f7fff9);
-  color: #1b3f21;
-  box-shadow: 0 3px 12px rgba(46, 125, 50, 0.25);
+.mp-review-answer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: right;
 }
 
-/* Mini-„Pop“, wenn ein Paar fertig ist */
-.mp-item--matched.mp-item--matched-pop {
-  animation: mp-item-pop 0.3s ease-out;
+.mp-review-chosen {
+  font-size: 0.88rem;
+  color: #1c2342;
+  line-height: 1.3;
 }
 
-.mp-item--matched::after {
-  content: "🔗";
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%) scale(0.9);
-  opacity: 0.9;
-  font-size: 0.9rem;
+.mp-review-pair--wrong .mp-review-chosen {
+  color: #c62828;
+  text-decoration: line-through;
 }
 
-/* Falsche Zuordnung → roter Shake */
-.mp-item--wrong {
-  animation: mp-item-shake 0.28s ease-out;
-  border-color: #c62828;
-  background: #ffebee;
-}
-
-/* Deaktivierte Items */
-.mp-item--disabled {
-  cursor: default;
-  opacity: 0.6;
-  box-shadow: none;
-  filter: grayscale(0.1);
-}
-
-/* Verbindungs-Glow für Matched-Paare
-   Diese Klasse gibst du BEIDEN Items eines Paares → synchroner Glow */
-.mp-item--matched-glow {
-  box-shadow:
-    0 0 0 0 rgba(232, 189, 79, 0.0),
-    0 0 0 2px rgba(232, 189, 79, 0.0),
-    0 6px 18px rgba(46, 125, 50, 0.35);
-  animation: mp-link-glow 0.6s ease-out;
+.mp-review-correct-hint {
+  font-size: 0.78rem;
+  color: #2e7d32;
+  font-style: italic;
+  line-height: 1.3;
 }
 
 /* ==============================
    Animationen
    ============================== */
 
-@keyframes mp-item-shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-3px); }
-  50% { transform: translateX(3px); }
-  75% { transform: translateX(-2px); }
-  100% { transform: translateX(0); }
+@keyframes mp-review-pair-in {
+  0%   { opacity: 0; transform: translateY(22px) scale(0.92); }
+  60%  { opacity: 1; transform: translateY(-4px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Mini-„Pop“, wenn ein Paar fertig ist */
-@keyframes mp-item-pop {
-  0% { transform: scale(0.97); }
-  40% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-/* dezentes Pulsieren für ausgewählte Items */
-@keyframes mp-selected-pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(232, 189, 79, 0.0);
-  }
-  50% {
-    box-shadow: 0 0 0 4px rgba(232, 189, 79, 0.45);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(232, 189, 79, 0.0);
-  }
-}
-
-/* leichte Float-Animation */
-@keyframes mp-hover-float {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-2px); }
-  100% { transform: translateY(-1px); }
-}
-
-/* Spalten-Slide-in */
-@keyframes mp-slide-in-left {
-  0% {
-    opacity: 0;
-    transform: translateX(-14px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes mp-slide-in-right {
-  0% {
-    opacity: 0;
-    transform: translateX(14px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Verbindungs-Glow – goldener Ring, der kurz aufblitzt */
-@keyframes mp-link-glow {
-  0% {
-    box-shadow:
-      0 0 0 0 rgba(232, 189, 79, 0.0),
-      0 0 0 0 rgba(232, 189, 79, 0.0),
-      0 6px 18px rgba(46, 125, 50, 0.35);
-  }
-  40% {
-    box-shadow:
-      0 0 0 2px rgba(232, 189, 79, 0.9),
-      0 0 20px 6px rgba(232, 189, 79, 0.7),
-      0 10px 24px rgba(46, 125, 50, 0.45);
-  }
-  100% {
-    box-shadow:
-      0 0 0 0 rgba(232, 189, 79, 0.0),
-      0 0 0 0 rgba(232, 189, 79, 0.0),
-      0 6px 18px rgba(46, 125, 50, 0.35);
-  }
+@keyframes mp-icon-stamp {
+  0%   { opacity: 0; transform: scale(0.1) rotate(-30deg); }
+  50%  { opacity: 1; transform: scale(1.55) rotate(8deg); }
+  72%  { transform: scale(0.88) rotate(-4deg); }
+  88%  { transform: scale(1.1) rotate(2deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 
 /* ==============================
    Mobile Feintuning
    ============================== */
 
-@media (max-width: 700px) {
-  .mp-board {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .mp-column-title {
-    font-size: 0.78rem;
-  }
-
-  .mp-item {
-    font-size: 0.9rem;
-    min-height: 42px;
-  }
-}
-
 @media (max-width: 600px) {
   .mp-card {
     gap: 8px;
-    padding: 14px 14px 16px;
+    padding: 28px 14px calc(env(safe-area-inset-bottom, 0px) + 44px);
     border-radius: 18px;
   }
 
-  .mp-meta-row {
-    font-size: 0.75rem;
+  /* Matching-Phase: Vollbild, Buttons unten */
+  .mp-card--matching {
+    min-height: 100%;
   }
 
-  .mp-prompt {
-    font-size: 0.86rem;
+  .mp-card--matching .mp-options-wrap {
+    margin-top: auto;
+  }
+
+  /* Footer in beiden Phasen klein halten */
+  .mp-card .game-footer-row {
+    margin-top: 0;
+    padding-bottom: 0;
+  }
+
+  .mp-card .game-feedback {
+    min-height: 0;
+    margin-bottom: 0;
+  }
+
+  .mp-meta-row {
+    font-size: 0.85rem;
+  }
+
+  .mp-question {
+    margin-top: 10px;
+    padding: 12px;
+  }
+
+  .mp-question-text {
+    font-size: 0.95rem;
+  }
+
+  .mp-term-box {
+    font-size: 1rem;
+    padding: 16px 16px;
+  }
+
+  .mp-options-wrap {
+    gap: 14px;
+  }
+
+  .mp-option {
+    font-size: 17px;
+    padding: 14px 12px;
+  }
+
+  .mp-review-wrap {
+    gap: 8px;
+  }
+
+  .mp-review-pair {
+    padding: 10px 10px;
+    gap: 8px;
+  }
+
+  .mp-review-term {
+    font-size: 0.82rem;
+  }
+
+  .mp-review-chosen {
+    font-size: 0.8rem;
+  }
+
+  .mp-review-correct-hint {
+    font-size: 0.72rem;
   }
 }
-

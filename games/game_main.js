@@ -369,6 +369,12 @@ export function startLessonGame(container, lessonConfig) {
         pendingEnergyBonusDetail = registerQuestionResult(isCorrect, {
           allowBonus: lessonConfig.allowEnergyStreakBonus !== false
         });
+        if (
+          pendingEnergyBonusDetail &&
+          typeof lessonConfig.onEnergyBonusAwarded === "function"
+        ) {
+          lessonConfig.onEnergyBonusAwarded(pendingEnergyBonusDetail);
+        }
       }
 
       if (playSoundImmediately) {

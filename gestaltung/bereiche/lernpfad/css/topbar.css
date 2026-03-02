@@ -12,8 +12,12 @@
   order: 1;
 }
 
-.map-top-row .map-energy-badge {
+.map-top-row .map-test-toggle-btn {
   order: 2;
+}
+
+.map-top-row .map-energy-badge {
+  order: 3;
 }
 
 .map-top-row .map-back-btn {
@@ -43,6 +47,31 @@
   white-space: nowrap;
 }
 
+.map-test-toggle-btn {
+  min-height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(22, 12, 7, 0.92);
+  color: rgba(255, 244, 226, 0.88);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+}
+
+.map-test-toggle-btn.is-active {
+  border-color: rgba(244, 207, 99, 0.48);
+  background: linear-gradient(135deg, rgba(78, 36, 12, 0.98), rgba(42, 18, 8, 0.96));
+  color: #fff6dc;
+}
+
 @media (max-width: 768px) {
   .map-top-row {
     flex-wrap: wrap;
@@ -57,5 +86,11 @@
     color: var(--ink);
     padding: 0 14px;
     font-size: 13px;
+  }
+
+  .map-test-toggle-btn {
+    min-height: 40px;
+    padding: 0 12px;
+    font-size: 0.68rem;
   }
 }

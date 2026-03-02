@@ -37,6 +37,23 @@
  * }
  */
 
+function adjustSCNOptionFontSize(buttons, maxPx = 17, minPx = 12) {
+  if (!buttons.length) return;
+
+  const cs = window.getComputedStyle(buttons[0]);
+  const paddingV = (parseFloat(cs.paddingTop) || 14) + (parseFloat(cs.paddingBottom) || 14);
+
+  for (let size = maxPx; size >= minPx; size--) {
+    buttons.forEach((b) => { b.style.fontSize = size + "px"; });
+
+    const lineHeight = size * 1.35;
+    const maxBtnHeight = lineHeight * 3 + paddingV + 4; // 3 Zeilen für Szenario-Texte
+
+    const allFit = Array.from(buttons).every((b) => b.scrollHeight <= maxBtnHeight);
+    if (allFit) break;
+  }
+}
+
 export function renderScenarioChoice(rootEl, gameData, onComplete) {
   if (!rootEl) {
     console.error("renderScenarioChoice: rootEl fehlt");
@@ -85,11 +102,8 @@ export function renderScenarioChoice(rootEl, gameData, onComplete) {
               : "<p>Eine Situation im Salon – wie reagierst du am besten?</p>"
           }
         </div>
+        <span class="scn-hint">Wähle die Antwort, die am besten zu einem professionellen Verhalten im Salon passt.</span>
       </div>
-    </div>
-
-    <div class="scn-hint">
-      Wähle die Antwort, die am besten zu einem professionellen Verhalten im Salon passt.
     </div>
 
     <div class="scn-options">
@@ -117,6 +131,7 @@ export function renderScenarioChoice(rootEl, gameData, onComplete) {
   card.classList.add("scn-card--auto-advance");
 
   const optionButtons = Array.from(card.querySelectorAll(".scn-option"));
+  requestAnimationFrame(() => adjustSCNOptionFontSize(optionButtons));
   const feedbackEl = card.querySelector(".game-feedback");
   const nextBtn = card.querySelector(".game-next-btn");
 

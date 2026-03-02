@@ -1,25 +1,29 @@
 // games/match_pairs/match_pairs.js
 
-/**
- * Match Pairs ("match_pairs")
- *
- * Erwartete gameData:
- * {
- *   id: "lvl1_abs1_l1_q5",
- *   topic: "Gefahrstoffe & Vorschriften",
- *   prompt: "Ordne die Fachbegriffe den passenden Beschreibungen zu.",
- *   pairs: [
- *     { left: "TRGS 530", right: "Regelt den Umgang mit Gefahrstoffen im Friseursalon" },
- *     { left: "PSA",      right: "Persönliche Schutzausrüstung wie Handschuhe und Schürze" },
- *     ...
- *   ],
- *   position: 5,
- *   total: 15,
- *   feedbackCorrect?: "Text bei allen Paaren ohne Fehler",
- *   feedbackWrong?:   "Text, wenn Fehler gemacht wurden"
- * }
- */
+function adjustMPOptionFontSize(buttons, maxPx = 17, minPx = 12) {
+  if (!buttons.length) return;
 
+  const cs = window.getComputedStyle(buttons[0]);
+  const paddingV = (parseFloat(cs.paddingTop) || 14) + (parseFloat(cs.paddingBottom) || 14);
+
+  for (let size = maxPx; size >= minPx; size--) {
+    buttons.forEach((b) => { b.style.fontSize = size + "px"; });
+
+    const lineHeight = size * 1.35;
+    const maxBtnHeight = lineHeight * 2 + paddingV + 4;
+
+    const allFit = Array.from(buttons).every((b) => b.scrollHeight <= maxBtnHeight);
+    if (allFit) break;
+  }
+}
+
+/**
+ * Match Pairs – sequenzieller Flow:
+ * 1. Frage in Box oben, Begriff fliegt als dunkle Karte ein
+ * 2. Alle Erklärungen als Buttons – kein direktes Feedback
+ * 3. Review: Paare erscheinen Schritt für Schritt mit ✓/✗-Animation
+ * 4. Weiter-Button → onComplete
+ */
 export function renderMatchPairs(rootEl, gameData, onComplete) {
   if (!rootEl) {
     console.error("renderMatchPairs: rootEl fehlt");
@@ -33,196 +37,175 @@ export function renderMatchPairs(rootEl, gameData, onComplete) {
   const pairs = gameData.pairs;
   const count = pairs.length;
 
-  // rechte Seite mischen
-  const rightIndices = [...pairs.keys()];
-  rightIndices.sort(() => Math.random() - 0.5);
+  // Rechte Seite einmal mischen
+  const shuffledRightIndices = [...Array(count).keys()].sort(() => Math.random() - 0.5);
+
+  const userAnswers = new Array(count).fill(null);
+  let currentLeftIndex = 0;
 
   const card = document.createElement("div");
-  card.className = "game-card mp-card";
+  card.className = "game-card mp-card mp-card--matching";
+
+  const questionText = gameData.question || gameData.prompt || "Ordne die Begriffe den passenden Erklärungen zu.";
 
   card.innerHTML = `
     <div class="mp-meta-row">
       <span class="mp-topic">${gameData.topic || "Zuordnung"}</span>
       <span class="mp-counter">
-        ${
-          gameData.position && gameData.total
-            ? "Frage " + gameData.position + " / " + gameData.total
-            : ""
-        }
+        ${gameData.position && gameData.total ? "Frage " + gameData.position + " / " + gameData.total : ""}
       </span>
     </div>
 
-    <div class="mp-prompt">
-      ${gameData.prompt || "Ordne die Begriffe den passenden Erklärungen zu."}
+    <div class="mp-question">
+      <span class="mp-question-text">${questionText}</span>
+      <span class="mp-hint">Wähle die passende Erklärung.</span>
     </div>
 
-    <div class="mp-board">
-      <div class="mp-column mp-column-left">
-        <div class="mp-column-title">Begriffe</div>
-        ${pairs
-          .map(
-            (p, i) => `
-              <button
-                class="mp-item mp-item-left"
-                type="button"
-                data-side="left"
-                data-index="${i}">
-                ${p.left}
-              </button>`
-          )
-          .join("")}
+    <div class="mp-term-section">
+      <span class="mp-term-progress">Begriff 1 / ${count}</span>
+      <div class="mp-term-box mp-term-box--in">
+        ${pairs[0].left}
       </div>
+    </div>
 
-      <div class="mp-column mp-column-right">
-        <div class="mp-column-title">Erklärungen</div>
-        ${rightIndices
-          .map((pairIndex) => {
-            const p = pairs[pairIndex];
-            return `
-              <button
-                class="mp-item mp-item-right"
-                type="button"
-                data-side="right"
-                data-index="${pairIndex}">
-                ${p.right}
-              </button>`;
-          })
-          .join("")}
-      </div>
+    <div class="mp-options-wrap">
+      ${shuffledRightIndices.map((rightIdx) => `
+        <button class="mp-option" type="button" data-right-index="${rightIdx}">
+          ${pairs[rightIdx].right}
+        </button>
+      `).join("")}
     </div>
 
     <div class="game-footer-row">
       <div class="game-feedback" aria-live="polite"></div>
-      <button class="game-next-btn" disabled>Weiter</button>
+      <button class="game-next-btn" style="display:none" disabled>Weiter</button>
     </div>
   `;
 
   rootEl.appendChild(card);
-  card.classList.add("mp-card--auto-advance");
 
-  const leftItems = Array.from(card.querySelectorAll(".mp-item-left"));
-  const rightItems = Array.from(card.querySelectorAll(".mp-item-right"));
+  const termProgressEl = card.querySelector(".mp-term-progress");
+  const termBoxEl = card.querySelector(".mp-term-box");
+  const optionsWrapEl = card.querySelector(".mp-options-wrap");
   const feedbackEl = card.querySelector(".game-feedback");
-  let selectedLeftIndex = null; // Index im pairs-Array
-  const matched = new Array(count).fill(false);
-  let matchedCount = 0;
-  let mistakes = 0;
+  const nextBtn = card.querySelector(".game-next-btn");
 
-  function clearSelection() {
-    selectedLeftIndex = null;
-    leftItems.forEach((btn) => btn.classList.remove("mp-item--selected"));
-    rightItems.forEach((btn) => btn.classList.remove("mp-item--selected"));
-  }
+  const optionButtons = Array.from(card.querySelectorAll(".mp-option"));
+  requestAnimationFrame(() => adjustMPOptionFontSize(optionButtons));
 
-  function handleLeftClick(btn) {
-    const pairIndex = Number(btn.dataset.index);
-    if (matched[pairIndex]) return;
-
-    selectedLeftIndex = pairIndex;
-    leftItems.forEach((b) => b.classList.remove("mp-item--selected"));
-    btn.classList.add("mp-item--selected");
-
-    if (feedbackEl) feedbackEl.textContent = "";
-  }
-
-  function handleRightClick(btn) {
-    const pairIndex = Number(btn.dataset.index);
-    if (matched[pairIndex]) return;
-
-    if (selectedLeftIndex === null) {
-      if (feedbackEl) {
-        feedbackEl.textContent = "Wähle zuerst einen Begriff links aus.";
-      }
+  function advanceTerm() {
+    currentLeftIndex++;
+    if (currentLeftIndex >= count) {
+      showReview();
       return;
     }
 
-    rightItems.forEach((b) => b.classList.remove("mp-item--selected"));
-    btn.classList.add("mp-item--selected");
+    // Rausfliegen
+    termBoxEl.classList.remove("mp-term-box--in");
+    termBoxEl.classList.add("mp-term-box--out");
 
-    const leftIndex = selectedLeftIndex;
-    const isMatch = pairIndex === leftIndex;
+    const onOut = () => {
+      termBoxEl.classList.remove("mp-term-box--out");
+      termProgressEl.textContent = "Begriff " + (currentLeftIndex + 1) + " / " + count;
+      termBoxEl.textContent = pairs[currentLeftIndex].left;
 
-    if (isMatch) {
-      // korrektes Paar
-      matched[leftIndex] = true;
-      matchedCount++;
+      // Reflow erzwingen, damit Animation neu startet
+      void termBoxEl.offsetWidth;
+      termBoxEl.classList.add("mp-term-box--in");
 
-      const leftBtn = leftItems[leftIndex];
-      const rightBtn = btn;
+      termBoxEl.removeEventListener("animationend", onOut);
+    };
 
-      [leftBtn, rightBtn].forEach((b) => {
-        b.classList.remove("mp-item--selected");
-        b.classList.add(
-          "mp-item--matched",
-          "mp-item--matched-pop",
-          "mp-item--matched-glow",
-          "mp-item--disabled"
-        );
-        b.disabled = true;
-      });
+    termBoxEl.addEventListener("animationend", onOut, { once: true });
 
-      setTimeout(() => {
-        [leftBtn, rightBtn].forEach((b) =>
-          b.classList.remove("mp-item--matched-pop")
-        );
-      }, 350);
+    // Fallback falls animationend nicht feuert
+    setTimeout(() => {
+      if (termBoxEl.classList.contains("mp-term-box--out")) onOut();
+    }, 400);
+  }
 
-      if (feedbackEl) {
-        feedbackEl.textContent = "Richtig zugeordnet, sehr gut!";
-      }
+  optionButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (btn.disabled) return;
 
-      clearSelection();
+      const rightIdx = Number(btn.dataset.rightIndex);
+      userAnswers[currentLeftIndex] = rightIdx;
 
-      // Alle Paare gefunden?
-      if (matchedCount === count) {
-        const noMistakes = mistakes === 0;
+      btn.classList.add("mp-option--used");
+      btn.disabled = true;
 
-        if (feedbackEl) {
-          feedbackEl.textContent =
-            noMistakes
-              ? gameData.feedbackCorrect ||
-                "Perfekt! Du hast alle Zuordnungen fehlerfrei gelöst."
-              : gameData.feedbackWrong ||
-                "Gut gemacht! Du hast alle Paare gefunden – wenn du magst, schau dir das Theorie-Kapitel noch einmal an.";
-        }
+      advanceTerm();
+    });
+  });
 
-        setTimeout(() => {
+  function showReview() {
+    let mistakes = 0;
+    userAnswers.forEach((chosenRightIdx, leftIdx) => {
+      if (chosenRightIdx !== leftIdx) mistakes++;
+    });
+    const noMistakes = mistakes === 0;
+
+    // Matching-Phase beenden
+    card.classList.remove("mp-card--matching");
+
+    // Term-Section ausblenden
+    const termSection = card.querySelector(".mp-term-section");
+    if (termSection) termSection.style.display = "none";
+
+    // Frage-Box: "Auswertung"
+    const questionEl = card.querySelector(".mp-question");
+    if (questionEl) {
+      const textEl = questionEl.querySelector(".mp-question-text");
+      if (textEl) textEl.textContent = "Auswertung";
+      const hintEl = questionEl.querySelector(".mp-hint");
+      if (hintEl) hintEl.style.display = "none";
+    }
+
+    // Options → Review-Liste
+    optionsWrapEl.className = "mp-review-wrap";
+    optionsWrapEl.innerHTML = "";
+
+    // Paare nacheinander mit Animation einblenden
+    pairs.forEach((pair, leftIdx) => {
+      const chosenRightIdx = userAnswers[leftIdx];
+      const isCorrect = chosenRightIdx === leftIdx;
+      const chosenText = pairs[chosenRightIdx].right;
+      const correctText = pair.right;
+
+      const pairEl = document.createElement("div");
+      pairEl.className = "mp-review-pair mp-review-pair--" + (isCorrect ? "correct" : "wrong");
+      pairEl.style.setProperty("--delay", (leftIdx * 0.45) + "s");
+
+      pairEl.innerHTML = `
+        <span class="mp-review-term">${pair.left}</span>
+        <span class="mp-review-icon">${isCorrect ? "✓" : "✗"}</span>
+        <div class="mp-review-answer">
+          <span class="mp-review-chosen">${chosenText}</span>
+          ${!isCorrect ? `<span class="mp-review-correct-hint">${correctText}</span>` : ""}
+        </div>
+      `;
+
+      optionsWrapEl.appendChild(pairEl);
+    });
+
+    // Nach allen Animationen: 3-Sekunden-Countdown, dann auto-weiter
+    const allShownMs = (pairs.length * 0.45 + 0.5) * 1000;
+
+    setTimeout(() => {
+      let remaining = 4;
+      feedbackEl.textContent = remaining + " ...";
+
+      const tick = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearInterval(tick);
           if (typeof onComplete === "function") {
             onComplete(noMistakes);
           }
-        }, 650);
-      }
-    } else {
-      // falsche Zuordnung
-      mistakes++;
-
-      const leftBtn = leftItems[leftIndex];
-      const rightBtn = btn;
-
-      [leftBtn, rightBtn].forEach((b) => {
-        b.classList.add("mp-item--wrong");
-      });
-
-      if (feedbackEl) {
-        feedbackEl.textContent = "Nicht ganz – probier eine andere Kombination.";
-      }
-
-      setTimeout(() => {
-        [leftBtn, rightBtn].forEach((b) => {
-          b.classList.remove("mp-item--wrong", "mp-item--selected");
-        });
-        clearSelection();
-      }, 350);
-    }
+        } else {
+          feedbackEl.textContent = remaining + " ...";
+        }
+      }, 1000);
+    }, allShownMs);
   }
-
-  // Event-Handler registrieren
-  leftItems.forEach((btn) => {
-    btn.addEventListener("click", () => handleLeftClick(btn));
-  });
-
-  rightItems.forEach((btn) => {
-    btn.addEventListener("click", () => handleRightClick(btn));
-  });
-
 }

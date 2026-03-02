@@ -3,6 +3,26 @@
 
 import { getLessonCompletionPercent } from "./core/progress_store.js";
 
+const TEST_UNLOCK_ALL_KEY = "azubi_test_unlock_all";
+
+function isTestUnlockAllEnabled() {
+  try {
+    const search = new URLSearchParams(window.location.search);
+    if (search.get("testUnlockAll") === "1") {
+      localStorage.setItem(TEST_UNLOCK_ALL_KEY, "1");
+      return true;
+    }
+    if (search.get("testUnlockAll") === "0") {
+      localStorage.removeItem(TEST_UNLOCK_ALL_KEY);
+      return false;
+    }
+    return localStorage.getItem(TEST_UNLOCK_ALL_KEY) === "1";
+  } catch (error) {
+    console.warn("Test-Freischaltmodus konnte nicht gelesen werden:", error);
+    return false;
+  }
+}
+
 // -----------------------------------------------
 // Fortschritt & Unlock-Logik
 // -----------------------------------------------
@@ -19,10 +39,6 @@ import { getLessonCompletionPercent } from "./core/progress_store.js";
  * }
  */
 function getLevelProgress(level) {
-  const key = `friseurTrainerMaxLesson_${level.id}`;
-  const stored = localStorage.getItem(key);
-  const maxUnlocked = stored ? parseInt(stored, 10) || 0 : 0;
-
   // Alle Lektionen des Levels flach ziehen
   const lessons = [];
   (level.sections || []).forEach(section => {
@@ -32,6 +48,15 @@ function getLevelProgress(level) {
   const totalLessons = lessons.length;
   if (totalLessons === 0) {
     return { maxUnlocked: 0, totalLessons: 0, isCompleted: false, progressPercent: 0 };
+  }
+
+  let maxUnlocked = totalLessons > 0 ? 0 : 0;
+  if (isTestUnlockAllEnabled()) {
+    maxUnlocked = totalLessons - 1;
+  } else {
+    const key = `friseurTrainerMaxLesson_${level.id}`;
+    const stored = localStorage.getItem(key);
+    maxUnlocked = stored ? parseInt(stored, 10) || 0 : 0;
   }
 
   // Level gilt als abgeschlossen, wenn die letzte Lektion freigeschaltet wurde
@@ -55,6 +80,7 @@ function getLevelProgress(level) {
  * Jedes weitere Level wird freigeschaltet, wenn das vorherige abgeschlossen ist.
  */
 function isLevelUnlocked(jahrEntry, levelIndex) {
+  if (isTestUnlockAllEnabled()) return true;
   if (levelIndex === 0) return true;
   const prevLevel = jahrEntry.levels[levelIndex - 1];
   if (!prevLevel) return false;
@@ -67,6 +93,7 @@ function isLevelUnlocked(jahrEntry, levelIndex) {
  * Jedes weitere Jahr wird freigeschaltet, wenn das letzte Level des vorherigen Jahres abgeschlossen ist.
  */
 function isJahrUnlocked(content, jahrIndex) {
+  if (isTestUnlockAllEnabled()) return true;
   if (jahrIndex === 0) return true;
   const prevJahr = content.jahre[jahrIndex - 1];
   if (!prevJahr || !prevJahr.levels || prevJahr.levels.length === 0) return false;

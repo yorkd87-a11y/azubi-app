@@ -18,6 +18,23 @@
  * }
  */
 
+function adjustGFOptionFontSize(buttons, maxPx = 17, minPx = 12) {
+  if (!buttons.length) return;
+
+  const cs = window.getComputedStyle(buttons[0]);
+  const paddingV = (parseFloat(cs.paddingTop) || 14) + (parseFloat(cs.paddingBottom) || 14);
+
+  for (let size = maxPx; size >= minPx; size--) {
+    buttons.forEach((b) => { b.style.fontSize = size + "px"; });
+
+    const lineHeight = size * 1.35;
+    const maxBtnHeight = lineHeight * 2 + paddingV + 4;
+
+    const allFit = Array.from(buttons).every((b) => b.scrollHeight <= maxBtnHeight);
+    if (allFit) break;
+  }
+}
+
 export function renderGapFill(rootEl, gameData, onComplete) {
   if (!rootEl) {
     console.error("renderGapFill: rootEl fehlt");
@@ -49,14 +66,13 @@ export function renderGapFill(rootEl, gameData, onComplete) {
       </span>
     </div>
 
-    <div class="gf-sentence">
-      <span class="gf-text-before">${gameData.textBefore}</span>
-      <span class="gf-gap">_____</span>
-      <span class="gf-text-after">${gameData.textAfter}</span>
-    </div>
-
-    <div class="gf-hint">
-      Wähle das passende Wort, das die Lücke sinnvoll ergänzt.
+    <div class="gf-question">
+      <div class="gf-sentence">
+        <span class="gf-text-before">${gameData.textBefore}</span>
+        <span class="gf-gap">_____</span>
+        <span class="gf-text-after">${gameData.textAfter}</span>
+      </div>
+      <span class="gf-hint">Wähle das passende Wort, das die Lücke sinnvoll ergänzt.</span>
     </div>
 
     <div class="gf-options">
@@ -80,7 +96,8 @@ export function renderGapFill(rootEl, gameData, onComplete) {
   card.classList.add("gf-card--auto-advance");
 
   const gapEl = card.querySelector(".gf-gap");
-  const optionButtons = card.querySelectorAll(".gf-option");
+  const optionButtons = Array.from(card.querySelectorAll(".gf-option"));
+  requestAnimationFrame(() => adjustGFOptionFontSize(optionButtons));
   const feedbackEl = card.querySelector(".game-feedback");
 
   let answered = false;

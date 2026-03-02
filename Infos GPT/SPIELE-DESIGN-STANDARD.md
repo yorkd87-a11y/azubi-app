@@ -113,9 +113,12 @@ requestAnimationFrame(() => adjustXXOptionFontSize(optionButtons));
 - [x] `single_choice_quiz`
 - [x] `multiple_choice_quiz`
 - [x] `true_false_swipe`
+- [x] `scenario_choice`
+- [x] `gap_fill`
+- [x] `match_pairs` — Sonderflow: sequenziell (1 Begriff → alle Optionen), kein direktes Feedback, dann Review mit ✓/✗, dann Weiter-Button
 
 ## Noch ausstehend
-- [ ] `scenario_choice`
+- [ ] `order_steps`
 - [ ] `gap_fill`
 - [ ] `match_pairs`
 - [ ] `order_steps`

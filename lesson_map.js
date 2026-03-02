@@ -12,6 +12,17 @@ let energyValueEl = null; // Referenz fÃ¼r die Anzeige oben rechts
 let currentMapScrollTarget = null;
 let currentMapScrollHandler = null;
 const ENERGY_ICON_SRC = "./media/Bilder/Icons/Farbtupe-Energie.png";
+const TEST_UNLOCK_ALL_KEY = "azubi_test_unlock_all";
+let activeSectionVideoOverlay = null;
+
+function isTestUnlockAllEnabled() {
+  try {
+    return localStorage.getItem(TEST_UNLOCK_ALL_KEY) === "1";
+  } catch (error) {
+    console.warn("Test-Freischaltmodus konnte nicht gelesen werden:", error);
+    return false;
+  }
+}
 
 function formatEnergyChipValue(energy, maxEnergy) {
   if (Number(energy) > Number(maxEnergy)) {
@@ -29,6 +40,65 @@ function renderEnergyChipMarkup() {
     `;
 }
 
+function closeSectionVideoOverlay() {
+  if (!activeSectionVideoOverlay) return;
+  const videoEl = activeSectionVideoOverlay.querySelector(".map-video-player");
+  if (videoEl && typeof videoEl.pause === "function") {
+    videoEl.pause();
+  }
+  activeSectionVideoOverlay.remove();
+  activeSectionVideoOverlay = null;
+}
+
+function openSectionVideoOverlay(videoUrl, title = "Abschnittsvideo") {
+  if (!videoUrl) return;
+
+  closeSectionVideoOverlay();
+
+  const overlay = document.createElement("div");
+  overlay.className = "map-video-overlay";
+  overlay.innerHTML = `
+    <div class="map-video-dialog" role="dialog" aria-modal="true" aria-label="${title}">
+      <div class="map-video-header">
+        <div class="map-video-kicker">Abschnittsvideo</div>
+        <button class="map-video-close" type="button" aria-label="Video schließen">×</button>
+      </div>
+      <h3 class="map-video-title">${title}</h3>
+      <div class="map-video-frame">
+        <video class="map-video-player" controls playsinline preload="metadata" src="${videoUrl}"></video>
+      </div>
+    </div>
+  `;
+
+  const closeBtn = overlay.querySelector(".map-video-close");
+  const videoEl = overlay.querySelector(".map-video-player");
+  const handleEsc = (event) => {
+    if (event.key === "Escape") {
+      closeSectionVideoOverlay();
+    }
+  };
+
+  const closeOverlay = () => {
+    document.removeEventListener("keydown", handleEsc);
+    closeSectionVideoOverlay();
+  };
+
+  closeBtn?.addEventListener("click", closeOverlay);
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) {
+      closeOverlay();
+    }
+  });
+  document.addEventListener("keydown", handleEsc);
+
+  document.body.appendChild(overlay);
+  activeSectionVideoOverlay = overlay;
+
+  if (videoEl && typeof videoEl.play === "function") {
+    videoEl.play().catch(() => {});
+  }
+}
+
 /**
  * Wird einmal von app.js aufgerufen, um die Map zu initialisieren.
  */
@@ -43,6 +113,24 @@ export function initLessonMap(rootElement, handleSelectLesson, handleMapMenuActi
       const action = navBtn.dataset.action;
       if (action && typeof onMapMenuAction === "function") {
         onMapMenuAction(action);
+      }
+      return;
+    }
+
+    const testToggleBtn = event.target.closest(".map-test-toggle-btn");
+    if (testToggleBtn) {
+      if (typeof onMapMenuAction === "function") {
+        onMapMenuAction("toggle-test-unlock");
+      }
+      return;
+    }
+
+    const separatorVideoBtn = event.target.closest(".map-separator-play-btn");
+    if (separatorVideoBtn) {
+      const videoUrl = separatorVideoBtn.dataset.separatorVideo || "";
+      const videoTitle = separatorVideoBtn.dataset.separatorTitle || "Abschnittsvideo";
+      if (videoUrl) {
+        openSectionVideoOverlay(videoUrl, videoTitle);
       }
       return;
     }
@@ -139,6 +227,7 @@ export function renderLessonMap(mapData, maxUnlockedLessonIndex, options = {}) {
               class="map-separator-play-btn"
               type="button"
               data-separator-video="${item.videoUrl}"
+              data-separator-title="${label}"
               data-separator-video-required="${item.videoRequired ? "true" : "false"}"
               aria-label="Abschnittsvideo abspielen">
               <span class="map-separator-play-icon" aria-hidden="true">▶</span>
@@ -384,6 +473,14 @@ export function renderLessonMap(mapData, maxUnlockedLessonIndex, options = {}) {
   const topRow = mapRoot.querySelector(".map-top-row");
   let energyTopEl = null;
   if (topRow) {
+    const testToggleBtn = document.createElement("button");
+    testToggleBtn.type = "button";
+    testToggleBtn.className = `map-test-toggle-btn${isTestUnlockAllEnabled() ? " is-active" : ""}`;
+    testToggleBtn.textContent = isTestUnlockAllEnabled()
+      ? "Testmodus: Alle frei"
+      : "Testmodus";
+    topRow.appendChild(testToggleBtn);
+
     energyTopEl = document.createElement("div");
     energyTopEl.className = "map-energy-badge map-energy-top";
     energyTopEl.innerHTML = renderEnergyChipMarkup();

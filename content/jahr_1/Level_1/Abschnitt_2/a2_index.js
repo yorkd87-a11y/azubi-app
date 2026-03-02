@@ -21,6 +21,7 @@ const ABSCHNITT_2 = {
   title: "Arbeits- & Wegeunfälle, Unfallverhütung",
   description:
     "Was ist ein Arbeits- oder Wegeunfall und wie verhinderst du Unfälle im Salonalltag: Ordnung, Ruhe, Körperhaltung, Kabel & Werkzeuge.",
+  videoUrl: "./media/videos/Abschnitte/abschnitt_arbeitsunfälle.mp4",
   lessons: [
     LEKTION_1,
     LEKTION_2,

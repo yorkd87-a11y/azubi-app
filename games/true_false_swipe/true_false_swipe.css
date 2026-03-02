@@ -183,4 +183,16 @@
     font-size: 17px;
     padding: 14px 12px;
   }
+
+  /* Footer kollabieren bis er gebraucht wird (kein Platz-Klau durch margin-top: auto) */
+  .tfs-card .game-footer-row {
+    margin-top: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .tfs-card .game-feedback {
+    min-height: 0;
+    margin-bottom: 0;
+  }
 }

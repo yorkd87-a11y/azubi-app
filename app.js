@@ -34,6 +34,135 @@ import {
 import { protokolliereStepAbschluss } from "./lernlogik/fortschritt.js";
 
 let currentLessonSession = null;
+const TEST_UNLOCK_ALL_KEY = "azubi_test_unlock_all";
+const LIVE_ACCESS_SESSION_KEY = "azubi_live_access_granted";
+const LIVE_ACCESS_PASSWORD = "FrieseurAzubi2026!";
+
+function isTestUnlockAllEnabled() {
+  try {
+    const search = new URLSearchParams(window.location.search);
+    if (search.get("testUnlockAll") === "1") {
+      localStorage.setItem(TEST_UNLOCK_ALL_KEY, "1");
+      return true;
+    }
+    if (search.get("testUnlockAll") === "0") {
+      localStorage.removeItem(TEST_UNLOCK_ALL_KEY);
+      return false;
+    }
+    return localStorage.getItem(TEST_UNLOCK_ALL_KEY) === "1";
+  } catch (error) {
+    console.warn("Test-Freischaltmodus konnte nicht gelesen werden:", error);
+    return false;
+  }
+}
+
+function requiresLivePasswordPrompt() {
+  try {
+    const host = (window.location.hostname || "").toLowerCase();
+    return host.endsWith("github.io");
+  } catch (error) {
+    console.warn("Host konnte nicht geprueft werden:", error);
+    return false;
+  }
+}
+
+function hasLiveAccessAlreadyGranted() {
+  try {
+    return sessionStorage.getItem(LIVE_ACCESS_SESSION_KEY) === "1";
+  } catch (error) {
+    console.warn("Live-Zugriff konnte nicht gelesen werden:", error);
+    return false;
+  }
+}
+
+function setLiveAccessGranted() {
+  try {
+    sessionStorage.setItem(LIVE_ACCESS_SESSION_KEY, "1");
+  } catch (error) {
+    console.warn("Live-Zugriff konnte nicht gespeichert werden:", error);
+  }
+}
+
+function renderLiveAccessDenied() {
+  document.body.innerHTML = `
+    <div class="live-access-gate">
+      <div class="live-access-card">
+        <div class="live-access-kicker">Geschützter Testzugang</div>
+        <h1 class="live-access-title">Passwort erforderlich</h1>
+        <p class="live-access-text">
+          Diese GitHub-Version ist nur für interne Tests freigeschaltet.
+        </p>
+        <button class="live-access-retry-btn" type="button">Erneut versuchen</button>
+      </div>
+    </div>
+  `;
+
+  const retryBtn = document.querySelector(".live-access-retry-btn");
+  retryBtn?.addEventListener("click", () => {
+    if (ensureLiveAccess()) {
+      window.location.reload();
+    }
+  });
+}
+
+function ensureLiveAccess() {
+  if (!requiresLivePasswordPrompt()) {
+    return true;
+  }
+
+  if (hasLiveAccessAlreadyGranted()) {
+    return true;
+  }
+
+  const entered = window.prompt("Passwort für die GitHub-Testversion eingeben:");
+  if (entered === LIVE_ACCESS_PASSWORD) {
+    setLiveAccessGranted();
+    return true;
+  }
+
+  renderLiveAccessDenied();
+  return false;
+}
+
+function setTestUnlockAllEnabled(enabled) {
+  try {
+    if (enabled) {
+      localStorage.setItem(TEST_UNLOCK_ALL_KEY, "1");
+    } else {
+      localStorage.removeItem(TEST_UNLOCK_ALL_KEY);
+    }
+  } catch (error) {
+    console.warn("Test-Freischaltmodus konnte nicht gespeichert werden:", error);
+  }
+}
+
+function refreshCurrentScreenAfterTestToggle() {
+  if (CURRENT_LEVEL) {
+    loadLessonProgress();
+  }
+
+  if (mode === "today") {
+    showToday({ forceVisible: true });
+    return;
+  }
+
+  if (mode === "level-select") {
+    showLevelSelect();
+    return;
+  }
+
+  if (mode === "map") {
+    showMap();
+    return;
+  }
+
+  if (mode === "intro") {
+    showIntro();
+    return;
+  }
+
+  showMap();
+}
 
 // =======================================
 // LEVEL / LEKTIONEN â€“ DATENMODELL (dynamisch)
@@ -45,7 +174,7 @@ let currentLessons = [];
 let CURRENT_MODULE = null;
 let currentModuleId = null;
 let pendingUnlockReveal = null;
-const CURRENT_GAME_PREVIEW_TYPE = "true_false_swipe";
+const CURRENT_GAME_PREVIEW_TYPE = "match_pairs";
 
 function clonePreviewData(data) {
   return JSON.parse(JSON.stringify(data));
@@ -384,11 +513,15 @@ function getMaxUnlockedForLevel(level) {
   const totalLessons = lessons.length;
   if (totalLessons === 0) return 0;
 
+  const lastIndex = totalLessons - 1;
+  if (isTestUnlockAllEnabled()) {
+    return lastIndex;
+  }
+
   const key = `friseurTrainerMaxLesson_${level.id}`;
   const stored = localStorage.getItem(key);
   let maxUnlocked = stored ? parseInt(stored, 10) || 0 : 0;
 
-  const lastIndex = totalLessons - 1;
   if (maxUnlocked > lastIndex) maxUnlocked = lastIndex;
   return maxUnlocked;
 }
@@ -623,6 +756,33 @@ function markiereSessionErledigt(sessionId) {
   }
 }
 
+function markiereWiederholungAlsErledigt(wiederholungsId) {
+  if (!wiederholungsId) return;
+
+  const status = synchronisiereTagesZaehler(holeLernstatus());
+  const wiederholungen = Array.isArray(status.geplanteWiederholungen)
+    ? status.geplanteWiederholungen
+    : [];
+
+  let hatAenderung = false;
+  status.geplanteWiederholungen = wiederholungen.map((wiederholung) => {
+    if (!wiederholung || wiederholung.id !== wiederholungsId) {
+      return wiederholung;
+    }
+
+    hatAenderung = true;
+    return {
+      ...wiederholung,
+      status: "erledigt",
+      erledigtAm: heutigesDatumKey()
+    };
+  });
+
+  if (hatAenderung) {
+    sichereLernstatus(status);
+  }
+}
+
 function ermittleSessionTypLabel(session) {
   if (session?.typ === "wiederholung") return "Wiederholung";
   return "Daily Mission";
@@ -643,7 +803,9 @@ function starteHeutigeSession(sessionId) {
   markiereSessionGestartet(sessionId);
   aktuelleSessionQuelle = {
     quelle: "today",
-    sessionId
+    sessionId,
+    sessionTyp: session.typ,
+    wiederholungsId: session.wiederholungsId || null
   };
 
   if (session.typ === "mission") {
@@ -943,6 +1105,12 @@ function updateEnergyDisplayUI(energy, maxEnergy) {
 // =======================================
 
 function loadLessonProgress() {
+  if (isTestUnlockAllEnabled()) {
+    const lastIndex = currentLessons.length - 1;
+    maxUnlockedLessonIndex = Math.max(0, lastIndex);
+    return;
+  }
+
   const key = `friseurTrainerMaxLesson_${currentModuleId}`;
   const stored = localStorage.getItem(key);
   maxUnlockedLessonIndex = stored ? parseInt(stored, 10) || 0 : 0;
@@ -1518,10 +1686,7 @@ function enterLesson(lessonIndex) {
   const allowEnergyStreakBonus = lesson.id
     ? !hasConsumedLessonStreakBonus(lesson.id)
     : true;
-
-  if (lesson.id) {
-    consumeLessonStreakBonus(lesson.id);
-  }
+  let lessonStreakBonusErhalten = false;
 
   // neue Lesson-Session starten (fÃ¼r Zeit + Stats)
   currentLessonSession = new LessonSession({ lessonId: lesson.id });
@@ -1592,6 +1757,9 @@ function enterLesson(lessonIndex) {
         addXp(xpGained);
       }
     },
+    onEnergyBonusAwarded: () => {
+      lessonStreakBonusErhalten = true;
+    },
     // Lektion komplett beendet
     onCompleted: (gameResult = {}) => {
       // Basis-Stats aus Session (Zeit + ggf. bereits gezÃ¤hlte Fragen)
@@ -1644,6 +1812,10 @@ function enterLesson(lessonIndex) {
       // XP im Stats-Objekt fÃ¼r das Summary speichern
       stats.xpEarned = lessonXp;
 
+      if (lesson.id && lessonStreakBonusErhalten) {
+        consumeLessonStreakBonus(lesson.id);
+      }
+
       const lernstatus = holeLernstatus();
       const aktualisierterLernstatus = protokolliereStepAbschluss(lernstatus, {
         stepId: lesson.id,
@@ -1674,6 +1846,12 @@ function enterLesson(lessonIndex) {
           } else {
             // erst Eigenwerbung, dann zurueck zur Karte
             if (sessionQuelle?.quelle === "today" && sessionQuelle.sessionId) {
+              if (
+                sessionQuelle.sessionTyp === "wiederholung" &&
+                sessionQuelle.wiederholungsId
+              ) {
+                markiereWiederholungAlsErledigt(sessionQuelle.wiederholungsId);
+              }
               markiereSessionErledigt(sessionQuelle.sessionId);
               aktuelleSessionQuelle = null;
               showLessonPromo(lesson, { onContinue: () => showToday() });
@@ -1742,6 +1920,11 @@ function init() {
         }
         if (action === "settings") {
           showGameTypePreview();
+          return;
+        }
+        if (action === "toggle-test-unlock") {
+          setTestUnlockAllEnabled(!isTestUnlockAllEnabled());
+          refreshCurrentScreenAfterTestToggle();
           return;
         }
       }
@@ -1838,12 +2021,9 @@ function init() {
   }
 }
 
-init();
-
-
-
-
-
+if (ensureLiveAccess()) {
+  init();
+}
 
 
 

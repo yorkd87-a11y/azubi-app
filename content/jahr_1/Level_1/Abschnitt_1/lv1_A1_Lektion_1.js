@@ -126,6 +126,7 @@ const LEKTION_1 = {
       id: "j1_l1_a1_l1_q6",
       topic: "Begriffe",
       gameType: "match_pairs",
+      question: "Was bedeuten diese Begriffe rund um deine Ausbildung?",
       prompt: "Ordne die Begriffe den passenden Beschreibungen zu.",
       pairs: [
         {
