@@ -1,0 +1,227 @@
+Alles klar – dann war unser bisheriger Zuschnitt **zu grob**.
+
+Ihr habt intern diese Logik:
+
+* **Pro Level:** 4 Abschnitte (A1–A4)
+* **Pro Abschnitt:** **8 Steps = 7 Inhalte + 1 Quiz**
+* **Lehrjahr 1:** **4 Level** ⇒ insgesamt **4 × 4 × 8 = 128 Steps**
+
+Damit muss der Masterplan pro Abschnitt **feiner** werden: nicht „ein Abschnitt = ein Block“, sondern **ein Abschnitt = 8 Lektionen**.
+
+---
+
+## Saubere ID-/Datei-Logik (passt zu eurer Struktur)
+
+**Pfad:**
+`content/jahr_1/Level_{L}/Abschnitt_{A}/lv{L}_A{A}_Lektion_{S}.js`
+
+**IDs:**
+
+* Lektion-ID: `j1_l{L}_a{A}_l{S}`
+* Quiz ist immer **Step 8**: `..._l8` (und enthält dann die 18 Fragen)
+
+**Wichtig:** Eure bisherigen Quiz-Dateien wie A3/A4 sollten eigentlich als **Lektion_8** laufen, nicht als Lektion_1.
+
+---
+
+# Lehrjahr 1 – Masterplan V2 (fein, 8 Steps pro Abschnitt)
+
+## Level 1 – Ankommen & sicher arbeiten (LF1)
+
+### A1 Vertrag, Rolle, Pflichten
+
+1. Überblick: Rolle im Salon + Warum Regeln - ok
+2. Ausbildungsvertrag vs Arbeitsvertrag (Kurzvergleich) - ok
+3. Rechte/Pflichten im Alltag (Pünktlichkeit, Auftreten, Mitdenken) - Ok
+4. Berichtsheft: wozu, wie, typische Fehler - ok
+5. Betriebsordnung/Salonregeln: Do/Don’t im Ablauf - ok
+6. Schweigepflicht & Diskretion: Beispiele aus dem Salon - ok
+7. Mini-Checkpoint: „Top 10 Regeln im Salon“ (Kurzsummary) - ok
+8. **Quiz (18 Fragen, gemischte Games)** status - ok
+
+### A2 Arbeitsunfälle vermeiden
+
+1. Was ist ein Arbeitsunfall? (Definition + 3 Merkmale) status - ok
+2. Wegeunfall vs Arbeitsunfall (Abgrenzung) status - ok
+3. Typische Salonrisiken (Boden, Kabel, Hitze, Schere) status - ok
+4. Ordnungssystem am Platz (wo liegt was – warum) status - ok
+5. Körperhaltung/Ergonomie (kurz, direkt anwendbar) status - ok
+6. Was tun im Unfall? Melden/Dokumentieren (Ablauf) status - ok
+7. Mini-Checkpoint: „Sicher arbeiten – Merksätze“ status - ok
+8. **Quiz (18 Fragen)**
+
+### A3 Hygiene & Infektionsschutz
+
+1. Warum Hygiene? Infektionskette im Salon (kurz)
+2. Reinigung vs Desinfektion (klarer Unterschied)
+3. Händehygiene (wann genau, Standardablauf)
+4. Tool-Aufbereitung (Kamm/Bürste/Schere/Clips)
+5. Arbeitsplatz resetten (Bedienplatz + Waschbecken)
+6. Ampelregel: grün/gelb/rot (wann stoppen/holen)
+7. Mini-Checkpoint: „Hygiene-Checkliste 6 Schritte“
+8. **Quiz (18 Fragen)**
+
+### A4 Gefahrstoffe, Hautschutz, Nachhaltigkeit
+
+1. Gefahrstoffe im Salon: was zählt dazu (nur relevant)
+2. Etikett lesen: Piktogramm/Signalwort/Hinweise
+3. Sicherheitsdatenblatt: wozu + wo finden
+4. PSA/Hautschutzplan: Handschuhe, Schutz, Pflege
+5. Notfälle: Auge/Hautkontakt/Verschütten (Sofortablauf)
+6. Lagerung & Entsorgung (sauber, sicher)
+7. Nachhaltig arbeiten (Dosierung, Wasser, Strom, Müll)
+8. **Quiz (18 Fragen)**
+
+---
+
+## Level 2 – Kundenkontakt & Pflege (LF2 + LF3)
+
+### A1 Empfang & Service
+
+1. Empfangsstandard: erster Eindruck (3 Basics)
+2. Begrüßungssätze (3 Standardsätze)
+3. Termin/Name abgleichen + Orientierung geben
+4. Service: Jacke, Platz, Getränk (Ablauf)
+5. Wartezeit managen (Info + Ruhe)
+6. Datenschutz/Diskretion am Empfang (Praxis)
+7. Mini-Checkpoint: „Empfang in 60 Sekunden“
+8. **Quiz (18 Fragen)**
+
+### A2 Kommunikation, Termin, Beschwerden
+
+1. Fragetechnik (Kurzschema)
+2. Aktives Zuhören (Do/Don’t)
+3. Telefonstandard (Begrüßung, Bedarf, Abschluss)
+4. Terminlogik (Wiederholen, Absichern, Notizen)
+5. Reklamation annehmen (ruhig, strukturiert)
+6. Dokumentation/Weiterleitung (was gehört rein)
+7. Mini-Checkpoint: „3-Satz-Reklamation“
+8. **Quiz (18 Fragen)**
+
+### A3 Haar & Kopfhaut verstehen (Pflege-Grundlagen)
+
+1. Aufbau Haar (3 Schichten, Wirkung)
+2. Kopfhaut: normal/trocken/fettig/sensibel
+3. Warnsignale + Ampelregel (Behandlungsverbot)
+4. Wasser: Eigenschaften & Einfluss (kurz)
+5. Shampoo: Grundprinzip + Tenside (nur nötig)
+6. Produktlogik: was wofür (Basics)
+7. Mini-Checkpoint: „Analyse in 5 Fragen“
+8. **Quiz (18 Fragen)**
+
+### A4 Wäsche & Pflege durchführen
+
+1. Ablauf Ansatzwäsche (Profi-Schrittfolge)
+2. Umhang/Handtuch/Waschbecken: Setup (Qualität)
+3. Kopfmassage Basics (Griffe + No-Gos)
+4. Produktwahl: Shampoo/Conditioner/Maske (kurz)
+5. Einwirkzeiten & Ausspülen (Qualitätsfehler vermeiden)
+6. Kartei-Dokumentation (kurzer Standard)
+7. Mini-Checkpoint: „Wäsche-Checkliste“
+8. **Quiz (18 Fragen)**
+
+---
+
+## Level 3 – Beratung & Styling (LF4)
+
+### A1 Formenlehre light
+
+1. Proportionen lesen (5-Minuten-Check)
+2. Grundformen (oval/rund/quadratisch/länglich etc.)
+3. Ausgleich-Regeln (2–3 klare Regeln)
+4. No-Gos in Empfehlungen (typisch im Salon)
+5. Bildbeispiele richtig nutzen (ohne zu verwirren)
+6. Kurz-Doku: was notieren (Standard)
+7. Mini-Checkpoint: „Formen-Merker“
+8. **Quiz (18 Fragen)**
+
+### A2 Frisuren empfehlen
+
+1. Wunsch erfragen (3 Fragen)
+2. 2 Vorschläge machen (Struktur)
+3. Begründen (Wirkung + Alltag)
+4. Kundenentscheidung führen (ohne Druck)
+5. Foto/Tablet nutzen (richtig erklären)
+6. Ergebnis absichern (Zusammenfassung)
+7. Mini-Checkpoint: „Beratung in 90 Sekunden“
+8. **Quiz (18 Fragen)**
+
+### A3 Föhnen & Finish
+
+1. Vorbereitung (Hitzeschutz, Produktbasis)
+2. Föhnrichtung + Spannung (Basics)
+3. Ansatzvolumen (einfacher Standard)
+4. Rundbürste Technik (Grundgriff)
+5. Finishprodukte (6-Regeln-System)
+6. Fehlerdiagnose (warum fällt’s zusammen?)
+7. Mini-Checkpoint: „Föhn-Merker“
+8. **Quiz (18 Fragen)**
+
+### A4 Kundenbindung
+
+1. Verabschiedung (Standard + Wertschätzung)
+2. Folgetermin anbahnen (einfacher Satzbau)
+3. Mini-Heimroutine (2 Produkte + 1 Tipp)
+4. Kritik annehmen (ruhig, lösungsorientiert)
+5. Dokumentation (was notieren)
+6. Service-Plus im Alltag (kleine Gesten)
+7. Mini-Checkpoint: „Bindung-Checkliste“
+8. **Quiz (18 Fragen)**
+
+---
+
+## Level 4 – Schneiden Grundlagen (LF5)
+
+### A1 Setup & Sicherheit
+
+1. Arbeitsplatzaufbau (Tools, Hygiene, Ordnung)
+2. Werkzeugcheck (Schere, Kamm, Clips)
+3. Körperhaltung/Stand (Basics)
+4. Haarwuchsrichtungen sehen lernen
+5. Konturenverlauf (Nacken/Seite/Front)
+6. Sicherheitsregeln am Kunden (kurz)
+7. Mini-Checkpoint: „Schnitt-Setup“
+8. **Quiz (18 Fragen)**
+
+### A2 Grundformen als System
+
+1. kompakt – Prinzip + Ergebnisbild
+2. gradiert – Prinzip + Ergebnisbild
+3. gestuft – Prinzip + Ergebnisbild
+4. Abteilungen (Oberkopf/Seite/Nacken)
+5. Führungslinien (Basisidee)
+6. Kontrolle/Querscheitel (Basics)
+7. Mini-Checkpoint: „Grundformen-Merker“
+8. **Quiz (18 Fragen)**
+
+### A3 Technik-Basics
+
+1. stumpf schneiden (wann, warum)
+2. Effilieren light (wann ja/nein)
+3. Anhebewinkel 90° (Logik)
+4. Anhebewinkel 135° (Logik)
+5. Überziehung/Spannung (Fehler vermeiden)
+6. Abschlusscheck (Kontrolle + Symmetrie)
+7. Mini-Checkpoint: „Winkel-Merker“
+8. **Quiz (18 Fragen)**
+
+### A4 Bossfight Jahresabschluss
+
+1. Empfang → Übergabe (Kurzablauf)
+2. Mini-Beratung (2 Vorschläge)
+3. Wäsche/Pflege (Standard)
+4. Föhnen/Finish (Standard)
+5. Schnittteil nach Stand (Basics)
+6. Dokumentation (Kurzstandard)
+7. Mini-Checkpoint: „Ablauf in 10 Punkten“
+8. **Großes Quiz (Mix Level 1–4)**
+
+---
+
+## Was heißt das für euren aktuellen Stand?
+
+* **L1 A1 & A2:** Ihr habt faktisch schon viel Quiz-/Fragenmaterial. Das gehört sauber auf **Step 8**.
+* **L1 A3 & A4:** Das, was wir gebaut haben, ist ebenfalls **Step 8**.
+* Es fehlen dann pro Abschnitt die **Steps 1–7** (Inhalte/Info/Checkpoint).
+
+Wenn du mir sagst, **wie eure “Inhalte”-Steps technisch aussehen** (reine Textseiten? auch Mini-Fragen?), baue ich dir als nächstes direkt **z. B. L1 A3 Step 1–7** als passende JS-Dateien in eurem Format.

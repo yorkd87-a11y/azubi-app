@@ -1,0 +1,57 @@
+/* Spiele Header */
+
+.gm-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #ffffff;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+}
+
+.gm-close-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: none;
+  background: #f0f1f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.08s ease;
+}
+
+.gm-close-btn:hover {
+  background: #e3e4ee;
+  transform: translateY(-1px);
+}
+
+.gm-progress-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gm-progress-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: #e4e6f0;
+  overflow: hidden;
+}
+
+.gm-progress-bar-inner {
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #1c2342, #e8bd4f);
+  transition: width 0.25s ease;
+}
+
+.gm-progress-label {
+  font-size: 0.75rem;
+  color: #6b6f76;
+}

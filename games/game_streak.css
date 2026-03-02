@@ -1,0 +1,30 @@
+.gm-streak {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(28, 35, 66, 0.12);
+  color: #1c2342;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.gm-streak-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b6f76;
+}
+
+.gm-streak-value {
+  color: #b45309;
+}
+
+@media (max-width: 600px) {
+  .gm-streak {
+    padding: 4px 8px;
+    font-size: 0.76rem;
+  }
+}

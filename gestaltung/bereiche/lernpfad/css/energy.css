@@ -1,0 +1,116 @@
+/* Lernpfad Energie */
+
+.map-level-header {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.map-energy-badge {
+  position: static;
+  display: flex;
+  align-items: center;
+}
+
+.map-top-row .map-energy-chip {
+  min-height: 52px;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 207, 99, 0.42);
+  background: rgba(31, 17, 8, 0.95);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.34);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.map-energy-chip {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px 0 12px;
+}
+
+.map-energy-chip-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex: 0 0 22px;
+}
+
+.map-energy-chip-value {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f9fafb;
+  line-height: 1.1;
+}
+
+.map-energy-float {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0;
+  transform: translate(-50%, calc(-50% + 12px));
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.map-energy-float--hidden {
+  opacity: 0;
+}
+
+.map-energy-float--visible {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+@media (min-width: 1100px) {
+  .map-energy-chip {
+    padding: 8px 18px;
+  }
+
+  .map-energy-chip-icon {
+    width: 26px;
+    height: 26px;
+    flex-basis: 26px;
+  }
+
+  .map-energy-chip-value {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .map-top-row .map-energy-chip {
+    min-height: 48px;
+    background: rgba(31, 17, 8, 0.95);
+    border: 1px solid rgba(244, 207, 99, 0.45);
+    box-shadow: 0 0 10px rgba(244, 207, 99, 0.18);
+    color: var(--ink);
+    padding: 0 14px 0 10px;
+  }
+
+  .map-top-row .map-energy-chip-icon {
+    width: 20px;
+    height: 20px;
+    flex-basis: 20px;
+  }
+
+  .map-top-row .map-energy-chip-value {
+    font-size: 0.76rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .map-energy-chip {
+    padding: 5px 12px;
+  }
+
+  .map-energy-chip-icon {
+    width: 18px;
+    height: 18px;
+    flex-basis: 18px;
+  }
+
+  .map-energy-chip-value {
+    font-size: 0.6rem;
+  }
+}

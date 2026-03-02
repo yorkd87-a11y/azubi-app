@@ -1,0 +1,32 @@
+/* Lernpfad Header */
+
+.map-card h2 {
+  margin: 0 0 6px;
+  font-size: 25px;
+}
+
+.map-subtitle {
+  margin: 0 0 14px;
+  font-size: 20px;
+  color: var(--muted);
+}
+
+@media (min-width: 1100px) {
+  .map-card h2 {
+    font-size: 32px;
+  }
+
+  .map-subtitle {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .map-card h2 {
+    font-size: 18px;
+  }
+
+  .map-subtitle {
+    font-size: 14px;
+  }
+}

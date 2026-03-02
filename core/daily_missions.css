@@ -1,0 +1,317 @@
+/* core/daily_missions.css */
+
+/* Vollbild-Overlay */
+.dm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: radial-gradient(circle at top, rgba(24, 36, 80, 0.88), rgba(9, 12, 25, 0.96));
+}
+
+/* Zentrale Karte */
+.dm-card {
+  width: 100%;
+  max-width: 1600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #ffffff, #f4f5fb);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  padding: 20px 22px 18px;
+  color: #1c2342;
+  overflow: hidden;
+}
+
+/* Header */
+.dm-header {
+  position: relative;               /* NEU: für Close-Button */
+  display: flex;
+  justify-content: center;          /* NEU: Inhalt mittig */
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.dm-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;              /* NEU: Text zentriert */
+  text-align: center;
+  margin: 0 auto;
+}
+
+.dm-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #e8bd4f, #f6e0a8);
+  color: #1c2342;
+  font-weight: 700;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.18);
+}
+
+.dm-title {
+  font-size: 1.6rem;
+  line-height: 1.2;
+  margin: 0;
+  font-weight: 700;
+}
+
+.dm-subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #5b6275;
+  text-align: center;               /* NEU */
+}
+
+.dm-close-btn {
+  border: none;
+  background: #eff0f6;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #555a6c;
+  transition: background 0.15s ease, transform 0.1s ease;
+  position: absolute;               /* NEU */
+  top: 4px;                         /* NEU */
+  right: 4px;                       /* NEU */
+}
+
+.dm-close-btn:hover {
+  background: #e2e3f0;
+  transform: translateY(-1px);
+}
+
+/* Meta-Zeile */
+.dm-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  color: #6b6f76;
+}
+
+.dm-question-counter {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.dm-energy-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.dm-energy-label {
+  opacity: 0.8;
+}
+
+.dm-energy-value {
+  font-weight: 600;
+}
+
+.dm-energy-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #1c2342, #293257);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.dm-energy-pill-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex: 0 0 20px;
+}
+
+/* Fortschrittsbalken */
+.dm-progress-bar {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: #e0e2f0;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.dm-progress-inner {
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #e8bd4f, #f89c35);
+  transition: width 0.25s ease-out;
+}
+
+/* Content / Spielebereich */
+.dm-content {
+  flex: 1;
+  min-height: 260px;
+  max-height: 100%;
+  overflow: auto;
+  padding: 10px 12px 6px;           /* etwas mehr gleichmäßiger Padding */
+}
+
+.dm-game-slot {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;                    /* NEU: Inhalt zentrieren */
+  justify-content: center;
+}
+
+/* Footer */
+.dm-footer {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(203, 206, 220, 0.7);
+}
+
+.dm-footer-hint {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #7b8090;
+}
+
+/* Summary */
+.dm-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 26px 16px 20px;
+}
+
+.dm-summary h3 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.dm-summary p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555a6c;
+}
+
+.dm-summary p strong {
+  color: #1c2342;
+}
+
+.dm-close-main-btn {
+  margin-top: 12px;
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #e8bd4f, #f89c35);
+  color: #1c2342;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.dm-close-main-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 11px 26px rgba(0, 0, 0, 0.28);
+}
+
+/* kleine Feedback-Animationen */
+.dm-card.dm-correct {
+  animation: dm-correct-pulse 0.25s ease-out;
+}
+
+.dm-card.dm-wrong {
+  animation: dm-wrong-shake 0.18s ease-out;
+}
+
+@keyframes dm-correct-pulse {
+  0% {
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    transform: translateY(0);
+  }
+  50% {
+    box-shadow: 0 28px 70px rgba(96, 191, 88, 0.6);
+    transform: translateY(-1px);
+  }
+  100% {
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    transform: translateY(0);
+  }
+}
+
+@keyframes dm-wrong-shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Fallback-Fehlertext im Slot */
+.dm-error {
+  padding: 18px 16px;
+  border-radius: 16px;
+  background: #ffe9e7;
+  color: #7f1d1d;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .dm-card {
+    padding: 18px 16px 14px;
+  }
+
+  .dm-header {
+    align-items: center;
+  }
+
+  .dm-title {
+    font-size: 1.4rem;
+  }
+
+  .dm-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .dm-content {
+    padding-inline: 8px;
+  }
+}

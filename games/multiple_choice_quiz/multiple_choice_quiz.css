@@ -1,0 +1,413 @@
+/* games/multiple_choice_quiz/multiple_choice_quiz.css */
+
+/* Gesamte Quizkarte */
+.mc-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 22px 18px;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.22);
+  color: #1c2342;
+}
+
+/* Meta-Zeile: Thema + Fragezähler */
+.mc-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #6b6f76;
+}
+
+.mc-topic {
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.mc-counter {
+  opacity: 0.8;
+}
+
+/* Frage / Einleitung – Box analog zu tfs-statement-card / scn-bubble */
+.mc-question {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+  background: linear-gradient(135deg, #f7f7fb, #eef0f7);
+  border: 1px solid rgba(28, 35, 66, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 24px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.mc-question-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #1c2342;
+}
+
+/* Hinweis innerhalb der Fragetext-Box */
+.mc-hint {
+  font-size: 0.82rem;
+  color: rgba(28, 35, 66, 0.45);
+  font-style: italic;
+  border-top: 1px solid rgba(28, 35, 66, 0.07);
+  padding-top: 6px;
+}
+
+/* ==============================
+   Optionen als moderne 2×2 Karten
+   ============================== */
+
+.mc-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+/* Handy: untereinander */
+@media (max-width: 720px) {
+  .mc-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Einzelne Antwortkarte (Basis) */
+.mc-option {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+
+  padding: 14px 16px 16px;
+  border-radius: 18px;
+  background: radial-gradient(
+    circle at top left,
+    #ffffff 0%,
+    #f5f6fb 50%,
+    #edf0ff 100%
+  );
+  border: 1px solid rgba(19, 27, 64, 0.08);
+  box-shadow:
+    0 12px 24px rgba(15, 23, 42, 0.18),
+    0 0 0 1px rgba(255, 255, 255, 0.8);
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    border-color 0.16s ease,
+    opacity 0.16s ease;
+}
+
+.mc-option:hover:not(.mc-option--disabled) {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.26);
+}
+
+.mc-option:active:not(.mc-option--disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.22);
+}
+
+/* Tastatur-Fokus */
+.mc-option:focus-visible {
+  outline: 0;
+  box-shadow:
+    0 18px 40px rgba(28, 35, 66, 0.35),
+    0 0 0 2px #e8bd4f;
+}
+
+/* Checkbox-Icon links */
+.mc-option-icon {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 8px;
+  border: 2px solid #c4c7d6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: transparent; /* Häkchen erst bei Auswahl sichtbar */
+  background: #ffffff;
+  box-shadow: 0 2px 4px rgba(148, 163, 184, 0.35);
+}
+
+.mc-option-label {
+  flex: 1;
+  text-align: center;
+}
+
+/* ==============================
+   States
+   ============================== */
+
+/* Ausgewählt (vor Auswertung) */
+.mc-option--selected {
+  border-color: #e8bd4f;
+  background: linear-gradient(135deg, #fff7e3, #fbe8be);
+  box-shadow:
+    0 18px 40px rgba(232, 189, 79, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.9);
+  transform: translateY(-5px);
+  animation: mc-select-pop 0.16s ease-out;
+}
+
+.mc-option--selected .mc-option-icon {
+  border-color: #e8bd4f;
+  background: #e8bd4f;
+  color: #1c2342;
+}
+
+/* Nach Auswertung – deaktiviert */
+.mc-option--disabled {
+  cursor: default;
+  opacity: 0.96;
+}
+
+/* Korrekt angewählte Antwort */
+.mc-option--correct {
+  border-color: #2e7d32;
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  box-shadow: 0 18px 38px rgba(46, 125, 50, 0.3);
+  transform: translateY(-2px);
+}
+
+.mc-option--correct .mc-option-icon {
+  border-color: #2e7d32;
+  background: #2e7d32;
+  color: #ffffff;
+}
+
+/* Falsch ausgewählte Antwort */
+.mc-option--wrong {
+  border-color: #c62828;
+  background: linear-gradient(135deg, #ffebee, #ffcdd2);
+  box-shadow: 0 18px 38px rgba(198, 40, 40, 0.3);
+  transform: translateY(-2px);
+}
+
+.mc-option--wrong .mc-option-icon {
+  border-color: #c62828;
+  background: #c62828;
+  color: #ffffff;
+}
+
+/* Richtige, aber nicht gewählte Antwort */
+.mc-option--missed {
+  border-style: dashed;
+  border-color: #2e7d32;
+  background: linear-gradient(135deg, #f3faf4, #e8f5e9);
+}
+
+/* Labels oben rechts nach Auswertung */
+.mc-option--correct::after,
+.mc-option--wrong::after,
+.mc-option--missed::after {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.mc-option--correct::after {
+  content: "Richtig";
+  background: #2e7d32;
+}
+
+.mc-option--wrong::after {
+  content: "Falsch";
+  background: #c62828;
+}
+
+.mc-option--missed::after {
+  content: "Richtige Antwort";
+  background: #2e7d32;
+  opacity: 0.9;
+}
+
+/* Hover-Transform auf Touch deaktivieren (verhindert Wackeln beim Scrollen) */
+@media (hover: none) {
+  .mc-option:hover:not(.mc-option--disabled) {
+    transform: none;
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* Scroll-Hinweis Badge */
+.mc-scroll-hint {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: #1c2342;
+  color: #ffffff;
+  padding: 9px 20px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  z-index: 10001;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.mc-scroll-hint--visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ==============================
+   Animationen
+   ============================== */
+
+@keyframes mc-select-pop {
+  0% {
+    transform: translateY(0) scale(0.96);
+  }
+  60% {
+    transform: translateY(-6px) scale(1.03);
+  }
+  100% {
+    transform: translateY(-5px) scale(1);
+  }
+}
+
+@keyframes mc-correct-pulse {
+  0% {
+    transform: scale(0.96);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes mc-wrong-shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* ==============================
+   Mobile Feintuning
+   ============================== */
+
+@media (max-width: 780px) {
+  .mc-card {
+    gap: 12px;
+    padding: 15px 13px 12px;
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.18);
+  }
+
+  .mc-meta-row {
+    font-size: 0.9rem;
+  }
+
+  .mc-question {
+    padding: 14px 12px;
+    gap: 6px;
+  }
+
+  .mc-question-text {
+    font-size: 1rem;
+  }
+
+  .mc-options {
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .mc-option {
+    font-size: 0.9rem;
+    line-height: 1.36;
+    padding: 11px 13px 12px;
+  }
+
+  .mc-option-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .mc-card {
+    padding-top: 28px;
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+    min-height: unset;
+    align-self: flex-start;
+    width: 100%;
+  }
+
+  .mc-card .game-footer-row {
+    margin-top: 16px;
+    padding-bottom: 0;
+  }
+
+  .mc-card .game-feedback {
+    min-height: 0;
+    margin-bottom: 0;
+  }
+
+  .mc-options {
+    gap: 14px;
+  }
+
+  .mc-option {
+    font-size: 17px;
+    padding: 14px 12px;
+  }
+}
+

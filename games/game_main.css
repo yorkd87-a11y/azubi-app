@@ -1,0 +1,32 @@
+/* games/game_main.css
+   Restdatei: globale Spiel-Styles liegen jetzt modular unter
+   `gestaltung/bereiche/spiele_und_fragenkarten/css/`.
+*/
+
+.gm-no-energy {
+  justify-content: center;
+  text-align: center;
+}
+
+.gm-no-energy p {
+  margin: 0;
+  color: #3c3128;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.gm-no-energy-btn {
+  width: 100%;
+  min-height: 52px;
+  border: none;
+  border-radius: 999px;
+  background: #1c2342;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.gm-no-energy-btn:hover {
+  transform: translateY(-1px);
+}

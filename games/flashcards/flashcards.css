@@ -1,0 +1,231 @@
+/* games/flashcards/flashcards.css */
+
+.fc-card-main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 18px 20px 20px;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.22);
+  color: #1c2342;
+}
+
+/* Meta-Zeile */
+.fc-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #6b6f76;
+}
+
+.fc-topic {
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.fc-counter {
+  opacity: 0.8;
+}
+
+/* Prompt */
+.fc-prompt {
+  font-size: 0.96rem;
+  font-weight: 600;
+  margin-top: 2px;
+  color: #1c2342;
+}
+
+/* Karte mittig, eine pro Screen */
+.fc-card-wrapper {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+}
+
+.fc-card {
+  width: min(280px, 82vw);
+  height: 190px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.fc-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease;
+}
+
+.fc-card--flipped .fc-card-inner {
+  transform: rotateY(180deg);
+}
+
+.fc-card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 14px 14px 16px;
+  box-sizing: border-box;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background: radial-gradient(circle at top left, #111827 0%, #020617 45%, #0b1220 100%);
+  color: #f9fafb;
+}
+
+.fc-card-front {
+  /* Frontseite bekommt leicht andere Tönung, optional */
+  background: radial-gradient(circle at top left, #111827 0%, #020617 45%, #111827 100%);
+}
+
+
+.fc-card-back {
+  transform: rotateY(180deg);
+}
+
+/* Labels & Text auf der Karte */
+.fc-front-label,
+.fc-back-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+  margin-bottom: 6px;
+}
+
+.fc-front-text,
+.fc-back-text {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  overflow-wrap: break-word;
+}
+
+/* Progress-Zeile unter der Karte */
+.fc-progress-row {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: #6b6f76;
+}
+
+.fc-progress-label {
+  font-weight: 500;
+}
+
+.fc-seen-label {
+  opacity: 0.9;
+}
+
+.fc-seen-count {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Buttons "Kannte ich" / "Unsicher" */
+.fc-actions-row {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.fc-know-btn,
+.fc-unknown-btn {
+  min-width: 120px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.16s ease,
+    background 0.16s ease,
+    color 0.16s ease;
+}
+
+.fc-know-btn {
+  background: #0f172a;
+  color: #ffffff;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.35);
+}
+
+.fc-unknown-btn {
+  background: #f3f4ff;
+  color: #1c2342;
+  box-shadow: 0 8px 20px rgba(148, 163, 184, 0.35);
+}
+
+.fc-know-btn:hover,
+.fc-unknown-btn:hover {
+  transform: translateY(-2px);
+}
+
+.fc-know-btn:active,
+.fc-unknown-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2);
+}
+
+/* Info / Feedback unten */
+.fc-info-badge--done {
+  animation: fc-badge-pop 0.35s ease-out;
+}
+
+@keyframes fc-badge-pop {
+  0% {
+    transform: scale(0.96);
+  }
+  60% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Mobile Feintuning */
+@media (max-width: 780px) {
+  .fc-card-main {
+    padding: 14px 12px 16px;
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.18);
+  }
+
+  .fc-prompt {
+    font-size: 0.9rem;
+  }
+
+  .fc-card {
+    height: 180px;
+  }
+
+  .fc-front-text,
+  .fc-back-text {
+    font-size: 0.86rem;
+  }
+
+  .fc-actions-row {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .fc-know-btn,
+  .fc-unknown-btn {
+    flex: 1;
+  }
+}
+

@@ -1,0 +1,78 @@
+/* Spiele Footer */
+
+.game-footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 12px;
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 112px);
+}
+
+.game-feedback {
+  flex: 1;
+  min-height: 2.4em;
+  margin-bottom: 112px;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  color: #555;
+}
+
+.game-next-btn {
+  width: 100%;
+  display: block;
+  flex: 0 0 100%;
+  min-height: 56px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: none;
+  background: #1c2342;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: default;
+  opacity: 0.4;
+  transition: opacity 0.2s ease, transform 0.12s ease;
+  white-space: normal;
+}
+
+.game-next-btn--enabled {
+  opacity: 1;
+  cursor: pointer;
+  animation: gm-next-pop 0.22s ease-out;
+}
+
+.game-next-btn--enabled:hover {
+  transform: translateY(-1px);
+}
+
+.gm-correct-popup-btn {
+  margin-bottom: calc(env(safe-area-inset-bottom, 0px) + 112px);
+  width: 100%;
+  max-width: 100%;
+  min-height: 64px;
+  padding: 16px 20px;
+  font-size: 1.1rem;
+}
+
+@keyframes gm-next-pop {
+  0% { transform: scale(0.96); }
+  60% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+@media (max-width: 600px) {
+  .game-footer-row {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 28px);
+  }
+
+  .game-feedback {
+    margin-bottom: 28px;
+  }
+
+  .gm-correct-popup-btn {
+    margin-bottom: calc(env(safe-area-inset-bottom, 0px) + 28px);
+  }
+}

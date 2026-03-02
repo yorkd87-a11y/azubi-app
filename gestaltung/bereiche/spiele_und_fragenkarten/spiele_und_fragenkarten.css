@@ -1,0 +1,224 @@
+/* Info-Karte (card-area) */
+
+body.bereich-spiele-und-fragenkarten #card-area h2 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+body.bereich-spiele-und-fragenkarten #card-area ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+body.bereich-spiele-und-fragenkarten #card-area li + li {
+  margin-top: 2px;
+}
+
+/* Track-Badge im Lesson-Title (wird von app.js eingesetzt) */
+
+body.bereich-spiele-und-fragenkarten .track-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(5, 8, 24, 0.9);
+  border: 1px solid rgba(232, 189, 79, 0.35);
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-right: 4px;
+}
+
+/* Frage-Bereich */
+
+body.bereich-spiele-und-fragenkarten #question-area {
+  margin-bottom: 2px;
+}
+
+body.bereich-spiele-und-fragenkarten #question-media {
+  margin: -4px 0 6px;
+}
+
+body.bereich-spiele-und-fragenkarten #question-media audio,
+body.bereich-spiele-und-fragenkarten #question-media video {
+  width: 100%;
+  border-radius: 12px;
+  outline: none;
+}
+
+body.bereich-spiele-und-fragenkarten #question-text {
+  margin: 2px 0 8px;
+  font-size: 15px;
+}
+
+/* Antworten */
+
+body.bereich-spiele-und-fragenkarten #answers {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+/* Multiple-Choice Buttons */
+
+body.bereich-spiele-und-fragenkarten #answers button {
+  display: block;
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(8, 12, 30, 0.9);
+  color: var(--ink);
+  text-align: left;
+  font-size: 13px;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+body.bereich-spiele-und-fragenkarten #answers button:hover {
+  border-color: rgba(232, 189, 79, 0.9);
+  box-shadow: 0 0 0 1px rgba(232, 189, 79, 0.5);
+  background: rgba(12, 16, 36, 0.95);
+}
+
+body.bereich-spiele-und-fragenkarten #answers button.selected {
+  border-color: var(--accent);
+  background: rgba(232, 189, 79, 0.12);
+  box-shadow: 0 0 0 1px rgba(232, 189, 79, 0.7);
+}
+
+/* LÃ¼ckentext-Input */
+
+body.bereich-spiele-und-fragenkarten #answers input[type="text"] {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(8, 12, 30, 0.9);
+  color: var(--ink);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.1s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+body.bereich-spiele-und-fragenkarten #answers input[type="text"]::placeholder {
+  color: rgba(160, 166, 195, 0.7);
+}
+
+body.bereich-spiele-und-fragenkarten #answers input[type="text"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(232, 189, 79, 0.6);
+  background: rgba(12, 16, 36, 0.98);
+}
+
+/* Submit-Button */
+
+body.bereich-spiele-und-fragenkarten #submit-btn {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, var(--brand), var(--accent));
+  color: #221400;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+  transition: transform 0.1s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+body.bereich-spiele-und-fragenkarten #submit-btn:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55);
+}
+
+body.bereich-spiele-und-fragenkarten #submit-btn:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+}
+
+/* Feedback */
+
+body.bereich-spiele-und-fragenkarten #feedback {
+  margin: 6px 2px 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Footer / Navigation */
+
+body.bereich-spiele-und-fragenkarten .app-footer {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  padding: 4px 2px 0;
+}
+
+body.bereich-spiele-und-fragenkarten .app-footer button {
+  flex: 1;
+  padding: 9px 0;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(8, 11, 26, 0.95);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
+  transition: transform 0.1s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s;
+}
+
+body.bereich-spiele-und-fragenkarten .app-footer button:hover {
+  background: rgba(17, 22, 48, 0.98);
+  border-color: rgba(232, 189, 79, 0.6);
+}
+
+body.bereich-spiele-und-fragenkarten .app-footer button:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Responsiv Kleinigkeiten */
+
+@media (max-width: 768px) {
+  body.bereich-spiele-und-fragenkarten #card-area h2 {
+    font-size: 18px;
+  }
+
+  body.bereich-spiele-und-fragenkarten #card-area ul {
+    font-size: 14px;
+  }
+
+  body.bereich-spiele-und-fragenkarten #question-text {
+    font-size: 17px;
+  }
+
+  body.bereich-spiele-und-fragenkarten #answers button {
+    padding: 12px 14px;
+    font-size: 15px;
+  }
+
+  body.bereich-spiele-und-fragenkarten #answers input[type="text"] {
+    padding: 12px 14px;
+    font-size: 15px;
+  }
+
+  body.bereich-spiele-und-fragenkarten #submit-btn {
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+
+  body.bereich-spiele-und-fragenkarten #feedback {
+    font-size: 13px;
+  }
+
+  body.bereich-spiele-und-fragenkarten .app-footer button {
+    padding: 12px 0;
+    font-size: 15px;
+  }
+}

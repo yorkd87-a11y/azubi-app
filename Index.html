@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Friseur Azubi Trainer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#24160a">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- =========================
+       Basis-Styles & Layout
+  ========================== -->
+  <!-- Neue Struktur (noch leer, Vorbereitung für Umbau) -->
+  <link rel="stylesheet" href="gestaltung/basis/farben_und_schriften.css">
+  <link rel="stylesheet" href="gestaltung/basis/grundelemente.css">
+  <link rel="stylesheet" href="gestaltung/basis/layout_und_raster.css">
+  <link rel="stylesheet" href="gestaltung/basis/kleine_hilfen.css">
+
+  <link rel="stylesheet" href="gestaltung/bereiche/carmen_intro/carmen_intro.css">
+  <link rel="stylesheet" href="gestaltung/bereiche/heute/heute.css">
+  <link rel="stylesheet" href="gestaltung/bereiche/lernpfad_header/lernpfad_header.css">
+  <link rel="stylesheet" href="gestaltung/bereiche/level_uebersicht/level_uebersicht.css">
+  <link rel="stylesheet" href="gestaltung/bereiche/spiele_und_fragenkarten/spiele_und_fragenkarten.css">
+  <link rel="stylesheet" href="gestaltung/bereiche/werbebildschirme/werbebildschirme.css">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Intro / Carmen-Screen -->
+  <link rel="stylesheet" href="carmen_intro.css">
+
+  <!-- Lernpfad / Map-Ansicht -->
+  <link rel="stylesheet" href="lesson_map_styles.css">
+  <link rel="stylesheet" href="gestaltung/bereiche/lernpfad/css/main.css">
+
+  <!-- Abschnitt-Karte / Level-Header auf dem Lernpfad -->
+  <link rel="stylesheet" href="level_header.css">
+
+  <!-- Level-/Jahr-Auswahl -->
+  <link rel="stylesheet" href="level_select.css">
+
+  <!-- =========================
+       Game-Styles (Overlay + Spiele)
+  ========================== -->
+  <link rel="stylesheet" href="games/game_main.css">
+  <link rel="stylesheet" href="gestaltung/bereiche/spiele_und_fragenkarten/css/main.css">
+  <link rel="stylesheet" href="games/game_streak.css">
+  <link rel="stylesheet" href="core/lesson_summary.css">
+  <link rel="stylesheet" href="core/daily_missions.css">
+
+
+  <!-- Aktive Spiele -->
+  <link rel="stylesheet" href="games/single_choice_quiz/single_choice_quiz.css">
+  <link rel="stylesheet" href="games/multiple_choice_quiz/multiple_choice_quiz.css">
+  <link rel="stylesheet" href="games/true_false_swipe/true_false_swipe.css">
+  <link rel="stylesheet" href="games/gap_fill/gap_fill.css">
+  <link rel="stylesheet" href="games/match_pairs/match_pairs.css">
+  <link rel="stylesheet" href="games/order_steps/order_steps.css">
+  <link rel="stylesheet" href="games/timeline_order/timeline_order.css">
+  <link rel="stylesheet" href="games/quickfire_streak/quickfire_streak.css">
+  <link rel="stylesheet" href="games/scenario_choice/scenario_choice.css">
+  <link rel="stylesheet" href="games/category_sort/category_sort.css">
+  <link rel="stylesheet" href="games/flashcards/flashcards.css">
+  <link rel="stylesheet" href="games/sentence_builder/sentence_builder.css">
+
+
+
+  <!-- Optional / zukünftige Spiele -->
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- ===================================================
+         Intro-Screen mit Carmen (Start der App)
+    ==================================================== -->
+    <div id="intro-screen" class="intro-screen hidden">
+      <div class="intro-card">
+        <div class="intro-layout">
+
+          <!-- Carmen Bild -->
+          <div class="intro-avatar">
+            <img
+              src="media/carmen_intro.png"
+              alt="Carmen – deine Begleiterin in der Friseurausbildung">
+          </div>
+
+          <!-- Sprechblase mit Einleitungstext -->
+          <div class="intro-bubble">
+            <div id="intro-bubble-text">
+              <h2>Hi, ich bin Carmen 👋</h2>
+              <p>
+                Ich bin 18 Jahre alt und starte – genau wie du – meine Ausbildung im Friseurberuf.
+              </p>
+              <p>
+                In dieser App lernen wir gemeinsam alles, was du für Schule, Salon und Prüfung brauchst:
+                vom ersten Tag im Betrieb über Hygiene und Kundenempfang bis hin zu Haar- und Kopfhaut-Wissen.
+              </p>
+              <p>
+                Du bekommst kurze Erklärungen, viele Fragen zum Üben und echte Situationen aus dem Salon – so,
+                wie sie wirklich passieren.
+              </p>
+              <p>
+                Wenn du bereit bist, begleite ich dich Schritt für Schritt durch deine Ausbildung.
+              </p>
+            </div>
+
+            <!-- Audio-Button (Intro-Voice von Carmen) -->
+            <button id="intro-audio-btn" class="intro-audio-btn">
+              ▶ Intro anhören
+            </button>
+            <audio id="intro-audio" src="media/carmen_intro_audio.wav"></audio>
+          </div>
+        </div>
+
+        <!-- Button, um von Intro → Lernpfad zu wechseln -->
+        <button id="intro-start-btn" class="intro-start-btn">
+          Mit Carmen starten ✂️
+        </button>
+      </div>
+    </div>
+
+    <div id="today-screen" class="today-screen hidden">
+      <div class="today-shell">
+        <div class="today-card">
+          <div class="today-banner">
+            <span class="today-banner-title">Heute</span>
+            <span id="today-progress-pill" class="today-banner-progress">0 von 2 erledigt</span>
+          </div>
+
+          <div class="today-hero">
+            <div class="today-copy">
+              <h2 id="today-headline">Deine Session wartet</h2>
+              <p id="today-subline">Erledige sie zuerst, dann geht es in den Lernpfad.</p>
+            </div>
+          </div>
+
+          <div id="today-session-list" class="today-session-list"></div>
+
+          <button id="today-map-btn" class="today-map-btn" type="button">
+            Zum Lernpfad
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================================================
+         Level-/Jahr-Auswahl (zwischen Intro und Lernpfad)
+    ==================================================== -->
+    <div id="level-select-screen" class="level-select-screen hidden"></div>
+
+    <!-- ===================================================
+         Lernpfad / Map-Screen mit Level-/Abschnittsübersicht
+    ==================================================== -->
+    <div id="map-screen" class="map-screen hidden">
+      <div id="map-root" class="map-root"></div>
+    </div>
+
+    <!-- ===================================================
+         Werbeblock nach abgeschlossener Lektion
+    ==================================================== -->
+    <div id="promo-screen" class="promo-screen hidden">
+      <div class="promo-card">
+        <div class="promo-layout">
+          <span class="promo-kicker">Empfehle unsere App an deine Freunde</span>
+          <div class="promo-video-shell">
+            <div id="promo-countdown" class="promo-countdown">--s</div>
+            <button id="promo-unmute-btn" class="promo-unmute-btn hidden" type="button">
+              Ton einschalten
+            </button>
+            <video
+              id="promo-video"
+              class="promo-video"
+              autoplay
+              muted
+              playsinline
+            ></video>
+            <button id="promo-replay-overlay-btn" class="promo-replay-overlay hidden" type="button">
+              Erneut abspielen
+            </button>
+            <button id="promo-continue-btn" class="promo-primary-btn promo-video-continue hidden" type="button">
+              Weiter zum Lernpfad
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================================================
+         Lernmodus: Header (Titel, XP, Streak, Lesson-Info)
+    ==================================================== -->
+    <header class="app-header" id="learn-header">
+      <div class="app-header-top">
+        <h1>Friseur Azubi Trainer</h1>
+        <div class="app-stats">
+          <span id="xp-display">XP: 0</span>
+          <span id="streak-display">Streak: 0 🔥</span>
+          <span id="energy-display">Energie: 50/50</span>
+        </div>
+      </div>
+
+      <div class="app-meta-row">
+        <span id="module-title"></span>
+        <span id="lesson-title"></span>
+      </div>
+
+      <div class="app-meta-row">
+        <span id="lesson-progress"></span>
+        <span id="question-progress"></span>
+      </div>
+    </header>
+
+    <!-- ===================================================
+         Lernmodus: Hauptbereich (Infokarte + Fragenbereich)
+    ==================================================== -->
+    <main class="app-main" id="learn-main">
+
+      <!-- Info-Karte zur aktuellen Lesson -->
+      <section id="card-area" class="card">
+        <!-- Wird durch app.js mit Lesson-Inhalt gefüllt -->
+      </section>
+
+      <!-- Fragen, Antworten, Medien, Feedback -->
+      <section id="question-area" class="card">
+        <!-- Medien (Audio/Video/Bild) zur Frage -->
+        <div id="question-media"></div>
+
+        <!-- Fragetext -->
+        <h2 id="question-text"></h2>
+
+        <!-- Antwortbereich (Buttons, Inputs, etc.) -->
+        <div id="answers"></div>
+
+        <!-- Antwort prüfen -->
+        <button id="submit-btn">Antwort prüfen</button>
+
+        <!-- Feedback (richtig/falsch, Erklärung) -->
+        <p id="feedback"></p>
+      </section>
+    </main>
+
+    <!-- ===================================================
+         Lernmodus: Navigation (Zurück / Weiter)
+    ==================================================== -->
+    <footer class="app-footer" id="learn-footer">
+      <button id="prev-btn">← Zurück</button>
+      <button id="next-btn">Weiter →</button>
+    </footer>
+  </div>
+
+  <!-- ===================================================
+       Einstiegspunkt der App-Logik
+       (State, Map, Lessons, Aufruf von startLessonGame)
+  ==================================================== -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>

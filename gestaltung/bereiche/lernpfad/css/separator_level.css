@@ -1,0 +1,6 @@
+/* Lernpfad Separator: Level */
+
+.map-separator--level .map-separator-label {
+  font-size: 0.74rem;
+  color: rgba(244, 207, 99, 0.75);
+}

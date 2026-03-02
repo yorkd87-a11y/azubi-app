@@ -1,0 +1,722 @@
+﻿/* ================================================
+   LERNPFAD / MAP-SCREEN - 3-Spalten-Zickzack
+   Desktop + Mobile
+   ================================================ */
+
+/* --- Grundlayout fuer den Map-Screen --- */
+
+body.bereich-lernpfad .map-screen {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px 16px 20px; /* mehr Luft */
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+
+body.bereich-lernpfad .map-root {
+  width: 100%;
+  max-width: 1180px;       /* breiter auf Desktop */
+  margin: 0 auto;
+}
+
+/* --- Karte, die den Pfad enthaelt --- */
+
+body.bereich-lernpfad .map-card {
+  background: radial-gradient(circle at top left, rgba(232, 189, 79, 0.16), transparent 55%),
+              radial-gradient(circle at bottom right, rgba(88, 199, 255, 0.14), transparent 65%),
+              var(--card);
+  border-radius: 24px;
+  padding: 20px 24px 48px;      /* etwas grosszuegiger */
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Top-Row: Zurueck-Button links, Energie rechts */
+body.bereich-lernpfad .map-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+body.bereich-lernpfad .map-top-row .map-back-btn {
+  order: 1;
+}
+
+body.bereich-lernpfad .map-top-row .map-energy-badge {
+  order: 2;
+}
+
+body.bereich-lernpfad .map-card h2 {
+  margin: 0 0 6px;
+  font-size: 25px;              /* groesser */
+}
+
+body.bereich-lernpfad .map-subtitle {
+  margin: 0 0 14px;
+  font-size: 20px;              /* groesser */
+  color: var(--muted);
+}
+
+/* --- Energie-Anzeige oben im Head --- */
+
+body.bereich-lernpfad .map-level-header {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+body.bereich-lernpfad .map-energy-badge {
+  position: static;
+  display: flex;
+  align-items: center;
+}
+
+/* Kapsel: jetzt alles in einer Zeile */
+body.bereich-lernpfad .map-energy-chip {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid #e8bd4f;   /* Gold */
+  background: rgba(10, 18, 40, 0.9);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Blitz */
+body.bereich-lernpfad .map-energy-chip-icon {
+  font-size: 1rem;           /* vorher sehr klein */
+  line-height: 2;
+}
+
+/* 50/50: groesser, besser lesbar */
+body.bereich-lernpfad .map-energy-chip-value {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f9fafb;
+  line-height: 2;
+}
+
+/* Energie-Badge im Pfad */
+body.bereich-lernpfad .map-energy-float {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 4;
+}
+
+body.bereich-lernpfad .map-energy-float--hidden {
+  opacity: 0;
+}
+
+/* --- Pfad - Steps untereinander, etwas groesser --- */
+
+body.bereich-lernpfad .map-path {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;                 /* mehr vertikaler Abstand */
+  padding: 12px 0 48px;      /* extra �Welt�-Rand nach unten */
+}
+
+
+body.bereich-lernpfad .map-complete-cta {
+  margin: 16px auto 6px;
+  display: block;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 189, 79, 0.6);
+  background: rgba(9, 13, 30, 0.95);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+}
+
+body.bereich-lernpfad .map-complete-cta:hover {
+  border-color: rgba(232, 189, 79, 0.9);
+}/* Eine Stufe (Kreis + Connector) */
+
+body.bereich-lernpfad .map-step {
+  position: relative;
+  height: 100px;              /* mehr �Versatz nach unten� pro Step */
+  --node-x: 50%;
+}
+
+/* --- Node (Kreis + Label) sitzt auf einer der 3 Spalten --- */
+
+body.bereich-lernpfad .map-node {
+  position: absolute;
+  top: 0;
+  left: var(--node-x);       /* wird von JS gesetzt (z. B. 12%, 50%, 88%) */
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* Kreis */
+
+body.bereich-lernpfad .map-node-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 700;
+  background: rgba(9, 13, 30, 0.95);
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  color: var(--ink);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.75);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+/* Label unter dem Kreis */
+
+body.bereich-lernpfad .map-node-label {
+  max-width: 170px;
+  text-align: center;
+    opacity: 0.85;
+}
+
+body.bereich-lernpfad .map-node-title {
+  font-size: 22px;
+  color: var(--muted);
+}
+
+/* Score-Zeile (z. B. �92 %�) */
+body.bereich-lernpfad .map-node-score {
+  margin-top: 2px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #9ca3af;
+}
+
+/* Goldfarbene Anzeige bei 100 % */
+body.bereich-lernpfad .map-node-perfect .map-node-score {
+  color: #e8bd4f;
+}
+
+/* --- Verbindungslinie - Laenge / Position / Winkel kommen aus JS --- */
+
+body.bereich-lernpfad .map-connector {
+  position: absolute;
+  height: 2px;
+  /* gestrichelte Gold-Linie */
+  background-image: repeating-linear-gradient(
+    to right,
+    rgba(232, 189, 79, 0.9),
+    rgba(232, 189, 79, 0.9) 10px,
+    rgba(232, 189, 79, 0.0) 10px,
+    rgba(232, 189, 79, 0.0) 18px
+  );
+  opacity: 0.9;
+  transform-origin: 50% 50%;
+}
+
+/* --- Zustaende: current / completed / locked --- */
+
+body.bereich-lernpfad .map-node-current .map-node-circle {
+  border-color: var(--accent);
+  background: rgba(232, 189, 79, 0.22);
+  box-shadow:
+    0 0 0 4px rgba(232, 189, 79, 0.45),
+    0 12px 30px rgba(0, 0, 0, 0.85);
+}
+
+body.bereich-lernpfad .map-node-current .map-node-circle::after {
+  content: "?";
+  font-size: 45px;
+  margin-left: 2px;
+  color: var(--accent);
+}
+
+/* Basis fuer abgeschlossene Level (falls kein Prozent bekannt) */
+body.bereich-lernpfad .map-node-completed .map-node-circle {
+  background: rgba(22, 36, 72, 0.85);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #e5e7eb;
+}
+
+/* 1�99 %: �partial� */
+body.bereich-lernpfad .map-node-partial .map-node-circle {
+  background: rgba(63, 201, 126, 0.25);
+  border-color: rgba(63, 201, 126, 0.9);
+  color: #bafacf;
+}
+
+/* 100 %: goldener Kreis */
+body.bereich-lernpfad .map-node-perfect .map-node-circle {
+  background: radial-gradient(circle at 30% 0%, #fff7d6, #e8bd4f 60%, #b5831d 100%);
+  border-color: #f2d27a;
+  color: #1c2342;
+  box-shadow:
+    0 0 0 4px rgba(232, 189, 79, 0.55),
+    0 16px 40px rgba(0, 0, 0, 0.95);
+}
+
+/* Optional: kleiner Glanzstern oben rechts im goldenen Kreis */
+body.bereich-lernpfad .map-node-perfect .map-node-circle::after {
+  content: "?";
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 20px;
+  color: #fff7d6;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+}
+
+/* Gesperrt: blasser, gestrichelter Rahmen */
+
+body.bereich-lernpfad .map-node-locked {
+  cursor: default;
+  opacity: 0.45;
+}
+
+body.bereich-lernpfad .map-node-locked .map-node-circle {
+  border-style: dashed;
+}
+
+/* Hover nur fuer freigeschaltete Punkte */
+
+body.bereich-lernpfad .map-node:not(.map-node-locked):hover .map-node-circle {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.9);
+}
+
+/* Resume Highlight */
+body.bereich-lernpfad .map-node-resume .map-node-circle {
+  box-shadow:
+    0 0 0 4px rgba(232, 189, 79, 0.35),
+    0 12px 30px rgba(232, 189, 79, 0.45);
+  border-color: rgba(232, 189, 79, 0.9);
+  transform: scale(1.04);
+}
+
+/* ================================================
+   DESKTOP-BOOST: Lernpfad deutlich groesser
+   ================================================ */
+
+@media (min-width: 1100px) {
+body.bereich-lernpfad .map-root {
+    max-width: 1380px;
+  }
+
+body.bereich-lernpfad .map-card {
+    padding: 28px 32px 62px;
+    border-radius: 28px;
+  }
+
+body.bereich-lernpfad .map-card h2 {
+    font-size: 32px;
+  }
+
+body.bereich-lernpfad .map-subtitle {
+    font-size: 24px;
+  }
+
+body.bereich-lernpfad .map-path {
+    gap: 36px;
+    padding: 18px 0 64px;
+  }
+
+  
+body.bereich-lernpfad .map-complete-cta {
+  margin: 16px auto 6px;
+  display: block;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 189, 79, 0.6);
+  background: rgba(9, 13, 30, 0.95);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+}
+
+body.bereich-lernpfad .map-complete-cta:hover {
+  border-color: rgba(232, 189, 79, 0.9);
+}.map-step {
+    height: 120px;
+  }
+
+body.bereich-lernpfad .map-node-circle {
+    width: 120px;
+    height: 120px;
+    font-size: 36px;
+  }
+
+body.bereich-lernpfad .map-node-label {
+    max-width: 220px;
+  }
+
+body.bereich-lernpfad .map-node-title {
+    font-size: 26px;
+  }
+
+body.bereich-lernpfad .map-node-score {
+    font-size: 0.95rem;
+  }
+
+body.bereich-lernpfad .map-energy-chip {
+    padding: 8px 18px;
+  }
+
+body.bereich-lernpfad .map-energy-chip-icon {
+    font-size: 1.1rem;
+  }
+
+body.bereich-lernpfad .map-energy-chip-value {
+    font-size: 0.85rem;
+  }
+}
+
+/* ================================================
+   MOBILE-ANPASSUNGEN
+   ================================================ */
+
+@media (max-width: 768px) {
+body.bereich-lernpfad .map-top-row {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  
+.map-top-row .map-back-btn,
+body.bereich-lernpfad .map-top-row .map-energy-chip {
+    background: rgba(9, 13, 30, 0.95);
+    border: 1px solid rgba(232, 189, 79, 0.45);
+    box-shadow: 0 0 10px rgba(232, 189, 79, 0.18);
+    color: var(--ink);
+  }
+
+body.bereich-lernpfad .map-top-row .map-back-btn {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+body.bereich-lernpfad .map-top-row .map-energy-chip {
+    padding: 8px 14px;
+  }
+
+body.bereich-lernpfad .map-top-row .map-energy-chip-icon {
+    font-size: 0.9rem;
+  }
+
+body.bereich-lernpfad .map-top-row .map-energy-chip-value {
+    font-size: 0.7rem;
+  }.map-screen {
+    padding: 12px 2px 10px;
+  }
+
+body.bereich-lernpfad .map-root {
+    max-width: 100%;
+  }
+
+body.bereich-lernpfad .map-card {
+    border-radius: 16px;
+    padding: 18px 16px 440px;
+  }
+
+body.bereich-lernpfad .map-sticky-bar {
+    position: fixed;
+    top: 6px;
+    left: 8px;
+    right: 8px;
+    z-index: 50;
+    margin: 0;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-6px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+body.bereich-lernpfad .map-sticky-bar--visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+body.bereich-lernpfad .map-sticky-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(9, 13, 30, 0.95);
+    border: 1px solid rgba(232, 189, 79, 0.45);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+    max-width: 520px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+body.bereich-lernpfad .map-sticky-label {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(232, 189, 79, 0.9);
+  }
+
+body.bereich-lernpfad .map-sticky-title {
+    font-size: 14px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+body.bereich-lernpfad .map-sticky-next {
+    font-size: 13px;
+    color: rgba(160, 166, 195, 0.9);
+  }
+
+body.bereich-lernpfad .map-card h2 {
+    font-size: 18px;
+  }
+
+body.bereich-lernpfad .map-subtitle {
+    font-size: 14px;
+  }
+
+body.bereich-lernpfad .map-path {
+    gap: 42px;
+    padding: 18px 0 460px;
+  }
+
+  
+body.bereich-lernpfad .map-complete-cta {
+  margin: 16px auto 6px;
+  display: block;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 189, 79, 0.6);
+  background: rgba(9, 13, 30, 0.95);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+}
+
+body.bereich-lernpfad .map-complete-cta:hover {
+  border-color: rgba(232, 189, 79, 0.9);
+}.map-step {
+    height: 84px;
+  }
+
+body.bereich-lernpfad .map-node-circle {
+    width: 58px;
+    height: 58px;
+    font-size: 20px;
+  }
+
+body.bereich-lernpfad .map-node-label {
+    max-width: 220px;
+    width: min(220px, 70vw);
+    text-align: center;
+    opacity: 0.85;
+  }
+
+body.bereich-lernpfad .map-node {
+    gap: 10px;
+  }
+
+body.bereich-lernpfad .map-node-label {
+    margin-top: 2px;
+  }
+
+body.bereich-lernpfad .map-node-title {
+    font-size: 14px;
+    line-height: 1.25;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
+  }
+
+body.bereich-lernpfad .map-node-score {
+    font-size: 0.95rem;
+  }
+
+  
+  /* Subtle tooltip on tap */
+body.bereich-lernpfad .map-node::after {
+    content: attr(data-title);
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    max-width: 220px;
+    width: max-content;
+    padding: 6px 10px;
+    border-radius: 12px;
+    background: rgba(9, 13, 30, 0.95);
+    border: 1px solid rgba(232, 189, 79, 0.35);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.2;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 5;
+    white-space: normal;
+  }
+
+.map-node:active::after,
+body.bereich-lernpfad .map-node:focus-visible::after {
+    opacity: 1;
+  }.map-energy-chip {
+    padding: 5px 12px;
+  }
+
+body.bereich-lernpfad .map-energy-chip-icon {
+    font-size: 0.65rem;
+  }
+
+body.bereich-lernpfad .map-energy-chip-value {
+    font-size: 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+body.bereich-lernpfad .map-card {
+    padding: 14px 12px 28px;
+  }
+
+body.bereich-lernpfad .map-path {
+    gap: 18px;
+    padding-bottom: 460px;
+  }
+
+  
+body.bereich-lernpfad .map-complete-cta {
+  margin: 16px auto 6px;
+  display: block;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 189, 79, 0.6);
+  background: rgba(9, 13, 30, 0.95);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+}
+
+body.bereich-lernpfad .map-complete-cta:hover {
+  border-color: rgba(232, 189, 79, 0.9);
+}.map-node-label {
+    max-width: 120px;
+  }
+}
+
+/* ========== ENDE LERNPFAD ========== */
+
+/* ========== Daily Mission Badge auf dem Lernpfad ========== */
+
+/* Button-Container */
+body.bereich-lernpfad .map-daily-mission-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  margin-bottom: 16px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+
+  background: radial-gradient(circle at top left, rgba(232, 189, 79, 0.3), transparent 55%),
+              linear-gradient(135deg, #1c2342, #293257);
+  color: #ffffff;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.45);
+  font-size: 0.85rem;
+  text-align: left;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.18s ease;
+}
+
+body.bereich-lernpfad .map-daily-mission-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.55);
+}
+
+/* Label links (�Daily Mission�) */
+body.bereich-lernpfad .map-dm-label {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #e8bd4f, #f6e0a8);
+  color: #1c2342;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Beschreibungstext */
+body.bereich-lernpfad .map-dm-text {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+/* kleiner, animierter �Ping� rechts */
+body.bereich-lernpfad .map-dm-pulse {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #fbbf24;
+  box-shadow: 0 0 0 0 rgba(248, 191, 36, 0.7);
+  animation: map-dm-pulse 1.8s infinite;
+}
+
+@keyframes map-dm-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(248, 191, 36, 0.7);
+  }
+  70% {
+    transform: scale(1.5);
+    box-shadow: 0 0 0 10px rgba(248, 191, 36, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(248, 191, 36, 0);
+  }
+}
+
+/* Mobile: Badge ueber volle Breite */
+@media (max-width: 720px) {
+body.bereich-lernpfad .map-daily-mission-badge {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 10px 16px;
+    font-size: 0.95rem;
+  }
+}
+
+/* ========== ENDE Daily Mission Badge auf dem Lernpfad ========== */
+
+
+
+
+
+
+
+
+

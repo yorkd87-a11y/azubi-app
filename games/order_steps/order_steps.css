@@ -1,0 +1,238 @@
+/* games/order_steps/order_steps.css */
+
+.os-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  color: #1c2342;
+}
+
+.os-card--auto-advance .game-footer-row {
+  display: none;
+}
+
+/* Meta-Infos: Thema + Zähler */
+.os-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  color: #6b6f76;
+}
+
+.os-topic {
+  font-weight: 600;
+}
+
+.os-counter {
+  opacity: 0.8;
+}
+
+/* Aufgaben-Text */
+.os-prompt {
+  margin-top: 2px;
+  font-size: 1rem;
+  color: #4a4d57;
+}
+
+/* Slots (Zielreihenfolge) */
+.os-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.os-slot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px dashed #cdd0de;
+  background: linear-gradient(180deg, #f8f8fc 0%, #f1f2f8 100%);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.06s ease;
+}
+
+.os-slot:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.os-slot-index {
+  min-width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: #1c2342;
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(28, 35, 66, 0.2);
+}
+
+.os-slot-label {
+  flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  color: #6b6f76;
+}
+
+/* Slot ist belegt */
+.os-slot--filled {
+  border-style: solid;
+  background: #ffffff;
+  color: #1c2342;
+}
+
+/* Options-Chips unten */
+.os-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.os-option {
+  width: 100%;
+  text-align: center;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #d6d8e0;
+  background: #f7f7fb;
+  color: #1c2342;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.06s ease;
+}
+
+.os-option:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* verwendeter Chip */
+.os-option--used {
+  cursor: default;
+  opacity: 0.5;
+  transform: scale(0.96);
+  box-shadow: none;
+}
+
+/* Ghost-Chip, der in Slot fliegt */
+.os-chip-ghost {
+  position: absolute;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid #d6d8e0;
+  background: #ffffff;
+  font-size: 0.9rem;
+  pointer-events: none;
+  white-space: nowrap;
+  transition:
+    left 0.35s ease,
+    top 0.35s ease,
+    transform 0.35s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  z-index: 2;
+}
+
+/* Korrekte/Wrong-State der Slots */
+.os-slot--correct {
+  border-color: #2e7d32;
+  background: #e8f5e9;
+  animation: os-slot-pop 0.35s ease-out;
+}
+
+.os-slot--wrong {
+  border-color: #c62828;
+  background: #ffebee;
+  animation: os-slot-shake 0.32s ease-out;
+}
+
+/* ==============================
+   Animationen
+   ============================== */
+
+@keyframes os-slot-pop {
+  0% {
+    transform: scale(0.96);
+  }
+  40% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes os-slot-shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* ==============================
+   Mobile Feintuning
+   ============================== */
+
+@media (max-width: 600px) {
+  .os-card {
+    gap: 8px;
+  }
+
+  .os-meta-row {
+    font-size: 0.9rem;
+  }
+
+  .os-prompt {
+    font-size: 1rem;
+  }
+
+  .os-slot {
+    padding: 9px 10px;
+  }
+
+  .os-slot-label {
+    font-size: 0.9rem;
+  }
+
+  .os-options {
+    gap: 8px;
+  }
+
+  .os-option {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    min-height: 0;
+  }
+}
+

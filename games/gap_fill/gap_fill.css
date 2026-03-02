@@ -1,0 +1,250 @@
+/* games/gap_fill/gap_fill.css */
+
+.gf-card {
+  position: relative; /* für Ghost-Chip Positionierung */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 960px;
+  width: 100%;
+  margin: 24px auto 0;
+}
+
+.gf-card--auto-advance .game-footer-row {
+  display: none;
+}
+
+/* Meta-Infos oben */
+.gf-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  color: #6b6f76;
+}
+
+.gf-topic {
+  font-weight: 600;
+}
+
+.gf-counter {
+  opacity: 0.7;
+}
+
+/* Satz + Lücke */
+.gf-sentence {
+  margin: 24px 0 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #222;
+  line-height: 1.8;
+  text-align: center;
+}
+
+.gf-text-before,
+.gf-text-after {
+  white-space: pre-wrap;
+}
+
+.gf-gap {
+  display: inline-block;
+  min-width: 60px;
+  padding: 0 4px;
+  border-bottom: 2px solid #1c2342;
+  text-align: center;
+  color: #1c2342;
+  font-weight: 700;
+}
+
+/* Hinweistext */
+.gf-hint {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: #6b6f76;
+  text-align: center;
+}
+
+/* Antwort-Optionen wie beim Single Choice untereinander */
+.gf-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 12px;
+}
+
+.gf-option {
+  width: 100%;
+  text-align: center;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #d6d8e0;
+  background: #f7f7fb;
+  color: #1c2342;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  cursor: pointer;
+  margin: 0;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.06s ease;
+}
+
+.gf-option:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* gewählte Option */
+.gf-option--selected {
+  border-color: #1c2342;
+  background: #ecefff;
+  box-shadow: 0 3px 10px rgba(28, 35, 66, 0.18);
+}
+
+/* Zustände nach Auswahl */
+.gf-option--disabled {
+  cursor: default;
+}
+
+.gf-option--correct {
+  border-color: #2e7d32;
+  background: #e8f5e9;
+}
+
+.gf-option--wrong {
+  border-color: #c62828;
+  background: #ffebee;
+}
+
+/* Ghost-Chip, der zur Lücke fliegt */
+.gf-chip-ghost {
+  position: absolute;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid #d6d8e0;
+  background: #f7f7fb;
+  font-size: 0.9rem;
+  pointer-events: none;
+  white-space: nowrap;
+  transition:
+    left 0.35s ease,
+    top 0.35s ease,
+    transform 0.35s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+}
+
+/* Gap-States */
+.gf-gap--filled {
+  border-bottom-width: 2px;
+}
+
+/* KORREKT: Pop + Firework */
+.gf-gap--correct {
+  color: #2e7d32;
+  border-color: #2e7d32;
+  animation: gf-gap-pop 0.35s ease-out;
+  position: relative;
+}
+
+.gf-gap--correct::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(232, 189, 79, 0.9), transparent 60%);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+  animation: gf-gap-firework 0.6s ease-out forwards;
+}
+
+/* FALSCH: rotes Blinken */
+.gf-gap--wrong {
+  color: #c62828;
+  border-color: #c62828;
+  animation: gf-gap-blink 0.4s ease-out 0s 2;
+}
+
+/* ======================================
+   ANIMATIONEN Gap-Fill
+   ====================================== */
+
+@keyframes gf-gap-pop {
+  0% {
+    transform: scale(0.9);
+  }
+  40% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes gf-gap-firework {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  60% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1.6);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.0);
+  }
+}
+
+@keyframes gf-gap-blink {
+  0% {
+    background: transparent;
+  }
+  50% {
+    background: rgba(198, 40, 40, 0.12);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+/* ======================================
+   MOBILE-FEINTUNING
+   ====================================== */
+
+@media (max-width: 600px) {
+  .gf-card {
+    gap: 8px;
+    margin: 12px auto 0;
+  }
+
+  .gf-meta-row {
+    font-size: 0.75rem;
+  }
+
+  .gf-sentence {
+    font-size: 1rem;
+    margin: 12px 0 6px;
+    line-height: 1.55;
+  }
+
+  .gf-gap {
+    min-width: 46px;
+  }
+
+  .gf-options {
+    gap: 10px;
+  }
+
+  .gf-option {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+}

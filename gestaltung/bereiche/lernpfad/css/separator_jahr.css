@@ -1,0 +1,61 @@
+/* Lernpfad Separator Jahr */
+
+.map-separator--jahr .map-separator-label {
+  font-size: 0.72rem;
+  color: rgba(255, 242, 222, 0.72);
+  padding: 0 18px;
+}
+
+.map-separator--jahr .map-separator-label::before,
+.map-separator--jahr .map-separator-label::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 34px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(244, 207, 99, 0), rgba(244, 207, 99, 0.8));
+}
+
+.map-separator--jahr .map-separator-label::before {
+  left: -26px;
+  transform: translateY(-50%);
+}
+
+.map-separator--jahr .map-separator-label::after {
+  right: -26px;
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.map-step--pre-separator--jahr {
+  margin-bottom: 12px;
+}
+
+.map-step--post-separator--jahr {
+  margin-top: 12px;
+}
+
+@media (min-width: 1100px) {
+  .map-separator--jahr {
+    padding-top: 50px;
+    padding-bottom: 0;
+    margin-bottom: -30px;
+  }
+
+  .map-separator--jahr .map-separator-label {
+    font-size: 1.44rem;
+  }
+
+  .map-step--post-separator--jahr {
+    margin-top: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .map-separator--jahr {
+    padding-top: 0;
+    padding-bottom: 0;
+    gap: 0;
+    margin-top: 0;
+    margin-bottom: -34px;
+  }
+}

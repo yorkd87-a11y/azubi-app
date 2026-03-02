@@ -1,0 +1,379 @@
+/* games/timeline_order/timeline_order.css */
+
+.to-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  color: #1c2342;
+}
+
+.to-card--auto-advance .game-footer-row {
+  display: none;
+}
+
+/* Meta-Zeile: Thema + Fragezähler */
+.to-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #6b6f76;
+}
+
+.to-topic {
+  font-weight: 600;
+}
+
+.to-counter {
+  opacity: 0.8;
+}
+
+/* Prompt / Einleitung */
+.to-prompt {
+  font-size: 1rem;
+  color: #4a4d57;
+  line-height: 1.4;
+}
+
+/* Timeline-Bereich (Slots) */
+.to-line-wrapper {
+  position: relative;
+  margin-top: 6px;
+  padding: 12px 10px 12px 0;
+}
+
+.to-line-label {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888c99;
+  margin: 0 0 10px 12px;
+}
+
+.to-line {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  padding-left: 34px;
+}
+
+.to-line::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(232, 189, 79, 0.95), rgba(140, 90, 34, 0.35));
+}
+
+/* Einzelner Slot */
+.to-slot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #f8f8fc 0%, #f1f2f8 100%);
+  border: 1px solid rgba(28, 35, 66, 0.08);
+  min-height: 42px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+/* Slot-Index (1, 2, 3, …) */
+.to-slot-index {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: #1c2342;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(28, 35, 66, 0.18);
+  position: absolute;
+  left: -32px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Slot-Text (wenn belegt) */
+.to-slot-text {
+  flex: 1;
+  font-size: 0.92rem;
+  line-height: 1.35;
+  color: #1c2342;
+  padding-right: 34px;
+}
+
+/* Placeholder-Text, wenn leer */
+.to-slot-placeholder {
+  flex: 1;
+  font-size: 0.88rem;
+  color: #9ca0b0;
+  padding-right: 34px;
+}
+
+.to-slot-result {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 800;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+}
+
+/* Slot ist belegt */
+.to-slot--filled {
+  border-style: solid;
+  border-color: #d0d3e4;
+  background: #ffffff;
+}
+
+/* Slot wird beim Füllen kurz gepulst */
+.to-slot--pop {
+  animation: to-slot-pop 0.28s ease-out;
+}
+
+/* Slot richtig/falsch nach Auswertung */
+.to-slot--correct {
+  border-color: #2e7d32;
+  background: #e8f5e9;
+}
+
+.to-slot--correct .to-slot-result {
+  background: linear-gradient(180deg, #f7d97b 0%, #d8a32f 100%);
+  color: #54380a;
+}
+
+.to-slot--wrong {
+  border-color: #c62828;
+  background: #ffebee;
+}
+
+.to-slot--wrong .to-slot-result {
+  background: linear-gradient(180deg, #ff998f 0%, #db4437 100%);
+  color: #ffffff;
+}
+
+.to-slot--check-pop {
+  animation: to-slot-check-pop 0.22s ease-out;
+}
+
+/* Pool-Bereich */
+.to-pool-wrapper {
+  margin-top: 8px;
+}
+
+.to-pool-label {
+  font-size: 0.84rem;
+  color: #6b6f76;
+  margin-bottom: 8px;
+}
+
+.to-pool {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Schrittkarten unten */
+.to-step-chip {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid #d6d8e0;
+  background: #f7f7fb;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  color: #1c2342;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    transform 0.08s ease,
+    box-shadow 0.16s ease,
+    opacity 0.15s ease;
+}
+
+.to-step-chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Zustand: ausgewählt (verschwindet aus Pool) */
+.to-step-chip--picked {
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+}
+
+/* Karte bekommt State-Klassen */
+.to-card--correct {
+  animation: to-card-correct 0.4s ease-out;
+}
+
+.to-card--wrong {
+  animation: to-card-wrong 0.3s ease-out;
+}
+
+/* Confetti */
+.to-confetti-piece {
+  position: absolute;
+  width: 5px;
+  height: 9px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: to-confetti 0.7s ease-out forwards;
+}
+
+/* ==============================
+   Animationen
+   ============================== */
+
+@keyframes to-slot-pop {
+  0% {
+    transform: scale(0.95);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes to-card-correct {
+  0% {
+    transform: scale(0.98);
+  }
+  45% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes to-card-wrong {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes to-slot-check-pop {
+  0% {
+    transform: scale(0.98);
+  }
+  55% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes to-confetti {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(1);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(34px) translateX(8px) rotate(25deg) scale(0.9);
+  }
+}
+
+/* ==============================
+   Mobile Feintuning
+   ============================== */
+
+@media (max-width: 600px) {
+  .to-card {
+    gap: 8px;
+  }
+
+  .to-meta-row {
+    font-size: 0.9rem;
+  }
+
+  .to-prompt {
+    font-size: 1rem;
+  }
+
+  .to-line-label,
+  .to-pool-label {
+    font-size: 0.82rem;
+  }
+
+  .to-slot {
+    min-height: 38px;
+    padding: 7px 8px;
+  }
+
+  .to-slot-index {
+    width: 24px;
+    height: 24px;
+    left: -28px;
+    font-size: 0.78rem;
+  }
+
+  .to-slot-text {
+    font-size: 0.9rem;
+    padding-right: 30px;
+  }
+
+  .to-slot-placeholder {
+    padding-right: 30px;
+  }
+
+  .to-slot-result {
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    font-size: 0.76rem;
+  }
+
+  .to-step-chip {
+    font-size: 0.9rem;
+    padding: 10px 12px;
+  }
+
+}
+

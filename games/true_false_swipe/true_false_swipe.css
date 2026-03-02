@@ -1,0 +1,186 @@
+/* games/true_false_swipe/true_false_swipe.css */
+
+.tfs-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  color: #1c2342;
+}
+
+.tfs-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  color: #6b6f76;
+}
+
+.tfs-topic {
+  font-weight: 600;
+}
+
+.tfs-counter {
+  opacity: 0.85;
+}
+
+/* Statement-Wrapper: relative für Badge-Positionierung */
+.tfs-statement-wrapper {
+  position: relative;
+  margin-top: 24px;
+}
+
+/* Statement-Box – analog zu sc-question / mc-question */
+.tfs-statement-card {
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f7f7fb, #eef0f7);
+  border: 1px solid rgba(28, 35, 66, 0.08);
+  padding: 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.4;
+  color: #1c2342;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  transition:
+    box-shadow 0.16s ease,
+    border-color 0.16s ease,
+    background 0.16s ease;
+}
+
+.tfs-statement-card--answered {
+  border-color: #1c2342;
+}
+
+.tfs-result-badge {
+  position: absolute;
+  top: -16px;
+  right: 5px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(-6px) scale(0.9);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.tfs-result-badge--true {
+  background: #2e7d32;
+  color: #ffffff;
+}
+
+.tfs-result-badge--false {
+  background: #c62828;
+  color: #ffffff;
+}
+
+.tfs-result-badge--visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Antwort-Buttons – nach unten schieben */
+.tfs-choices-row {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: auto;
+}
+
+.tfs-choice {
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: 1px solid #d6d8e0;
+  background: #f7f7fb;
+  cursor: pointer;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: center;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.06s ease;
+}
+
+.tfs-choice--false {
+  color: #c62828;
+}
+
+.tfs-choice--true {
+  color: #2e7d32;
+}
+
+.tfs-choice:hover:not(.tfs-choice--disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.tfs-choice--selected {
+  border-color: #1c2342;
+  background: #ecefff;
+  box-shadow: 0 3px 10px rgba(28, 35, 66, 0.18);
+}
+
+.tfs-choice--disabled {
+  cursor: default;
+  opacity: 0.9;
+}
+
+/* Hover-Transform auf Touch deaktivieren */
+@media (hover: none) {
+  .tfs-choice:hover:not(.tfs-choice--disabled) {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* ==============================
+   Mobile Feintuning
+   ============================== */
+
+@media (max-width: 600px) {
+  .tfs-card {
+    width: 100%;
+    max-width: 100%;
+    gap: 8px;
+    padding-top: 28px;
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 44px);
+  }
+
+  .tfs-meta-row {
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  .tfs-statement-wrapper {
+    margin-top: 20px;
+  }
+
+  .tfs-statement-card {
+    font-size: 1rem;
+    padding: 14px 12px;
+  }
+
+  .tfs-result-badge {
+    font-size: 0.8rem;
+  }
+
+  .tfs-choices-row {
+    margin-top: auto;
+    gap: 14px;
+  }
+
+  .tfs-choice {
+    min-height: 56px;
+    font-size: 17px;
+    padding: 14px 12px;
+  }
+}

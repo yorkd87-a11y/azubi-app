@@ -1,0 +1,95 @@
+# YD – Azubi App: Microlearning-Standard (v1) + Beispiel (A3 / Step 1)
+
+Ziel dieser Datei: Claude soll ab **Level/Abschnitt A3** alle neuen Lektionen automatisch nach einem festen Microlearning-Standard ergänzen – ohne Umbau des bestehenden Question-Schemas. Wir erweitern nur optional.
+
+---
+
+## 1) Warum bauen wir das neu auf?
+
+### Ausgangslage
+- Klassische „Lerntext + paar Fragen“-Lektionen funktionieren im Alltag oft schlecht:
+  - Azubis lesen oberflächlich, klicken sich durch, behalten wenig.
+  - Transfer in den Salonalltag ist zu schwach („weiß ich“, aber macht es nicht).
+
+### Was sich verändert hat (Social Media / Nutzung)
+- Aufmerksamkeit ist kürzer, aber Lernfähigkeit ist nicht schlechter.
+- Was besser funktioniert:
+  - **kurze Einheiten** mit klarer Struktur
+  - **sofortiges Abrufen** (Active Recall) statt Konsum
+  - **szenariobasiertes Entscheiden** statt reiner Definitionen
+  - **Wiederholung über Zeit** (Spaced Repetition) statt „Block lernen“
+
+### Was wir bezwecken
+- Weniger BlaBla, mehr Handlungssicherheit:
+  - Azubis sollen nach 7–10 Minuten **eine Routine** beherrschen.
+  - Fehler werden reduziert, weil „Warum“ + „Fehlerfalle“ mittrainiert werden.
+
+---
+
+## 2) Neuer Standard pro Step (Steps 1–7)
+
+Jeder Step ist ein **Microlearning-Loop (7–10 Min)**:
+
+1) **Hook (15s)**  
+   Ein Satz, der sofort klarmacht: Risiko/Warum relevant im Salon.
+
+2) **Mini-Input (90–120s)**  
+   Genau **3 Kernpunkte** (kurz, konkret).
+
+3) **Active Recall (15 Fragen)**  
+   - **3 Warm-up** (Wiederholung)
+   - **10 Core** (neuer Inhalt)
+   - **2 Transfer** (Szenario + typische Fehlerfalle)
+
+4) **Praxisauftrag (60s)**  
+   Konkrete Handlung am Platz („Heute machst du …“).
+
+5) **Mini-Reflexion (15s)**  
+   1 Frage: „Woran merkst du, dass du es richtig gemacht hast?“
+
+> Optional: Wenn ein Step 18 Fragen haben soll → +3 zusätzliche „Fehlerfallen“.
+
+---
+
+## 3) Spaced Repetition (Wiederholungssystem)
+
+### Pro Step (immer automatisch)
+Warm-up = **2 Fragen aus Step -1 + 1 Frage aus Step -2**  
+Ziel: Wiederholung ohne extra Lektionen.
+
+### Zusätzlich (App-Logik / optional)
+- **Tag 3:** 1 Szenariofrage aus Step 1–2
+- **Tag 7:** Mini-Checkpoint (6 Fragen aus Step 1–6)
+
+---
+
+## 4) Antwort-Standard (Feedback muss erklärend sein)
+
+Für jede Frage müssen die Feedback-Texte nach diesem Muster formuliert sein:
+
+- **Richtig:** (kurz bestätigen)
+- **Warum richtig:** 1–2 Sätze mit Salonlogik (Risiko / Übertragungsweg / Eintrittspforte)
+- **Typischer Fehler:** Was im Alltag oft falsch gemacht wird
+- **Merksatz:** 1 kurzer Satz zum Einprägen
+
+Beispiel-Stil:
+✅ Richtig. … (Warum) … Typischer Fehler: … Merksatz: „…“.
+
+---
+
+## 5) Technischer Plan: Bestehendes Schema behalten (non-breaking)
+
+### Wir behalten:
+- `const LEKTION_X = { ... questions: [...] }`
+- Fragen weiterhin im Spielepool-Format: `type` / `gameType` + die gameData-Felder (options, correctIndex, etc.)
+
+### Wir ergänzen optional (neu, aber kompatibel):
+Ein Feld `microLearning` im Lesson-Objekt:
+
+```js
+microLearning: {
+  hook: "…",
+  keyPoints: ["…", "…", "…"],
+  practiceTask: "…",
+  reflectionQuestion: "…"
+}

@@ -1,0 +1,75 @@
+﻿Aufbau
+
+Azubi App mit Claude/
+├─ Index.html                  -> Ein einziges HTML-Grundgeruest (SPA)
+├─ app.js                      -> App-Logik (Navigation, Screens, XP, Streak)
+├─ styles.css                  -> Globales Design (Header/Karten/Grundlayout)
+├─ lesson_map_styles.css       -> Lernpfad / Map-Design
+├─ level_header.css            -> Legacy (leer, ehemals Header-Komponente)
+├─ level_select.css            -> Legacy (leer, ehemals Level-Auswahl)
+├─ carmen_intro.css            -> Legacy (leer, ehemals Carmen-Intro)
+├─ gestaltung/                 -> Neue Stylestruktur
+│  ├─ basis/                    -> Globale Styles
+│  │  ├─ farben_und_schriften.css
+│  │  ├─ abstaende_und_groessen.css
+│  │  ├─ grundelemente.css
+│  │  ├─ layout_und_raster.css
+│  │  └─ kleine_hilfen.css
+│  └─ bereiche/                 -> Screen-spezifische Styles
+│     ├─ carmen_intro/carmen_intro.css
+│     ├─ lernpfad/lernpfad.css  -> Scoped-Variante (derzeit nicht aktiv)
+│     ├─ lernpfad_header/lernpfad_header.css
+│     ├─ level_uebersicht/level_uebersicht.css
+│     └─ spiele_und_fragenkarten/spiele_und_fragenkarten.css
+├─ games/                      -> Spiele-Engine + Game-CSS
+│  ├─ game_main.js
+│  ├─ game_main.css
+│  ├─ game_overlay.js
+│  ├─ game_utils.js
+│  ├─ game_index.js
+│  ├─ game_types.js
+│  ├─ game_bonus_popup.js
+│  ├─ single_choice_quiz/
+│  ├─ multiple_choice_quiz/
+│  ├─ true_false_swipe/
+│  ├─ flashcards/
+│  ├─ gap_fill/
+│  ├─ match_pairs/
+│  ├─ order_steps/
+│  ├─ scenario_choice/
+│  ├─ dialog_quiz/
+│  ├─ audio_choice/
+│  ├─ category_sort/
+│  ├─ quickfire_streak/
+│  ├─ sentence_builder/
+│  └─ timeline_order/
+├─ core/                       -> Kern-Systeme
+│  ├─ energy_system.js
+│  ├─ progress_store.js
+│  ├─ question_history.js
+│  ├─ lesson_summary.js / .css
+│  └─ daily_missions.js / .css
+├─ content/
+│  └─ jahr_1/
+│     ├─ jahr_1_index.js
+│     ├─ Level_1/
+│     ├─ Level_2/
+│     ├─ Level_3/
+│     └─ Level_4/
+├─ media/
+│  ├─ answer_audio/
+│  ├─ carmen_intro.png
+│  ├─ carmen_intro_audio.wav
+│  ├─ lektionen/
+│  └─ videos/
+└─ Übersicht für Claude/
+   ├─ Aufgaben für Claude.txt
+   ├─ Aufbau und Struktur der App.txt
+   ├─ Read Me claude.txt
+   └─ Naechstes Fragenpaket 1
+
+Notizen
+- Google AI
+- Carmen = Aoede
+- You are a young lady. Read aloud in a warm and friendly tone:
+- Sentence Builder: Schedar - Temperature 0,55

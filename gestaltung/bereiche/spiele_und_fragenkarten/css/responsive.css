@@ -1,0 +1,21 @@
+/* Spiele Responsive */
+
+@media (max-width: 600px) {
+  .gm-overlay {
+    min-height: 100dvh;
+  }
+
+  .gm-header {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .gm-progress-label {
+    font-size: 0.78rem;
+  }
+
+  .gm-energy {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+  }
+}

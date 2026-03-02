@@ -1,0 +1,65 @@
+/* Lernpfad Separatoren */
+
+.map-separator {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 34px 0 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.map-separator-label-wrap {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.map-separator-label {
+  position: relative;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(244, 207, 99, 0.88);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.map-separator-line {
+  display: none;
+}
+
+.map-separator-anchor {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.map-separator-anchor--tl {
+  left: 10%;
+  top: 18%;
+}
+
+.map-separator-anchor--br {
+  left: 90%;
+  top: 82%;
+}
+
+.map-step--pre-separator .map-node-label,
+.map-step--post-separator .map-node-label {
+  margin-top: 6px;
+}

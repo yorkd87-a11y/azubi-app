@@ -1,0 +1,52 @@
+/* Lernpfad Sticky Bar */
+
+.map-sticky-bar {
+  position: fixed;
+  top: 6px;
+  left: 8px;
+  right: 8px;
+  z-index: 50;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.map-sticky-bar--visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.map-sticky-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(33, 18, 9, 0.96);
+  border: 1px solid rgba(244, 207, 99, 0.45);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.map-sticky-label {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(244, 207, 99, 0.95);
+}
+
+.map-sticky-title {
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.map-sticky-next {
+  font-size: 13px;
+  color: rgba(255, 202, 155, 0.92);
+}

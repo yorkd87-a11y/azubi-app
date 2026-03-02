@@ -1,0 +1,28 @@
+﻿updates die noch gemacht werden müssen:
+Eine Datei für Claude, wenn wieder Token da sind.
+
+Aufgabe jedesmal durchführen: 
+passe bitte die Datei "Aufbau und struktur der App" nach dem aktuellen Aufbau an.
+- aktualisiere immer deine Ablauf.md. also mit /(Init)
+
+Hast du eine Aufgabe umgesetzt, lösche Sie aus dieser Liste
+
+
+
+Updates:
+
+Priorität:
+
+
+weitere Aufgaben:
+ 
+
+- Bauen wir nach jeder Runde ein kurzes Werbevideo ein. Wir haben aktuell 3 zur auswahl. es soll wie bei duolingo eigenwerbung sein, wenn ein nutzer eine lektion abgeschlossen hat.
+- Baue eine Datei oder füge ein code hinzu, wo wir nach jedem Zusammenfassungsquiz ein Carmen Intro implementieren. Dieses sollte so aufegabut werden, wie das Intro. Also ein Carmen Bild, ein text. und ein Platzhalter für das Audio. Beschreibe mir, wo ich was einfüge, also entweder ein ordner, wo ich die 3 datein rein packe oder wir reden dann live, wenn es soweit ist.
+- Prüfe in den Fragen Datein die optionen Hook und Keypoints. Wie können wir diese in den einzelnen Lektionen implementieren. baue was sinnvolles und zeige es mir.
+- Prüfen, wie der Fragenpool funktioniert, und ob alles eingestellt ist, damit es funktionsfähig ist. Erkläre mir dazu bitte nochmal den Ablauf.
+
+- TODO: Beim Wechsel auf Level 2 soll die Map oben starten (nicht unten).
+
+- TODO: Fragen fehlen noch fuer Level 2 Abschnitt 2 bis Level 4 Abschnitt 4 (komplett).
+

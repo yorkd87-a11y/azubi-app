@@ -1,0 +1,121 @@
+// content/jahr_1/Level_1/Abschnitt_3/lv1_A3_Lektion_1.js
+// Lektion 1 – Warum Hygiene? Infektionskette im Salon (kurz)
+
+const LEKTION_1 = {
+  id: "j1_l1_a3_l1",
+  jahr: 1,
+  level: 1,
+  section: 3,
+  title: "Warum Hygiene? Infektionskette im Salon",
+  track: "hygiene",
+  energy: 15,
+  bonusStrikeOnPerfect: true,
+
+  // Optional, non-breaking
+  microLearning: {
+    hook: "Die meisten Hygienefehler passieren nicht aus Unwissen – sondern weil man zu schnell ist und den Übertragungsweg übersieht.",
+    keyPoints: [
+      "Eine Infektion entsteht, wenn Erreger + Übertragungsweg + Eintrittspforte zusammenkommen.",
+      "Im Salon sind Hände und Tools die häufigsten Übertragungswege.",
+      "Hygiene heißt: Kette unterbrechen – nicht nur sauber aussehen."
+    ],
+    practiceTask:
+      "Heute am Platz: Definiere eine klare Used-Zone (Box/Schale). Jedes benutzte Tool sofort dort hinein. Ziel: Used-Zone am Ende leer = alles aufbereitet.",
+    reflectionQuestion:
+      "Welcher Kontaktpunkt war heute dein größtes Risiko (Hände / Tool / Fläche) – und was hast du konkret geändert?"
+  },
+
+  // 15 Fragen (Step 1: keine Warm-ups aus -1/-2 möglich → Basisfragen)
+  questions: [
+    {
+      id: "j1_l1_a3_l1_q01",
+      type: "single_choice_quiz",
+      gameType: "single_choice_quiz",
+      topic: "Hygiene Basics",
+      question: "Was ist das Hauptziel von Hygiene im Salon?",
+      options: ["Schneller arbeiten", "Infektionen verhindern", "Mehr Produktverkauf", "Weniger Wasserverbrauch"],
+      correctIndex: 1,
+      feedbackCorrect:
+        "✅ Richtig. Hygiene verhindert, dass Krankheitserreger über Hände, Tools und Kontaktflächen weitergegeben werden. Typischer Fehler: Hygiene nur als „Putzen“ sehen. Merksatz: Hygiene = Übertragung stoppen.",
+      feedbackWrong:
+        "❌ Nicht ganz. Richtig ist: Infektionen verhindern. Hygiene ist Risikokontrolle (Hände/Tools/Flächen), nicht nur optische Sauberkeit. Merksatz: Hygiene = Übertragung stoppen."
+    },
+
+    {
+      id: "j1_l1_a3_l1_q02",
+      type: "true_false_swipe",
+      gameType: "true_false_swipe",
+      topic: "Unsichtbare Risiken",
+      statement: "Nur sichtbarer Schmutz ist ein Hygieneproblem.",
+      isTrue: false,
+      feedbackCorrect:
+        "✅ Genau. Viele Erreger sind unsichtbar – eine Fläche kann sauber aussehen und trotzdem Keime tragen (z. B. Griffe, Handy). Typischer Fehler: nach Optik urteilen. Merksatz: Unsichtbar heißt nicht ungefährlich.",
+      feedbackWrong:
+        "❌ Falsch. Erreger sind oft unsichtbar. „Sieht sauber aus“ heißt nicht „hygienisch sicher“. Typischer Fehler: Optik mit Hygiene verwechseln. Merksatz: Unsichtbar heißt nicht ungefährlich."
+    },
+
+    {
+      id: "j1_l1_a3_l1_q03",
+      type: "multiple_choice_quiz",
+      gameType: "multiple_choice_quiz",
+      topic: "Infektionskette",
+      question: "Welche Teile gehören zur Infektionskette?",
+      options: ["Erreger", "Übertragungsweg", "Eintrittspforte", "Musiklautstärke"],
+      correctIndices: [0, 1, 2],
+      feedbackCorrect:
+        "✅ Richtig. Für eine Infektion braucht es Erreger + Weg + Eintritt. Wenn du ein Glied brichst, stoppst du die Kette. Typischer Fehler: nur an „Keime“ denken, nicht an den Weg. Merksatz: Erreger – Weg – Eintritt.",
+      feedbackPartially:
+        "⚠️ Teilweise richtig. Denk an das Dreieck: Erreger – Übertragungsweg – Eintrittspforte. Typischer Fehler: ein Baustein fehlt. Merksatz: Erreger – Weg – Eintritt.",
+      feedbackWrong:
+        "❌ Nicht korrekt. Richtig sind: Erreger, Übertragungsweg, Eintrittspforte. Typischer Fehler: Hygiene mit Ordnung verwechseln. Merksatz: Erreger – Weg – Eintritt."
+    },
+
+    {
+      id: "j1_l1_a3_l1_q04",
+      type: "match_pairs",
+      gameType: "match_pairs",
+      topic: "Begriffe verstehen",
+      prompt: "Ordne die Begriffe der passenden Erklärung zu.",
+      pairs: [
+        { left: "Quelle/Reservoir", right: "Wo Erreger sitzen (z. B. Haut, Textilien, Haare)" },
+        { left: "Übertragungsweg", right: "Wie Erreger weitergegeben werden (z. B. Hände, Kamm, Flächen)" },
+        { left: "Eintrittspforte", right: "Wo Erreger in den Körper gelangen (z. B. Mikroverletzung, Schleimhaut)" }
+      ],
+      feedbackCorrect:
+        "✅ Stark. Wenn du „Woher – Wie – Wohin?“ erkennst, weißt du sofort, welche Hygienemaßnahme nötig ist. Typischer Fehler: nur „irgendwas sprühen“. Merksatz: Woher – Wie – Wohin.",
+      feedbackWrong:
+        "❌ Schau dir das Dreieck nochmal an: Quelle (wo), Weg (wie), Eintritt (wo rein). Typischer Fehler: Begriffe durcheinander. Merksatz: Woher – Wie – Wohin."
+    },
+
+    {
+      id: "j1_l1_a3_l1_q05",
+      type: "scenario_choice",
+      gameType: "scenario_choice",
+      topic: "Salon-Situation",
+      situationTitle: "Kleine Schramme am Ohr",
+      situationText: [
+        "Du siehst an der Ohrkante eine kleine Schramme.",
+        "Du möchtest direkt mit der Schere weiterschneiden."
+      ],
+      options: [
+        "Ignorieren und schnell fertig werden.",
+        "Kurz stoppen: Hände/Tool-Status prüfen, ggf. desinfizieren und die Stelle schützen/umgehen.",
+        "Nur kurz trocken wischen und weitermachen."
+      ],
+      correctIndex: 1,
+      optionExplanations: [
+        "Risiko: Eintrittspforte wird übergangen. Tempo geht vor Sicherheit.",
+        "Professionell: Risiko erkennen, Übertragungsweg stoppen, dann weiterarbeiten.",
+        "Abwischen ist keine Hygienemaßnahme und schützt nicht vor Übertragung."
+      ],
+      feedbackCorrect:
+        "✅ Genau so. Schramme = Eintrittspforte. Kurz sichern, dann weiter. Typischer Fehler: aus Zeitdruck durchziehen. Merksatz: Bei Wunde: stoppen, sichern, dann weiter.",
+      feedbackWrong:
+        "❌ Die Profi-Lösung ist: stoppen, prüfen, ggf. desinfizieren und sicher weiterarbeiten. Typischer Fehler: Tempo vor Sicherheit. Merksatz: Bei Wunde: stoppen, sichern, dann weiter."
+    }
+
+    // … (Claude ergänzt Q06–Q15 nach gleichem Standard: erklärende Feedbacks, Mix aus Spieltypen)
+  ]
+};
+
+export default LEKTION_1;

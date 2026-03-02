@@ -1,0 +1,166 @@
+/* Lernpfad Layout */
+
+.map-screen {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  min-height: 0;
+}
+
+.map-root {
+  width: 100%;
+  margin: 0 auto;
+  min-height: min-content;
+  max-width: 1180px;
+}
+
+.map-card {
+  width: 100%;
+  background:
+    radial-gradient(circle at top left, rgba(244, 207, 99, 0.18), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(255, 107, 53, 0.14), transparent 62%),
+    linear-gradient(160deg, #24160a 0%, #2f1d0f 52%, #1a1008 100%);
+  border-radius: 24px;
+  padding: 20px 24px 48px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(244, 207, 99, 0.18);
+}
+
+.map-header-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.map-daily-mission-slot {
+  display: flex;
+  flex-direction: column;
+}
+
+.map-daily-mission-slot:empty {
+  display: none;
+}
+
+.map-path {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 12px 0 48px;
+}
+
+.map-complete-cta {
+  margin: 16px auto 6px;
+  display: block;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 189, 79, 0.6);
+  background: rgba(31, 17, 8, 0.95);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+}
+
+.map-complete-cta:hover {
+  border-color: rgba(232, 189, 79, 0.9);
+}
+
+.map-step {
+  position: relative;
+  height: 100px;
+  --node-x: 50%;
+}
+
+body.bereich-lernpfad .app,
+body.bereich-lernpfad-header .app {
+  height: 100vh;
+  padding-left: 0;
+  padding-right: 0;
+  overflow: hidden;
+}
+
+body.bereich-lernpfad .map-screen,
+body.bereich-lernpfad-header .map-screen {
+  height: 100vh;
+}
+
+@media (min-width: 1100px) {
+  .map-root {
+    max-width: 1380px;
+  }
+
+  .map-card {
+    padding: 28px 32px 62px;
+    border-radius: 28px;
+  }
+
+  .map-path {
+    gap: 36px;
+    padding: 18px 0 64px;
+  }
+
+  .map-complete-cta {
+    background: rgba(9, 13, 30, 0.95);
+  }
+
+  .map-step {
+    height: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .map-screen {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 12px;
+    padding-bottom: 10px;
+  }
+
+  .map-root {
+    max-width: 100%;
+  }
+
+  .map-card {
+    width: 100%;
+    border-radius: 16px;
+    padding-top: 18px;
+    padding-bottom: 440px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .map-daily-mission-slot:not(:empty) {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 34px);
+    padding-bottom: 6px;
+  }
+
+  .map-path {
+    gap: 42px;
+    padding: 18px 0 460px;
+  }
+
+  .map-complete-cta {
+    border-color: rgba(244, 207, 99, 0.6);
+    background: rgba(31, 17, 8, 0.95);
+  }
+
+  .map-step {
+    height: 84px;
+  }
+}
+
+@media (max-width: 480px) {
+  .map-card {
+    padding: 14px 12px 28px;
+  }
+
+  .map-path {
+    gap: 18px;
+    padding-bottom: 460px;
+  }
+}

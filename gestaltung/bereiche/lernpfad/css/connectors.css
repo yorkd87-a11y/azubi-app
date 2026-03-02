@@ -1,0 +1,15 @@
+/* Lernpfad Connectors */
+
+.map-connector {
+  position: absolute;
+  height: 2px;
+  background-image: repeating-linear-gradient(
+    to right,
+    rgba(232, 189, 79, 0.9),
+    rgba(232, 189, 79, 0.9) 10px,
+    rgba(232, 189, 79, 0) 10px,
+    rgba(232, 189, 79, 0) 18px
+  );
+  opacity: 0.9;
+  transform-origin: 50% 50%;
+}

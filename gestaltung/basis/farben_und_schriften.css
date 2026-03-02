@@ -1,0 +1,16 @@
+:root {
+  --bg: #050814;
+  --bg-soft: #0b0f20;
+  --card: #11162a;
+  --card-soft: #171e36;
+  --ink: #f5f5ff;
+  --muted: #a0a6c3;
+  --brand: #E8BD4F;
+  --accent: #ffdf7a;
+  --accent-soft: rgba(232, 189, 79, 0.12);
+  --danger: #f26b6b;
+
+  --radius: 18px;
+  --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.45);
+  --shadow-chip: 0 8px 20px rgba(0, 0, 0, 0.35);
+}

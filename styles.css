@@ -1,0 +1,194 @@
+﻿/* Header */
+
+.app-header {
+  background: linear-gradient(135deg, rgba(17, 22, 42, 0.95), rgba(10, 14, 30, 0.98));
+  border-radius: 22px;
+  padding: 12px 14px 10px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(232, 189, 79, 0.2);
+  position: sticky;
+  top: 10px;
+  z-index: 20;
+  backdrop-filter: blur(18px);
+}
+
+.app-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.app-header h1 {
+  font-size: 18px;
+  letter-spacing: 0.03em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.app-header h1::before {
+  content: "âœ‚ï¸";
+  font-size: 18px;
+}
+
+.app-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  font-size: 11px;
+}
+
+.app-stats span {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(6, 9, 24, 0.8);
+  border: 1px solid rgba(232, 189, 79, 0.25);
+  box-shadow: var(--shadow-chip);
+}
+
+#energy-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.app-energy-icon {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  flex: 0 0 26px;
+}
+
+#xp-display {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+#streak-display {
+  color: #ffb45f;
+  font-weight: 500;
+}
+
+.app-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+#module-title {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+#lesson-title {
+  text-align: right;
+}
+
+/* Karten */
+
+.card {
+  background: radial-gradient(circle at top left, rgba(232, 189, 79, 0.12), transparent 55%),
+              radial-gradient(circle at bottom right, rgba(16, 181, 255, 0.14), transparent 60%),
+              var(--card);
+  border-radius: var(--radius);
+  padding: 14px 14px 12px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glowy Border Effekt */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  border: 1px solid rgba(232, 189, 79, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* Kleine Animation beim Laden */
+
+@keyframes card-pop {
+  from {
+    transform: translateY(4px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.card {
+  animation: card-pop 0.25s ease-out;
+}
+
+/* Responsiv Kleinigkeiten */
+
+@media (max-width: 768px) {
+  html {
+    font-size: 19px;
+  }
+
+  .app {
+    padding: 12px 12px 18px;
+  }
+
+  .app-header {
+    padding: 14px 16px 12px;
+    border-radius: 24px;
+    top: 8px;
+  }
+
+  .app-header h1 {
+    font-size: 20px;
+  }
+
+  .app-header h1::before {
+    font-size: 20px;
+  }
+
+  .app-stats {
+    font-size: 12px;
+  }
+
+  .app-meta-row {
+    font-size: 12px;
+  }
+
+  .card {
+    padding: 16px 16px 14px;
+  }}
+
+@media (max-width: 380px) {
+  .app-header-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .app-stats {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+  }
+}
+
+
+

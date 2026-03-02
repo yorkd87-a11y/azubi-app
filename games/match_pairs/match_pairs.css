@@ -1,0 +1,393 @@
+/* games/match_pairs/match_pairs.css */
+
+.mp-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 18px 20px 20px;
+  border-radius: 24px;
+  background: radial-gradient(circle at top left, #f6f7ff 0, #eef0ff 38%, #ffffff 100%);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.16);
+  color: #1c2342;
+  overflow: hidden;
+}
+
+.mp-card--auto-advance .game-footer-row {
+  display: none;
+}
+
+/* dezentes „Schimmer“-Overlay */
+.mp-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top left, rgba(232, 189, 79, 0.15), transparent 55%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Meta-Infos oben */
+.mp-meta-row {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  color: #6b6f76;
+  z-index: 1;
+}
+
+.mp-topic {
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.mp-counter {
+  opacity: 0.8;
+}
+
+/* Aufgaben-Text */
+.mp-prompt {
+  position: relative;
+  margin-top: 2px;
+  font-size: 1.2rem;
+  color: #4a4d57;
+  z-index: 1;
+}
+
+/* Board mit zwei Spalten: links Begriffe, rechts Erklärungen */
+.mp-board {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-top: 4px;
+  z-index: 1;
+}
+
+/* Spalten */
+.mp-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Slide-in Animations für links/rechts */
+.mp-column:first-child {
+  animation: mp-slide-in-left 0.45s ease-out;
+}
+
+.mp-column:last-child {
+  animation: mp-slide-in-right 0.45s ease-out;
+}
+
+.mp-column-title {
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #888c99;
+  margin-bottom: 0;
+}
+
+/* Items in den Spalten */
+.mp-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid #d6d8e0;
+  background: #f7f7fb;
+  font-size: 1rem;
+  line-height: 1.4;
+  cursor: pointer;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: auto;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.2s ease,
+    transform 0.12s ease,
+    color 0.18s ease;
+  min-height: 34px;
+}
+
+/* Hover-Effekt */
+.mp-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
+}
+
+/* Links ein kleiner Icon-Kreis, um Links/Rechts optisch zu unterscheiden */
+.mp-item-left::before,
+.mp-item-right::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  transform: translateY(-50%);
+}
+
+.mp-item-left {
+  padding-left: 22px;
+}
+
+.mp-item-right {
+  padding-left: 22px;
+}
+
+/* --- Deutlicher Unterschied: linke vs. rechte Spalte --- */
+
+/* Linke Seite: dunkler, „Tag“-Style */
+.mp-item-left {
+  background: radial-gradient(circle at top left, #2b355e 0, #1c2342 45%, #151a30 100%);
+  color: #f9fafb;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.45);
+}
+
+.mp-item-left::before {
+  background: #e8bd4f;
+}
+
+/* dezentes Glimmen auf Hover links */
+.mp-item-left:hover {
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.55);
+}
+
+/* Rechte Seite: hell, „Notizkarte“ mit Goldrahmen */
+.mp-item-right {
+  background: #fffaf0;
+  border-color: rgba(232, 189, 79, 0.8);
+  box-shadow: 0 4px 12px rgba(232, 189, 79, 0.32);
+}
+
+.mp-item-right::before {
+  background: #1c2342;
+}
+
+/* leichtes Wackeln / float beim Hovern rechts */
+.mp-item-right:hover {
+  animation: mp-hover-float 0.6s ease-out;
+}
+
+/* ==============================
+   AUSGEWÄHLTE ELEMENTE – deutlich sichtbarer Zustand
+   ============================== */
+
+.mp-item--selected {
+  border-color: #e8bd4f;
+  box-shadow:
+    0 0 0 2px rgba(232, 189, 79, 0.7),
+    0 10px 24px rgba(15, 23, 42, 0.5);
+  transform: translateY(-2px) scale(1.02);
+  animation: mp-selected-pulse 0.55s ease-out;
+}
+
+/* großer Haken für ALLE ausgewählten Karten */
+.mp-item--selected::after {
+  content: "✓";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  opacity: 0.95;
+}
+
+/* Linke Karten: im ausgewählten Zustand hell/gold → maximaler Kontrast */
+.mp-item-left.mp-item--selected {
+  background: linear-gradient(135deg, #fff9e6, #fff3c4);
+  color: #1c2342;
+}
+
+/* Rechte Karten: etwas intensiver, bleiben aber im hellen Look */
+.mp-item-right.mp-item--selected {
+  background: linear-gradient(135deg, #fff9e6, #ffe9b5);
+}
+
+/* ==============================
+   MATCHED / FALSCH / DISABLED
+   ============================== */
+
+/* Bereits korrekt gematchte Paare */
+.mp-item--matched {
+  cursor: default;
+  border-color: #2e7d32;
+  background: linear-gradient(135deg, #e8f5e9, #f7fff9);
+  color: #1b3f21;
+  box-shadow: 0 3px 12px rgba(46, 125, 50, 0.25);
+}
+
+/* Mini-„Pop“, wenn ein Paar fertig ist */
+.mp-item--matched.mp-item--matched-pop {
+  animation: mp-item-pop 0.3s ease-out;
+}
+
+.mp-item--matched::after {
+  content: "🔗";
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%) scale(0.9);
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+/* Falsche Zuordnung → roter Shake */
+.mp-item--wrong {
+  animation: mp-item-shake 0.28s ease-out;
+  border-color: #c62828;
+  background: #ffebee;
+}
+
+/* Deaktivierte Items */
+.mp-item--disabled {
+  cursor: default;
+  opacity: 0.6;
+  box-shadow: none;
+  filter: grayscale(0.1);
+}
+
+/* Verbindungs-Glow für Matched-Paare
+   Diese Klasse gibst du BEIDEN Items eines Paares → synchroner Glow */
+.mp-item--matched-glow {
+  box-shadow:
+    0 0 0 0 rgba(232, 189, 79, 0.0),
+    0 0 0 2px rgba(232, 189, 79, 0.0),
+    0 6px 18px rgba(46, 125, 50, 0.35);
+  animation: mp-link-glow 0.6s ease-out;
+}
+
+/* ==============================
+   Animationen
+   ============================== */
+
+@keyframes mp-item-shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
+}
+
+/* Mini-„Pop“, wenn ein Paar fertig ist */
+@keyframes mp-item-pop {
+  0% { transform: scale(0.97); }
+  40% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* dezentes Pulsieren für ausgewählte Items */
+@keyframes mp-selected-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(232, 189, 79, 0.0);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(232, 189, 79, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(232, 189, 79, 0.0);
+  }
+}
+
+/* leichte Float-Animation */
+@keyframes mp-hover-float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+  100% { transform: translateY(-1px); }
+}
+
+/* Spalten-Slide-in */
+@keyframes mp-slide-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes mp-slide-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Verbindungs-Glow – goldener Ring, der kurz aufblitzt */
+@keyframes mp-link-glow {
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(232, 189, 79, 0.0),
+      0 0 0 0 rgba(232, 189, 79, 0.0),
+      0 6px 18px rgba(46, 125, 50, 0.35);
+  }
+  40% {
+    box-shadow:
+      0 0 0 2px rgba(232, 189, 79, 0.9),
+      0 0 20px 6px rgba(232, 189, 79, 0.7),
+      0 10px 24px rgba(46, 125, 50, 0.45);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(232, 189, 79, 0.0),
+      0 0 0 0 rgba(232, 189, 79, 0.0),
+      0 6px 18px rgba(46, 125, 50, 0.35);
+  }
+}
+
+/* ==============================
+   Mobile Feintuning
+   ============================== */
+
+@media (max-width: 700px) {
+  .mp-board {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .mp-column-title {
+    font-size: 0.78rem;
+  }
+
+  .mp-item {
+    font-size: 0.9rem;
+    min-height: 42px;
+  }
+}
+
+@media (max-width: 600px) {
+  .mp-card {
+    gap: 8px;
+    padding: 14px 14px 16px;
+    border-radius: 18px;
+  }
+
+  .mp-meta-row {
+    font-size: 0.75rem;
+  }
+
+  .mp-prompt {
+    font-size: 0.86rem;
+  }
+}
+

@@ -1,0 +1,259 @@
+// content/jahr_1/Level_1/Abschnitt_1/lv1_A1_Lektion_1.js
+
+// Lektion 1 – Jahr 1, Level 1, Abschnitt 1
+// Thema: Arbeitsvertrag vs. Ausbildungsvertrag – dein Platz im Team
+
+const LEKTION_1 = {
+  id: "j1_l1_a1_l1", // Jahr 1, Level 1, Abschnitt 1, Lektion 1
+  index: 1,
+  jahr: 1,
+  level: 1,
+  section: 1,
+  title: "Arbeitsvertrag vs. Ausbildungsvertrag",
+  description:
+    "Dein Platz im Team: Unterschiede zwischen Arbeits- und Ausbildungsvertrag sowie Rechte und Pflichten als Azubi.",
+  track: "rechte_pflichten",
+  energy: 12, // 12 Fragen = 12 Energiepunkte
+
+  questions: [
+    // 1) SINGLE CHOICE – Grundunterschied
+    {
+      id: "j1_l1_a1_l1_q1",
+      topic: "Grundlagen",
+      gameType: "single_choice_quiz",
+      question:
+        "Was ist der wichtigste Unterschied zwischen Arbeitsvertrag und Ausbildungsvertrag im Friseursalon?",
+      options: [
+        "Beim Arbeitsvertrag steht die Arbeit im Vordergrund, beim Ausbildungsvertrag das Lernen.",
+        "Beim Ausbildungsvertrag bekommst du kein Geld, beim Arbeitsvertrag schon.",
+        "Arbeitsverträge gelten nur in Fabriken, Ausbildungsverträge nur in Salons."
+      ],
+      correctIndex: 0,
+      feedbackCorrect:
+        "Richtig! Beim Ausbildungsvertrag steht deine Ausbildung im Mittelpunkt, beim Arbeitsvertrag die Arbeitsleistung.",
+      feedbackWrong:
+        "Nicht ganz. Entscheidend ist: Beim Arbeitsvertrag geht es vor allem um Arbeit, beim Ausbildungsvertrag um dein Lernen."
+    },
+
+    // 2) TRUE / FALSE – keine billige Arbeitskraft
+    {
+      id: "j1_l1_a1_l1_q2",
+      topic: "Rolle als Azubi",
+      gameType: "true_false_swipe",
+      statement:
+        "Mit einem Ausbildungsvertrag bist du in erster Linie eine billige Arbeitskraft für den Salon.",
+      isTrue: false,
+      feedbackCorrect:
+        "Genau! Du bist Azubi, keine billige Arbeitskraft – deine Ausbildung steht im Vordergrund.",
+      feedbackWrong:
+        "Falsch. Du bist nicht nur zum Arbeiten da, sondern sollst den Beruf Schritt für Schritt lernen."
+    },
+
+    // 3) GAP FILL – Schwerpunkt Ausbildungsvertrag (mit 2 Wörtern)
+    {
+      id: "j1_l1_a1_l1_q3",
+      topic: "Ausbildungsvertrag",
+      gameType: "gap_fill",
+      textBefore: "Beim ",
+      correctAnswer: "Ausbildungsvertrag im Friseursalon",
+      textAfter: " steht dein Lernen im Mittelpunkt.",
+      options: [
+        "Ausbildungsvertrag im Friseursalon",
+        "Arbeitsvertrag im Friseursalon",
+        "Mietvertrag im Friseursalon",
+        "Abovertrag im Friseursalon"
+      ],
+      feedbackCorrect:
+        "Richtig! Beim Ausbildungsvertrag im Friseursalon geht es darum, dass du den Beruf lernst.",
+      feedbackWrong:
+        "Nicht ganz. Gesucht war der Ausbildungsvertrag im Friseursalon – bei ihm steht dein Lernen im Fokus."
+    },
+
+    // 4) MULTIPLE CHOICE – Inhalte Ausbildungsvertrag
+    {
+      id: "j1_l1_a1_l1_q4",
+      topic: "Ausbildungsvertrag",
+      gameType: "multiple_choice_quiz",
+      question:
+        "Welche Punkte gehören typischerweise in einen Ausbildungsvertrag im Friseursalon?",
+      options: [
+        "Die Dauer deiner Ausbildung.",
+        "Der Ausbildungsplan mit wichtigen Lerninhalten.",
+        "Deine Lieblingsfrisur.",
+        "Regelungen zu Arbeitszeit und Vergütung."
+      ],
+      correctIndices: [0, 1, 3],
+      feedbackCorrect:
+        "Super! Dauer, Lerninhalte sowie Arbeitszeit und Vergütung sind typische Inhalte eines Ausbildungsvertrags.",
+      feedbackPartially:
+        "Einige Antworten passen, andere nicht. Typisch sind Dauer, Lerninhalte sowie Arbeitszeit und Vergütung – nicht deine Lieblingsfrisur.",
+      feedbackWrong:
+        "Fast. Es geht um Dauer der Ausbildung, Lerninhalte und Rahmenbedingungen wie Arbeitszeit und Vergütung – nicht um deine Lieblingsfrisur."
+    },
+
+    // 5) SCENARIO CHOICE – ausgenutzt fühlen
+    {
+      id: "j1_l1_a1_l1_q5",
+      topic: "Rechte in der Praxis",
+      gameType: "scenario_choice",
+      situationText:
+        "Du bist im 1. Lehrjahr. Seit Wochen machst du fast nur Putzen, Handtücher und Kaffee. Dir werden kaum Dienstleistungen erklärt und niemand nimmt sich Zeit für dich. Du hast einen Ausbildungsvertrag.\n\nWie reagierst du am besten, wenn du dich ausgenutzt fühlst und zu wenig lernst?",
+      options: [
+        {
+          label:
+            "Du sprichst deine Ausbilderin oder deinen Ausbilder freundlich an und erklärst, dass du mehr lernen möchtest.",
+          isCorrect: true,
+          explanation:
+            "Richtig – ein ruhiges Gespräch ist der Profi-Weg, um dein Recht auf Ausbildung einzufordern."
+        },
+        {
+          label:
+            "Du sagst nichts und hoffst, dass sich irgendwann von allein etwas ändert.",
+          isCorrect: false,
+          explanation:
+            "So kann sich die Situation lange hinziehen. Besser ist es, dein Anliegen klar anzusprechen."
+        },
+        {
+          label:
+            "Du kommst einfach nicht mehr zur Arbeit, weil du dich ausgenutzt fühlst.",
+          isCorrect: false,
+          explanation:
+            "Das ist keine gute Lösung. Erst reden, dann – wenn nötig – Berufsschule oder Kammer einbeziehen."
+        }
+      ]
+    },
+
+    // 6) MATCH PAIRS – Begriffe zuordnen
+    {
+      id: "j1_l1_a1_l1_q6",
+      topic: "Begriffe",
+      gameType: "match_pairs",
+      pairs: [
+        {
+          left: "Arbeitsvertrag",
+          right: "Schwerpunkt: Arbeit und Leistung im Betrieb"
+        },
+        {
+          left: "Ausbildungsvertrag",
+          right: "Schwerpunkt: Lernen und Vermittlung von Berufskenntnissen"
+        },
+        {
+          left: "Ausbildungsplan",
+          right: "Zeigt, welche Inhalte du Schritt für Schritt lernst"
+        },
+        {
+          left: "Ausbildungszeit",
+          right: "Legt fest, wie lange deine Ausbildung offiziell dauert"
+        }
+      ],
+      feedbackCorrect:
+        "Top! Du kannst die wichtigsten Begriffe rund um deine Ausbildung richtig zuordnen.",
+      feedbackWrong:
+        "Schau dir die Begriffe noch einmal an: Beim Ausbildungsvertrag und Ausbildungsplan geht es klar um dein Lernen."
+    },
+
+    // 7) ORDER STEPS – Ablauf grob sortieren
+    {
+      id: "j1_l1_a1_l1_q7",
+      topic: "Ablauf Ausbildung",
+      gameType: "order_steps",
+      instruction: "Bringe die Schritte in eine sinnvolle Reihenfolge.",
+      steps: [
+        "Du unterschreibst deinen Ausbildungsvertrag mit dem Salon.",
+        "Du startest im Salon und lernst nach und nach Aufgaben und Abläufe kennen.",
+        "Du arbeitest während der Ausbildungszeit auf deinen Berufsabschluss hin."
+      ],
+      correctOrder: [0, 1, 2],
+      feedbackCorrect:
+        "Perfekt sortiert! So läuft dein Weg in der Ausbildung grob ab.",
+      feedbackWrong:
+        "Noch nicht ganz. Erst unterschreibst du den Vertrag, dann startest du im Salon und arbeitest auf deinen Abschluss hin."
+    },
+
+    // 8) FLASHCARDS – Begriffe wiederholen
+    {
+      id: "j1_l1_a1_l1_q8",
+      topic: "Wiederholung",
+      gameType: "flashcards",
+      cards: [
+        {
+          front: "Arbeitsvertrag",
+          back: "Vertrag, bei dem du gegen Lohn Arbeit leistest. Schwerpunkt: Arbeitsleistung."
+        },
+        {
+          front: "Ausbildungsvertrag",
+          back: "Vertrag, bei dem deine Ausbildung im Mittelpunkt steht. Der Betrieb muss dir den Beruf beibringen."
+        },
+        {
+          front: "Pflichten Azubi",
+          back: "Pünktlich sein, sorgfältig arbeiten, mitlernen, Berichtsheft führen und Regeln im Betrieb einhalten."
+        },
+        {
+          front: "Pflichten Betrieb",
+          back: "Dich anleiten, dir Dinge erklären und dir Zeit zum Lernen geben."
+        }
+      ]
+    },
+
+    // 9) QUICKFIRE STREAK – Mini-Kurzcheck (einfaches Format wie in Lektion 2)
+    {
+      id: "j1_l1_a1_l1_q9",
+      topic: "Kurzcheck Ausbildungsvertrag",
+      gameType: "quickfire_streak",
+      question: "Beim Ausbildungsvertrag steht dein Lernen im Mittelpunkt.",
+      options: ["Stimmt", "Stimmt nicht"],
+      correctIndex: 0
+    },
+
+    // 10) TRUE / FALSE – Pflicht des Betriebs
+    {
+      id: "j1_l1_a1_l1_q10",
+      topic: "Pflichten Betrieb",
+      gameType: "true_false_swipe",
+      statement:
+        "Im Ausbildungsvertrag verpflichtet sich der Salon, dir die wichtigen Inhalte des Berufs beizubringen.",
+      isTrue: true,
+      feedbackCorrect:
+        "Genau! Der Salon muss dich fachlich anleiten und dir den Beruf zeigen.",
+      feedbackWrong:
+        "Doch, das stimmt. Der Salon hat die Pflicht, dich auszubilden – nicht nur arbeiten zu lassen."
+    },
+
+    // 11) GAP FILL – Pflicht Azubi: Berichtsheft
+    {
+      id: "j1_l1_a1_l1_q11",
+      topic: "Pflichten Azubi",
+      gameType: "gap_fill",
+      textBefore:
+        "Zu deinen Pflichten als Azubi gehören Pünktlichkeit, Sorgfalt und das Führen deines ",
+      correctAnswer: "Berichtshefts",
+      textAfter: ".",
+      options: ["Berichtshefts", "Urlaubsscheins", "Kundenpasses", "Lieferplans"],
+      feedbackCorrect:
+        "Richtig! Das Berichtsheft zeigt, was du gelernt hast und gehört fest zur Ausbildung.",
+      feedbackWrong:
+        "Nicht ganz. Gemeint ist das Berichtsheft – es dokumentiert deinen Lernfortschritt."
+    },
+
+    // 12) SINGLE CHOICE – Rechte kurz zusammenfassen
+    {
+      id: "j1_l1_a1_l1_q12",
+      topic: "Rechte Azubi",
+      gameType: "single_choice_quiz",
+      question:
+        "Welche Aussage beschreibt dein Recht als Azubi mit Ausbildungsvertrag am besten?",
+      options: [
+        "Du hast das Recht, ausgebildet zu werden und wichtige Inhalte erklärt zu bekommen.",
+        "Du hast das Recht, alle Aufgaben abzulehnen, die dir keinen Spaß machen.",
+        "Du hast nur das Recht, einfache Hilfsarbeiten zu machen."
+      ],
+      correctIndex: 0,
+      feedbackCorrect:
+        "Genau! Du hast ein klares Recht auf Ausbildung und Erklärung der Inhalte.",
+      feedbackWrong:
+        "Falsch. Dein wichtigstes Recht ist, ausgebildet zu werden – nicht nur Spaß-Aufgaben zu wählen oder nur Hilfsarbeiten zu machen."
+    }
+  ]
+};
+
+export default LEKTION_1;

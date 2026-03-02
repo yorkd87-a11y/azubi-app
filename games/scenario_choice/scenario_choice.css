@@ -1,0 +1,333 @@
+/* games/scenario_choice/scenario_choice.css */
+
+.scn-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  color: #1c2342;
+}
+
+/* Meta-Infos oben */
+.scn-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #6b6f76;
+}
+
+.scn-topic {
+  font-weight: 600;
+}
+
+.scn-counter {
+  opacity: 0.8;
+}
+
+/* Situation / Szenario-Bereich (Chat-artig) */
+.scn-situation {
+  display: block;
+  margin-top: 4px;
+}
+
+/* Chat-Bubble mit Titel und Text */
+.scn-bubble {
+  flex: 1;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #f7f7fb 0%, #f1f2fa 100%);
+  border: 1px solid rgba(28, 35, 66, 0.08);
+  padding: 14px 14px 15px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+/* Title innerhalb des Bubbles */
+.scn-situation-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1c2342;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+/* Text (kann mehrere Absätze enthalten) */
+.scn-situation-text {
+  font-size: 0.95rem;
+  text-align: center;
+  color: #4a4d57;
+  line-height: 1.4;
+}
+
+.scn-situation-text p + p {
+  margin-top: 4px;
+}
+
+/* Kleine Hinweiszeile unter dem Szenario */
+.scn-hint {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: #6b6f76;
+}
+
+/* Antwort-Optionen im „Chat-Button“-Style */
+.scn-options {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+/* Jede Option als große, gut klickbare Fläche */
+.scn-option {
+  -webkit-appearance: none;
+  appearance: none;
+  color: inherit;
+  font: inherit;
+  position: relative;
+  width: 100%;
+  text-align: left;
+
+  padding: 10px 12px 12px 32px;
+  border-radius: 14px;
+  border: 1px solid #d6d8e0;
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.08s ease,
+    box-shadow 0.18s ease,
+    color 0.18s ease;
+}
+.scn-option-text {
+  display: block;
+  margin-left: 26px;
+}
+  
+
+/* Option-Buchstabe (A, B, C...) links */
+.scn-option-label {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: #e4e6f5;
+  color: #1c2342;
+  font-size: 0.78rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scn-card--auto-advance .game-footer-row {
+  display: none;
+}
+
+/* Hover-Effekt (Mobile nur minimal spürbar) */
+.scn-option:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+/* Zustand: ausgewählt, noch nicht ausgewertet */
+.scn-option--selected {
+  border-color: #1c2342;
+  background: #ecefff;
+  box-shadow: 0 3px 10px rgba(28, 35, 66, 0.2);
+}
+
+/* Zustand: disabled nach Beantwortung */
+.scn-option--disabled {
+  cursor: default;
+}
+
+/* Zustand: richtige Antwort */
+.scn-option--correct {
+  border-color: #2e7d32;
+  background: linear-gradient(135deg, #e8f5e9, #f7fff9);
+  color: #1b3f21;
+  box-shadow: 0 3px 10px rgba(46, 125, 50, 0.25);
+}
+
+/* Zustand: falsche Antwort */
+.scn-option--wrong {
+  border-color: #c62828;
+  background: #ffebee;
+  color: #7b1f1f;
+  animation: scn-shake 0.25s ease-out;
+}
+
+/* Mini-Icon rechts, wenn korrekt */
+.scn-option--correct::after {
+  content: "✓";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%) scale(1);
+  font-size: 1.9rem;
+  opacity: 0.9;
+}
+
+/* Mini-Icon rechts, wenn falsch */
+.scn-option--wrong::after {
+  content: "!";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%) scale(1);
+  font-size: 1.9rem;
+  opacity: 0.9;
+}
+
+/* Karte bekommt beim Auswerten zusätzlich Zustände (für Puls & Confetti) */
+.game-card.scn-card--correct {
+  animation: scn-card-pulse 0.4s ease-out;
+}
+
+.game-card.scn-card--wrong {
+  animation: scn-card-nudge 0.25s ease-out;
+}
+
+/* Inline-Erklärung zur gewählten Option (im Feedback-Text) */
+.scn-feedback-extra {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.8rem;
+  color: #4a4d57;
+}
+
+/* ======================================
+   Confetti für richtige Entscheidung
+   ====================================== */
+
+.scn-confetti-piece {
+  position: absolute;
+  width: 6px;
+  height: 10px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: scn-confetti 0.7s ease-out forwards;
+}
+
+@keyframes scn-confetti {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(1);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(40px) translateX(10px) rotate(25deg) scale(0.9);
+  }
+}
+
+/* ======================================
+   Keyframes für Shake / Pulse
+   ====================================== */
+
+@keyframes scn-shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes scn-card-pulse {
+  0% {
+    transform: scale(0.98);
+  }
+  45% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes scn-card-nudge {
+  0% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(-4px);
+  }
+  60% {
+    transform: translateX(3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* ======================================
+   Mobile Feintuning
+   ====================================== */
+
+@media (max-width: 600px) {
+  .scn-card {
+    gap: 8px;
+  }
+
+  .scn-meta-row {
+    font-size: 0.9rem;
+  }
+
+  .scn-bubble {
+    padding: 10px 11px 12px;
+  }
+
+  .scn-situation-title {
+    font-size: 1rem;
+  }
+
+  .scn-situation-text {
+    font-size: 0.9rem;
+  }
+
+  .scn-hint {
+    font-size: 0.82rem;
+  }
+
+  .scn-option {
+    font-size: 0.9rem;
+    line-height: 1.32;
+    padding: 10px 11px 10px 32px;
+  }
+
+  .scn-option-label {
+    left: 9px;
+    width: 20px;
+    height: 20px;
+    font-size: 0.72rem;
+  }
+
+  .scn-option-text {
+    margin-left: 18px;
+  }
+}
+

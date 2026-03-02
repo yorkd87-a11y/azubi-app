@@ -1,0 +1,133 @@
+﻿# Changelog
+
+## 2026-02-24
+- Mobile Lernpfad: Header vereinfacht, Map-Abstaende vergroessert, Labels lesbarer, Wortumbruch verbessert.
+- Sticky-Step-Bar: erscheint beim Scrollen, zeigt aktuellen Schritt dynamisch.
+- Energie-Badge: startet oben rechts, wandert in die Zick-Zack-Luecken und wechselt Seite passend zum Kreis.
+- Resume-Button im Header: scrollt zum naechsten sinnvollen Schritt, Highlight-Effekt.
+- Abschluss-CTA: "Super, alles geschafft!" sichtbar bei 32/32 und navigiert zu Level 2.
+- Map-Scrolling: letzter Kreis kann mittig ausgerichtet werden.
+- Overflow-Fix: freies Panning im Lernpfad deaktiviert.
+
+## 2026-02-25
+- Neue Stylestruktur unter `gestaltung/` (basis + bereiche) angelegt und eingebunden.
+- Basis-Styles aus `styles.css` ausgelagert nach `gestaltung/basis/*`.
+- Bereiche ausgelagert: `carmen_intro`, `lernpfad_header`, `level_uebersicht`, `spiele_und_fragenkarten`.
+- Body-Bereichsklassen eingefuehrt, Startzustand auf `bereich-carmen-intro` gesetzt.
+- Lernpfad bleibt in `lesson_map_styles.css` (Scoped-Version verworfen wegen Layout-Abweichung).
+- Aufraeumen: leere Dateien entfernt, Backup-Ordner erstellt.
+- Lernpfad: Energiepille folgt 3er-Kreisen, nur ab Sticky-Header; sanftere Animation, Position im oberen Drittel.
+- Lernpfad: Aktiver Kreis leuchtet mit animiertem Rainbow-Glow beim Scrollen.
+- Lehrjahr-Uebersicht als eigene Ansicht vor der Level-Liste eingefuehrt (mit Zurueck-Button).
+- Mobile-Optimierung fuer Single-Choice und True/False sowie bessere Kartenabstaende auf Mobile.
+- Lektion-beenden-Sheet hat Safe-Area-Padding, damit es auf iPhone nicht am Home-Indikator klebt.
+- Lernpfad: Abschnitt-Separatoren als klare Trenner mit diagonalen Verbindungen zur Box (oben links/unten rechts), mehr Abstand davor/danach, Zick-Zack bleibt symmetrisch.
+- Lernpfad: Abschnitt-Header eckig, groesser, zentriert und mit fixer Breite.
+- Inhalt: Abschnitt 4 (Level 1) Titel und Beschreibung gesetzt auf "Gefahrstoffe & Arbeitsschutz im Salon".
+- Games: Kartenbreiten vereinheitlicht (max 960px, width 100%), mobile Overflows verhindert.
+- Gap-Fill: Layout responsiv gemacht, Options-Chips ohne grosse Margins, mobile Spalten-Anordnung.
+- Gap-Fill: Ghost-Chip animiert zentriert in die Luecke.
+- True/False: Swipe auf Mobile ueber die ganze Karte, staerkere Indikatoren, Buttons auf Mobile ausgeblendet.
+
+## 2026-03-01
+- Arbeitsregel: Projekt-Backups liegen ab jetzt ausserhalb des Projekts unter `C:\Users\York\Desktop\Azubi App Backup`.
+- Arbeitsregel: Umgesetzte Aenderungen sollen weiterhin in `CHANGELOG.md` dokumentiert werden.
+- Arbeitsregel: Nicht fuer jede Kleinigkeit ein neues Backup; Standard ist hoechstens ein Backup pro 30 Minuten plus Backups vor groesseren/riskanteren Eingriffen.
+- Promo-Screen: Testmodus vor dem Intro deaktiviert; Werbeblock erscheint wieder nur nach abgeschlossener Lektion.
+- Promo-Screen: Browser-/App-Soundflow verbessert; zuerst Autoplay mit Ton, bei Browser-Blockade Fallback auf stumme Wiedergabe mit Button zum Ton-Einschalten.
+- Aufgaben-Datei `Neue aufgabe gpt fuer den 26.02.txt` gegen den aktuellen Projektstand abgeglichen; Status in `Infos GPT/AUFGABE-26-02-STATUS.md` dokumentiert.
+- Aus dem 26.02-Status eine priorisierte To-do-Liste fuer die spaetere Lernlogik abgeleitet (`Infos GPT/TODO-LERNLOGIK-AUS-26-02.md`).
+- `DOKU_LERNLOGIK.md` angelegt: Zielbild fuer Kernlektion, Wiederholung, Daily Mission und 2 Sessions pro Tag sowie Dokumentation der aktuellen Startstellen fuer Lektionen.
+- Lernlogik vorbereitet: neuer Ordner `lernlogik/` mit Grunddateien `speicher.js`, `zeit.js`, `session_planer.js` und `fortschritt.js` angelegt.
+- Lernlogik: zentrales Nutzerstatus-Modell in `lernlogik/speicher.js` angelegt, inkl. `initialerStatus()`, Versionsfeld und normalisierter Lade-/Speicherlogik.
+- Lernlogik: `lernlogik/fortschritt.js` um Lerntag-Start, Step-Abschluss und automatische Wiederholungen nach 3 und 10 Lerntagen erweitert.
+- Lernlogik: `lernlogik/session_planer.js` um Inhaltsindex, faellige Wiederholungen, naechste Kernlektion und erste 2-Slot-Tagesplanung erweitert.
+- Lernlogik: neue Missionslogik in `lernlogik/missionen.js` angelegt (Schwachstelle, Checkpoint, Praxisauftrag, Speed Drill) und im Session-Planer als Daily-Mission-Quelle angebunden.
+- Lernlogik/UI: minimale `Heute`-Ansicht in `Index.html` und `gestaltung/bereiche/heute/heute.css` ergaenzt; zeigt genau 2 Session-Karten und haelt die Tagesplanung stabil fuer denselben Kalendertag.
+- Lernlogik/UI: Tagesstatus in `lernlogik/speicher.js` um geplante, gestartete und erledigte Session-IDs erweitert.
+- Lernlogik/UI: `app.js` an die neue `Heute`-Ansicht angebunden; Session-Start markiert den Tagesstatus, abgeschlossene Lektionen fuehren nach dem Promo-Screen zurueck zu `Heute`.
+- Daily Mission: `openDailyMission(...)` um optionale `onComplete`- und `onClose`-Hooks erweitert, damit die neue Tagesansicht sauber aktualisiert werden kann.
+- Produktlogik dokumentiert: Carmen-Intro spaeter nur einmalig fuer neue Nutzer; regulaerer App-Start soll zuerst offene Wiederholungen/Tages-Sessions und sonst direkt den Lernpfad zeigen.
+- Design: `Heute`-Ansicht optisch an das bestehende dunkle App-Design von Intro/Levelansichten angenaehert.
+- Arbeitsregel: Sichtbare UI-Texte sollen kuenftig mit echten Umlauten geschrieben werden (`ä, ö, ü, Ä, Ö, Ü, ß`).
+- Heute-Logik geschaerft: Der Screen zeigt jetzt nur noch echte Pflichtinhalte (faellige Wiederholung, echte Daily Mission). Wenn nichts anliegt, geht es direkt in den Lernpfad.
+- Heute-Design verdichtet: kompaktere, zentrierte Karten und insgesamt kleinere Darstellung fuer mehr Uebersicht.
+- Start-Flow umgesetzt: Carmen-Intro wird nach dem ersten bewussten Start lokal als gesehen markiert; bestehende Nutzer starten danach direkt in den regulaeren Tagesstart.
+- Daily-Mission-Verfuegbarkeit im restlichen UI auf echte History umgestellt; sichtbare Badges nutzen keinen Mock-Fallback mehr.
+- Energiesymbol umgestellt: Das neue Icon `media/Bilder/Icons/Farbtupe-Energie.png` ersetzt jetzt die bisherigen Blitz-Symbole im Header, Lernpfad, Lesson-Overlay, Daily-Mission-Overlay und Energie-Bonus-Popup.
+- True/False-Spiel zurueck auf klassische `Richtig`-/`Falsch`-Buttons umgestellt; Swipe-Hinweise und Swipe-Gesten entfernt, Antwortbuttons jetzt vollbreit und daumenfreundlich.
+- Startfix: Lernpfad-Initialisierung in `app.js` vor die Startentscheidung gezogen, damit beim direkten App-Start ohne Carmen kein leerer Screen erscheint.
+- Antwortpositionen randomisiert: Bei geeigneten Auswahlspielen werden Optionen jetzt pro Anzeige gemischt, damit sich nicht immer dieselbe Position der richtigen Antwort einpraegt. Aktiv fuer Single Choice, Multiple Choice, Scenario Choice, Gap Fill und die Reihenfolge von `Richtig`/`Falsch`.
+- Spiele-Flow: Antwortsound wird jetzt direkt bei der Auswertung abgespielt; bei richtigen Antworten erscheint danach das Erklaer-Popup, und nach `Weiter` wird ohne sichtbares Zurueckblitzen der alten Frage direkt zur naechsten Frage gewechselt.
+- Spiele-Flow weiter gestrafft: Die UI wartet nicht mehr auf das Ende des Antwortsounds. Sound startet sofort, Popup bzw. naechste Frage reagieren direkt ohne kuenstliche Sound-Wartezeit.
+- Audio-Fix: Antwortsounds verwenden jetzt pro Abspielvorgang einen frischen Audio-Player statt ein wiederverwendetes Element, damit insbesondere der Falsch-Sound nicht verschluckt wird.
+- Spiele-Flow fuer falsche Antworten umgestellt: Bei Single Choice, True/False, Multiple Choice, Scenario Choice und Gap Fill wird die falsche Antwort jetzt schon beim Antwortklick ausgewertet. Dadurch kommt der Falsch-Sound sofort und nicht erst beim spaeteren Klick auf `Weiter`.
+- Antwort-Popups neu gestaltet: Richtig und Falsch nutzen jetzt denselben Fullscreen-Feedback-Flow mit neuem Gold-/Feuer-Design, 2 Sekunden Sperre, danach aktivem `Weiter` und zusaetzlich 5 Sekunden Auto-Weiter.
+- Antwort-Popups visuell verstaerkt: mehr Glow- und Topbar-Effekte, staerkeres Titel-/Icon-Pulsing sowie deutlich praesentere Erklaerungsboxen mit mehr Freiraum, groesserem Text und staerkerem Fokus.
+- Antwort-Popups weiter verfeinert: Gold und Feuer farblich staerker getrennt, Erklaerungstext jetzt zentriert, und der farbige Akzentstreifen der Erklaerungsbox liegt passend zur Variante unten statt links.
+- Feedback-Texte im Antwort-Popup besser gegliedert: Nach Punkten wird jetzt automatisch eine neue Zeile erzeugt, damit laengere Erklaerungen leichter lesbar sind.
+- Design-Test vorbereitet: Carmen-Intro, Heute-Ansicht und Lernpfad farblich von der bisherigen Gold-Blau-Linie auf eine waermere Gold-/Feuer-Linie umgestellt, angelehnt an die neuen Antwort-Popups.
+- Lernpfad-Menue testweise erweitert: Unten im Map-Menue sind jetzt direkte Vorschau-Links zu `Heute` und `Carmen` eingebaut; `Heute` kann fuer den Design-Test auch ohne echte Sessions als Vorschau angezeigt werden. Diese Verknuepfung ist nur temporaer fuer den Sichttest gedacht.
+- Lernpfad-Farben weiter angepasst: Hintergrund der Map-Karte leicht aufgehellt, kuehle Kontrastflaechen durch waermere Amber-/Kupfer-Toene ersetzt und Sticky-Bar, Back-Button sowie Daily-Mission-Badge an die neue Gold-/Feuer-Linie angeglichen.
+- Lernpfad entruempelt: Der Level-Header wurde von mehreren Badges auf eine ruhigere Meta-Zeile reduziert, der obere `Weiterlernen`-Button entfernt und Lehrjahr-/Abschnitts-Trenner deutlich textiger und weniger chip-lastig gestaltet.
+- Lernpfad-Separatoren weiter ueberarbeitet: `Lehrjahr` und Abschnittstitel sind jetzt staerker als Kapiteltrenner statt als lose Textelemente gestaltet, mit kompakteren Abstaenden und dezenter Linienfuehrung.
+- Lernpfad-Hierarchie weiter geschaerft: Der mittlere Level-Zwischentitel wird im globalen Pfad nicht mehr gerendert, `Lehrjahr` wurde leiser gesetzt, die eigentliche Abschnittsueberschrift staerker betont und der erste Node naeher an den oberen Einstieg gezogen.
+- Fortschritts-Fix: Der alte Testmodus in `loadLessonProgress()` wurde entfernt. Lektionen werden jetzt wieder konsistent ueber `localStorage` freigeschaltet, damit der naechste Schritt nach einem erfolgreichen Abschluss wirklich aufgeht.
+- Serienbonus umgebaut: Das bisher einfache Energie-Bonus-Popup wurde auf einen ersten Slot-Machine-Stand mit 6 Walzen umgestellt. Verwendet werden die goldene Farbtube und ein rotes Kreuz; die Walzen landen auf dem bereits vergebenen Bonuswert und zeigen den Treffer als Vollbild-Inszenierung. Die eigentliche Fluganimation der Tuben ins Energiefeld folgt im naechsten Schritt.
+- Serienbonus-Ablauf korrigiert: Die 6-Walzen-Sequenz bestimmt jetzt selbst den echten Bonuswert, statt nur einen schon vorher gezogenen Wert zu illustrieren. Die Bonus-Inszenierung laeuft nun nach dem Antwort-Popup sauber exklusiv durch und blockiert den Weiterlauf, bis der Nutzer nach 2 Sekunden Sperre mit `Mega, danke` bestaetigt.
+- Serienbonus-Schwellen angepasst: Der Streak-Bonus triggert jetzt bei 4, 7 und 12 richtigen Antworten in Folge. Dabei werden je nach Serie 4, 6 oder 10 Walzen gezogen; jede goldene Tube gibt 1 Energie.
+- Energie-Overflow fuer Boni verbessert: Bonusenergie aus Streak-Tuben darf jetzt sichtbar ueber 50 hinaus steigen. Ueberfuellte Anzeigen werden nicht mehr kuenstlich als `x/50` dargestellt, sondern als absoluter Wert angezeigt.
+- Streak-Bonus pro Lektion begrenzt: Energiegewinne aus Antwort-Serien sind jetzt nur noch beim allerersten Start einer Lektion aktiv. Sobald eine Lektion einmal begonnen wurde, bleiben spaetere Wiederholungen derselben Lektion streak-faehig in der Anzeige, aber ohne neue Bonusenergie.
+- Lernpfad-CSS neu vorbereitet: Eine modulare Zielstruktur unter `gestaltung/bereiche/lernpfad/css/` wurde angelegt. Dazu gehoeren `main.css` und getrennte Teildateien fuer Layout, Nodes, Node-States, Schloss, Bottom-Navigation, Sticky-Bar, Energie, Separatoren und Responsive-Regeln. Die neue Struktur ist vorerst nur die Umbau-Basis; aktiv bleibt bis zum schrittweisen Transfer weiterhin `lesson_map_styles.css`.
+- Lernpfad-CSS weiter modularisiert: Nach der Bottom-Navigation liegt jetzt auch die echte Schloss- und Freischaltlogik des Lernpfads in `gestaltung/bereiche/lernpfad/css/node_lock.css`. Dazu gehoeren gesperrte Node-Styles, Schlossgeometrie, Mobile-Mini-Schloss, Unlock-Reveal und die zugehoerigen Keyframes. In `lesson_map_styles.css` blieben nur noch die Vorschau-spezifischen Schlossregeln.
+- Lernpfad-CSS weiter modularisiert: Die Basis-Node-Geometrie liegt jetzt produktiv in `gestaltung/bereiche/lernpfad/css/nodes.css`. Aus `lesson_map_styles.css` entfernt wurden die doppelten Grundregeln fuer Node-Container, Kreis, Label, Titel, Score, Hover/Active, Resume-Highlight sowie deren Desktop-/Mobile-Basisgroessen. In der grossen Datei bleiben fuer diesen Bereich vorerst nur State-, Glow- und Preview-nahe Regeln.
+- Lernpfad-Mobile-Fix: Die mobile Breite des Lernpfad-Hintergrunds wird jetzt ueber `gestaltung/bereiche/lernpfad/css/layout.css` stabilisiert. `map-screen` hat dort keinen zusaetzlichen Seitenrand mehr, und die Map-Card wird auf Mobile wieder voller an den Bildschirm gezogen.
+- Lernpfad-Wrapper-Fix: Fuer `bereich-lernpfad` und `bereich-lernpfad-header` wird jetzt auch das globale `.app`-Seitenpadding aufgehoben. Dadurch verschwindet der verbleibende Rand zum Bildschirmende, den die Map allein nicht wegdruecken konnte.
+- Lernpfad-Mobile-Feinschliff: Die Label-Boxen unter den Nodes wurden auf Mobile in `gestaltung/bereiche/lernpfad/css/nodes.css` wieder etwas schmaler gesetzt, damit sie trotz Vollbreiten-Layout nicht mehr so buendig an den Screenrand wirken.
+- Lernpfad-Label-Fix auf Mobile: Ein spaeter Restblock in `lesson_map_styles.css` ueberschrieb die modulare `nodes.css` noch einmal. Der Dublettenblock wurde entfernt. Zusaetzlich bekommen seitliche Node-Labels in `nodes.css` jetzt auf Mobile einen kleinen Innenversatz, damit linke und rechte Nodes ihre Textboxen nicht mehr direkt an den Bildschirmrand druecken.
+- Lernpfad-Mobile-Labels feinjustiert: Die erste Innenversatz-Korrektur war zu stark. In `nodes.css` wurden die mobilen Label-Boxen deshalb wieder etwas breiter gesetzt und die seitlichen Versatzwerte deutlich reduziert, damit die Labels auf dem Handy nicht zu schmal und zu weit eingerueckt wirken.
+- Lernpfad-Feinschliff: Die Prozentanzeige unter abgeschlossenen Nodes wurde in `nodes.css` auf Desktop und Mobile kleiner gesetzt, damit sie ruhiger unter dem Titel sitzt und nicht zu stark mit dem Node selbst konkurriert.
+- Lernpfad-Statusanzeige umgebaut: Die Prozentanzeige abgeschlossener Nodes sitzt jetzt als eigene kleine Pill oberhalb der Node statt im Textlabel. In `nodes.css` bekam diese Status-Pill zusaetzlich eine sehr leichte Schwebeanimation.
+- Lernpfad-Prozent-Pills farblich differenziert: `100 %` wird jetzt als goldene Erfolgs-Pill dargestellt, waehrend niedrigere Abschlussstaende eine ruhigere, dunklere Alternativfarbe bekommen.
+- Lernpfad-CSS weiter modularisiert: Die eigentlichen Node-States liegen jetzt produktiv in `gestaltung/bereiche/lernpfad/css/node_states.css`. Dorthin verschoben wurden Glow-Ring, Status-Badges, `current`, `completed`, `partial`, `perfect` und die zugehoerigen Keyframes. In `lesson_map_styles.css` bleibt fuer diesen Block jetzt nur noch das grobere Layout und Responsive-Verhalten.
+- Lernpfad-CSS weiter modularisiert: Die Kapitel- und Abschnittstrenner liegen jetzt produktiv in `gestaltung/bereiche/lernpfad/css/separators.css`. Aus `lesson_map_styles.css` entfernt wurden Separator-Container, Label-Stile, Anchor-Punkte sowie die Vor-/Nach-Abstaende der Nodes an Trennern.
+- Lernpfad-Separatoren erweitert: Abschnittstrenner haben jetzt in `separators.css` eine warme rötliche Kartenoptik. Gleichzeitig wurde der Map-Datenaufbau in `app.js` auf optionale Abschnittsvideos vorbereitet (`section.videoUrl`, `section.video.required`), und `lesson_map.js` rendert automatisch einen Play-Button, sobald an einem Abschnitt ein Video hinterlegt ist.
+- Lernpfad-Separatoren weiter strukturiert: `lesson_map.js` kennzeichnet Vor-/Nach-Abstände an Trennern jetzt getrennt nach `jahr` und `section` über eigene Klassen. Zusätzlich wurde die `section`-Box auf Desktop in `separators.css` breiter gesetzt, damit sie den verfügbaren Platz besser nutzt.
+- Lernpfad-Separatoren feinjustiert: Die Abschnittskarten haben jetzt mehr Außenabstand. In `separators.css` wurden sowohl das Separator-Padding als auch die Vor-/Nach-Abstände der benachbarten Nodes erhöht, damit mehr Luft zu Pfadlinien und Nodes entsteht.
+- Lernpfad-Separatoren weiter geoeffnet: Der Außenabstand der Abschnittskarten wurde in `separators.css` nochmals deutlich erhöht, damit zu Pfadlinien und benachbarten Nodes jetzt wirklich sichtbar mehr Raum bleibt.
+- Lernpfad-Separatoren optisch erweitert: Abschnittskarten wurden in `separators.css` breiter gesetzt, damit sie stärker in die Connector-Zone greifen. Zusätzlich haben sie jetzt links und rechts goldene Seitenlinien in derselben Familie wie der `Lehrjahr`-Trenner.
+- Lernpfad-Separatoren weiter feinjustiert: Die Abschnittskarte wurde in `separators.css` wieder etwas breiter gesetzt, und die goldenen Seitenlinien wurden im ersten Korrekturschritt erneut verlängert. Die exakte horizontale Mittelausrichtung folgt danach separat.
+- Lernpfad-CSS weiter modularisiert: Die `section`-Separatoren sind jetzt vollständig in `gestaltung/bereiche/lernpfad/css/separator_section.css` ausgelagert. Dort liegen Box-Optik, Unterstrich, Seitenlinien, Play-Button sowie die getrennten `section`-Abstände. In `separators.css` bleiben nur noch die allgemeinen Separator-Regeln sowie `jahr`/`level`.
+- Lernpfad-CSS weiter modularisiert: Auch die `jahr`-Separatoren sind jetzt separat in `gestaltung/bereiche/lernpfad/css/separator_jahr.css` ausgelagert. Dort liegen Titelstil, Seitenlinien sowie die eigenen `jahr`-Abstände inklusive Mobile-Korrektur. `separators.css` enthaelt damit nur noch allgemeine Separator-Regeln und `level`.
+- Lernpfad-CSS weiter modularisiert: Die echten Pfadlinien liegen jetzt produktiv in `gestaltung/bereiche/lernpfad/css/connectors.css`. Aus `lesson_map_styles.css` wurde der aktive `.map-connector`-Block entfernt.
+- Lernpfad-CSS weiter modularisiert: Die aktive Sticky-Bar liegt jetzt produktiv in `gestaltung/bereiche/lernpfad/css/sticky_bar.css`. Aus `lesson_map_styles.css` wurden Sichtbarkeit, Positionierung und Typografie der Sticky-Bar entfernt.
+- Lernpfad-CSS weiter modularisiert: Auch Topbar und Energie liegen jetzt produktiv getrennt in `gestaltung/bereiche/lernpfad/css/topbar.css` und `gestaltung/bereiche/lernpfad/css/energy.css`. Aus `lesson_map_styles.css` wurden Back-Button, Top-Row, Energie-Chip und Energie-Float-Regeln entfernt.
+- Lernpfad-CSS weiter modularisiert: Die verbleibenden Titel- und Untertitelgrößen der Map-Card liegen jetzt in `gestaltung/bereiche/lernpfad/css/header.css`. Aus `lesson_map_styles.css` wurden die `map-card h2`- und `map-subtitle`-Regeln inklusive Desktop-/Mobile-Anpassungen entfernt.
+- Lernpfad-Desktop-Feinschliff: Die Textboxen unter den Nodes wurden in `nodes.css` auf Desktop deutlich breiter und etwas großzügiger gepolstert, damit der vorhandene Platz besser genutzt wird und die Labels hochwertiger wirken.
+- Lernpfad-Desktop-Scrollfix: In `gestaltung/bereiche/lernpfad/css/layout.css` wurde `map-screen` als echter vertikaler Scroll-Container definiert (`overflow-y: auto`, `min-height: 0`), damit der Lernpfad auf Desktop wieder zuverlässig mit dem Mausrad scrollt.
+- Lernpfad-Scrollcontainer weiter geschaerft: Fuer `bereich-lernpfad` und `bereich-lernpfad-header` bekommt `.app` jetzt eine feste Viewport-Hoehe mit `overflow: hidden`, waehrend `.map-screen` selbst auf `100vh` als eigentlicher Scrollbereich laeuft. Damit verhaelt sich der Lernpfad auf Desktop wie die Session-Container mit sauberem Mausrad-Scroll.
+- Lernpfad-CSS weiter modularisiert: Das eigentliche Grundlayout des Lernpfads liegt jetzt produktiv in `gestaltung/bereiche/lernpfad/css/layout.css`. `lesson_map_styles.css` enthaelt dafuer nicht mehr die aktiven Regeln fuer Map-Screen, Map-Card, Map-Path, Step-Hoehen und Complete-CTA.
+- Lernpfad-CSS weiter modularisiert: Der Daily-Mission-Badge des Lernpfads liegt jetzt produktiv in `gestaltung/bereiche/lernpfad/css/daily_mission.css`, inklusive Pulse, Icon und Mobile-Vollbreitenregel.
+- Lernpfad-CSS aufgeraeumt: `lesson_map_styles.css` wurde auf den verbleibenden Rest-/Preview-Teil reduziert und enthaelt jetzt im Wesentlichen nur noch die Schloss-Vorschau fuer den Testzugang.
+- Lernpfad-CSS weiter modularisiert: Auch der `level`-Separator liegt jetzt separat in `gestaltung/bereiche/lernpfad/css/separator_level.css`. In `separators.css` bleiben damit nur noch allgemeine Separator-Regeln ohne typ-spezifische `level`-Optik.
+- Lernpfad-Mobile-Feinschliff: Die Titelschrift des `section`-Separators wurde in `separator_section.css` auf Mobile wieder reduziert, damit die Abschnittskarte auf dem Handy nicht zu dominant wirkt.
+- Lernpfad-Mobile-Feinschliff: Der Abstand oberhalb des `section`-Separators wurde auf Mobile in `separator_section.css` deutlich reduziert, damit `jahr` und Abschnittskarte naeher zusammenruecken.
+- Spiele-CSS vorbereitet: Unter `gestaltung/bereiche/spiele_und_fragenkarten/css/` wurde eine modulare Zielstruktur fuer das Spiele-Design angelegt (`main`, `layout`, `header`, `energy`, `streak`, `cards`, `footer`, `feedback`, `bonus`, `exit_sheet`, `responsive`). Die aktive Spiele-UI bleibt vorerst noch in `games/game_main.css`.
+- Spiele-Doku ergaenzt: Die geplante CSS-Zerlegung der Spiele wurde in `Infos GPT/SPIELE-CSS-ZIELSTRUKTUR.md` dokumentiert, inklusive Verantwortungsbereichen und Umbau-Reihenfolge.
+- Spiele-CSS Schritt 1 gestartet: Overlay-Grundlayout, Header und Energie wurden in `gestaltung/bereiche/spiele_und_fragenkarten/css/layout.css`, `header.css`, `energy.css` und `responsive.css` gespiegelt und ueber `main.css` produktiv hinter `games/game_main.css` eingebunden. Der eigentliche Rueckbau der Duplikate in `game_main.css` folgt danach separat.
+- Spiele-CSS Schritt 2 gestartet: Kartenlayout, Basis-Animationen und Footer-/Weiter-Button-Regeln wurden in `gestaltung/bereiche/spiele_und_fragenkarten/css/cards.css` und `footer.css` gespiegelt. Die produktive Prioritaet liegt weiterhin auf der modularen `main.css`, waehrend `games/game_main.css` vorerst noch als Rueckfallebene bestehen bleibt.
+- Spiele-CSS Schritt 3 gestartet: Das Abbruch-Sheet der Lektion liegt jetzt zusaetzlich modular in `gestaltung/bereiche/spiele_und_fragenkarten/css/exit_sheet.css`. Damit ist auch dieser stabile Overlay-Baustein fuer den spaeteren Komplettumbau vorbereitet.
+- Spiele-CSS Schritt 4 gestartet: Die Antwort- und Erklaer-Popups liegen jetzt zusaetzlich modular in `gestaltung/bereiche/spiele_und_fragenkarten/css/feedback.css`, inklusive Popup-Container, Text-/Erklaerboxen, Countdown-Buttons und der zugehoerigen Animationen. `games/game_main.css` bleibt vorerst als Rueckfallebene bestehen.
+- Spiele-CSS Schritt 5 gestartet: Der komplette Serienbonus-/Walzen-Block wurde in `gestaltung/bereiche/spiele_und_fragenkarten/css/bonus.css` gespiegelt, inklusive Slot-Machine, Ergebnisansicht, fliegender Tuben, Energie-Heat-Bars und Mobile-Anpassungen. Auch hier bleibt `games/game_main.css` vorerst als Rueckfallebene bestehen.
+- Spiele-CSS bereinigt: `games/game_main.css` wurde auf eine schlanke Restdatei reduziert. Die globalen Overlay-, Header-, Karten-, Footer-, Feedback-, Exit-Sheet- und Bonus-Regeln liegen damit faktisch nur noch in der modularen Struktur unter `gestaltung/bereiche/spiele_und_fragenkarten/css/`. In `game_main.css` bleibt nur noch der `No Energy`-Fallback.
+- Spiele-Desktop-Feinschliff: In `feedback.css` wurden die sichtbaren Scrollleisten der Antwort-Popup-Karten auf Desktop ausgeblendet und die Desktop-Weiter-Buttons im Popup weiter nach unten gesetzt. Mobile bleibt unverändert.
+- Spiele-Mobile-Fix: Der grosse Safe-Area-Zusatzraum im Spiele-Footer wurde in `footer.css` auf Mobile stark reduziert, damit unten kein auffaelliger Extra-Abstand mehr entsteht. Desktop bleibt unverändert.
+- Spiele-Mobile-Fix: Das versteckte Exit-Sheet ragte unten noch leicht in den Screen. In `exit_sheet.css` wird es jetzt im Ruhe-Zustand weiter nach unten verschoben und erscheint nur noch beim echten Oeffnen.
+- Spiele-Testzugang umgestellt: `Einst.` im Lernpfad oeffnet jetzt einen echten `single_choice_quiz`-Preview mit einer bewusst laengeren Testfrage und langen Antwortoptionen. Der Preview ist fuer Mobile-/Desktop-UI-Tests gedacht; die dabei verbrauchte Energie wird nach Abschluss direkt wieder ausgeglichen.
+- Spiele-Testfix: Beim `single_choice_quiz` wird der Footer im Auto-Weiter-Fall jetzt komplett ausgeblendet und erst bei falscher Antwort wieder eingeblendet. Dadurch verschwindet der unnötige Mobile-Scroll durch reservierten Footer-Platz.
+- Spiele-Testfix: Beim `single_choice_quiz` wird zusätzlich der Scroll-Container des Spiele-Bodys deaktiviert, solange der Auto-Weiter-Fall aktiv ist. Erst bei falscher Antwort wird Scroll wieder freigegeben.
+- Spiele-Testzugang weitergestellt: `Einst.` oeffnet jetzt den naechsten echten Preview-Fall `multiple_choice_quiz`, wieder mit einer bewusst laengeren Testfrage und mehreren inhaltlich dichten Antwortoptionen fuer Mobile-/Desktop-Tests.
+- Spiele-Testzugang angepasst: Der `multiple_choice_quiz`-Preview wurde wieder auf realistischere Standardlaengen fuer Frage und Antworten gekuerzt, damit beim UI-Test nicht kuenstlich zu viel Inhalt den Eindruck verfaelscht.
+- Spiele-Testfix: `multiple_choice_quiz` schaltet den Spiele-Scroll jetzt wie `single_choice_quiz` nur noch dann frei, wenn der Inhalt den Screen wirklich überläuft. Bei normalem Inhalt bleibt die Karte starr.
+- Spiele-Testzugang auf echte neue Fragenstruktur umgestellt: Der Preview unter `Einst.` zieht seine `single_choice_quiz`- und `multiple_choice_quiz`-Fragen jetzt direkt aus `Level 1 / Abschnitt 4` und verwendet damit die neuere Struktur mit `gameData` statt kuenstlicher Inline-Testfragen.
+- Doku aufgeraeumt: Offene Punkte liegen jetzt zentral in `Infos GPT/MASTER-TODO.md`. Veraltete Zwischenlisten (`TODO-LERNLOGIK-AUS-26-02.md`, `SPIELE-CSS-ZIELSTRUKTUR.md`, `AUFGABE-26-02-STATUS.md`) sowie `GPT Aufgabe heute.txt` wurden entfernt.

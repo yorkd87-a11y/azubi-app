@@ -1,0 +1,289 @@
+/* === Lesson Summary Overlay === */
+
+.ls-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 6000;
+  background: rgba(15, 23, 42, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.ls-card {
+  width: 100%;
+  max-width: 1100px; /* etwas schmaler → wirkt kompakter & symmetrischer */
+  background: radial-gradient(circle at top, #f9fafb, #e2e8f0);
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.5);
+  padding: 26px 32px 22px;
+  color: #1c2342;
+
+  /* Grid-Layout: Badges links, Video rechts */
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr);
+  grid-template-rows: auto auto auto auto;
+  grid-template-areas:
+    "title title"
+    "subtitle subtitle"
+    "badges video"
+    "actions actions";
+  column-gap: 24px;
+  row-gap: 18px;
+  align-items: center;
+  animation: ls-card-in 0.35s ease-out;
+}
+
+.ls-title {
+  grid-area: title;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.ls-subtitle {
+  grid-area: subtitle;
+  font-size: 0.9rem;
+  text-align: center;
+  opacity: 0.8;
+}
+
+/* ===========================
+   Video rechts (Desktop)
+   =========================== */
+
+.ls-video-wrapper {
+  grid-area: video;
+  justify-self: center;             /* statt end → näher zur Mitte */
+  align-self: center;
+
+  border-radius: 18px;
+  overflow: hidden;
+  background: radial-gradient(circle at top, #22c55e, #0ea5e9);
+  aspect-ratio: 9 / 16;
+
+  /* Größe wie gewünscht beibehalten */
+  max-width: 300px;
+  width: 50%;
+  max-height: 350px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  animation: ls-video-pop 0.45s ease-out 0.1s both;
+}
+
+.ls-video-wrapper--empty {
+  background: linear-gradient(135deg, #22c55e, #0ea5e9);
+}
+
+.ls-video {
+  width: 90%;
+  height: 90%;
+  border-radius: 18px;
+  object-fit: cover;
+}
+
+/* ===========================
+   Badges links – kleiner & mittig
+   =========================== */
+
+.ls-badges {
+  grid-area: badges;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-self: center;
+  align-self: center;
+  width: 100%;
+  max-width: 520px; /* ähnlich wie Videobreite → Symmetrie */
+}
+
+.ls-badge {
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.04);
+  border: 1px solid rgba(148, 163, 184, 0.8);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;      /* Text mittig */
+  text-align: center;
+  min-height: 52px;
+
+  animation: ls-badge-in 0.35s ease-out both;
+}
+
+.ls-badge:nth-child(1) { animation-delay: 0.12s; }
+.ls-badge:nth-child(2) { animation-delay: 0.18s; }
+.ls-badge:nth-child(3) { animation-delay: 0.24s; }
+
+.ls-badge-value {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.ls-badge-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.8;
+}
+
+/* leicht unterschiedliche Akzente pro Badge-Typ */
+.ls-badge-xp {
+  border-color: rgba(234, 179, 8, 0.8);
+}
+
+.ls-badge-correct {
+  border-color: rgba(34, 197, 94, 0.8);
+}
+
+.ls-badge-time {
+  border-color: rgba(59, 130, 246, 0.8);
+}
+
+/* ===========================
+   Buttons unten
+   =========================== */
+
+.ls-actions {
+  grid-area: actions;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.ls-btn {
+  border: none;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+}
+
+.ls-btn-primary {
+  background: #1c2342;
+  color: #ffffff;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.35);
+}
+
+.ls-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 35px rgba(15, 23, 42, 0.45);
+}
+
+.ls-btn-secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.ls-btn-secondary:hover {
+  background: #d1d5db;
+}
+
+/* ===========================
+   Animationen
+   =========================== */
+
+@keyframes ls-card-in {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ls-video-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(0) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ls-badge-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ===========================
+   Mobile Layout
+   =========================== */
+
+@media (max-width: 768px) {
+  .ls-card {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "title"
+      "subtitle"
+      "video"
+      "badges"
+      "actions";
+    row-gap: 14px;
+    padding: 24px 20px 20px;
+  }
+
+  .ls-video-wrapper {
+    justify-self: center;
+    max-width: 320px;
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  /* Badges: nebeneinander (wrap) */
+  .ls-badges {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    max-width: 100%;
+  }
+
+  .ls-badge {
+    flex: 1 1 30%;
+    min-width: 130px;
+  }
+
+  .ls-actions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .ls-badges {
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .ls-badge {
+    flex: 1 1 45%;
+    min-width: 120px;
+    padding: 12px 10px;
+  }
+}

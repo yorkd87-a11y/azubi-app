@@ -1,0 +1,92 @@
+/* Lernpfad Daily Mission */
+
+.map-daily-mission-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 8px 16px;
+  margin-bottom: 16px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background:
+    radial-gradient(circle at top left, rgba(244, 207, 99, 0.28), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(255, 107, 53, 0.16), transparent 60%),
+    linear-gradient(135deg, #3b1f0c, #5a3116);
+  color: #fff6e8;
+  box-shadow: 0 10px 25px rgba(27, 13, 5, 0.45);
+  font-size: 0.85rem;
+  text-align: left;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.18s ease;
+}
+
+.map-daily-mission-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px rgba(27, 13, 5, 0.55);
+}
+
+.map-dm-label {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.68rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f4cf63, #ffe7a0);
+  color: #2d1705;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.map-dm-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.74rem;
+  opacity: 0.9;
+  margin-left: auto;
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.map-dm-energy-icon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  flex: 0 0 14px;
+}
+
+.map-dm-pulse {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #fbbf24;
+  box-shadow: 0 0 0 0 rgba(248, 191, 36, 0.7);
+  animation: map-dm-pulse 1.8s infinite;
+}
+
+@keyframes map-dm-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(248, 191, 36, 0.7);
+  }
+  70% {
+    transform: scale(1.5);
+    box-shadow: 0 0 0 10px rgba(248, 191, 36, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(248, 191, 36, 0);
+  }
+}
+
+@media (max-width: 720px) {
+  .map-daily-mission-badge {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 9px 14px;
+    font-size: 0.86rem;
+  }
+}

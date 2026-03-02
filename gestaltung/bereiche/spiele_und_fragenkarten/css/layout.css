@@ -1,0 +1,66 @@
+/* Spiele Layout */
+
+.gm-overlay {
+  position: fixed;
+  inset: 0;
+  background: #61a0a2;
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  animation: gm-overlay-in 0.28s ease-out;
+}
+
+.gm-body {
+  flex: 1;
+  display: flex;
+  padding: 16px 14px 30px;
+  overflow-y: auto;
+}
+
+.gm-game-root {
+  display: flex;
+  flex: 1;
+  min-height: 100%;
+}
+
+.gm-game-root > * {
+  width: 100%;
+}
+
+.gm-body--no-scroll {
+  overflow-y: hidden;
+}
+
+@media (max-width: 600px) {
+  .gm-body {
+    padding: 20px 12px 8px;
+  }
+}
+
+@media (min-width: 900px) {
+  .gm-body {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .gm-game-root {
+    height: auto;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@keyframes gm-overlay-in {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

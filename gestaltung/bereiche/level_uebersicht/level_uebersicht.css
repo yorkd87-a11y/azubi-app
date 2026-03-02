@@ -1,0 +1,474 @@
+﻿/* level_select.css */
+
+/* =====================
+   Screen-Container
+   ===================== */
+
+body.bereich-level-uebersicht .level-select-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 0 0 32px;
+}
+
+/* =====================
+   Header
+   ===================== */
+
+body.bereich-level-uebersicht .ls-header {
+  padding: 20px 14px 0;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+body.bereich-level-uebersicht .ls-header-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 4px;
+}
+
+body.bereich-level-uebersicht .ls-header-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* =====================
+   Wrapper
+   ===================== */
+
+body.bereich-level-uebersicht .ls-screen-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 20px 14px 0;
+  max-width: 720px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* =====================
+   Lehrjahr-Übersicht
+   ===================== */
+
+body.bereich-level-uebersicht .ls-back-to-years {
+  align-self: flex-start;
+  margin-bottom: 6px;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--muted);
+  font-size: 12px;
+  border-radius: 999px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+body.bereich-level-uebersicht .ls-back-to-years:hover {
+  border-color: rgba(232, 189, 79, 0.6);
+  color: var(--accent);
+  background: rgba(9, 13, 30, 0.6);
+}
+
+body.bereich-level-uebersicht .ls-year-card {
+  background: radial-gradient(circle at top left, rgba(232, 189, 79, 0.1), transparent 55%),
+              var(--card);
+  border-radius: var(--radius);
+  padding: 18px 18px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow-soft);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+body.bereich-level-uebersicht .ls-year-unlocked {
+  cursor: pointer;
+}
+
+body.bereich-level-uebersicht .ls-year-unlocked:hover {
+  border-color: rgba(232, 189, 79, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.55);
+}
+
+body.bereich-level-uebersicht .ls-year-locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+body.bereich-level-uebersicht .ls-year-completed {
+  border-color: rgba(232, 189, 79, 0.25);
+}
+
+body.bereich-level-uebersicht .ls-year-card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+body.bereich-level-uebersicht .ls-year-number {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  background: rgba(232, 189, 79, 0.12);
+  border: 1px solid rgba(232, 189, 79, 0.28);
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+
+body.bereich-level-uebersicht .ls-year-lock {
+  margin-left: auto;
+  font-size: 15px;
+}
+
+body.bereich-level-uebersicht .ls-year-check {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(232, 189, 79, 0.15);
+  border: 1px solid rgba(232, 189, 79, 0.4);
+  border-radius: 999px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.bereich-level-uebersicht .ls-year-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+  line-height: 1.25;
+}
+
+body.bereich-level-uebersicht .ls-year-meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+body.bereich-level-uebersicht .ls-year-progress-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+body.bereich-level-uebersicht .ls-year-progress-inner {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand), var(--accent));
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+body.bereich-level-uebersicht .ls-year-progress-label {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+body.bereich-level-uebersicht .ls-year-locked-hint {
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* =====================
+   Jahr-Section
+   ===================== */
+
+body.bereich-level-uebersicht .ls-jahr-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+body.bereich-level-uebersicht .ls-jahr-locked {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+body.bereich-level-uebersicht .ls-jahr-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 2px;
+}
+
+body.bereich-level-uebersicht .ls-jahr-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+}
+
+body.bereich-level-uebersicht .ls-lock-icon {
+  font-size: 13px;
+  margin-left: auto;
+}
+
+/* =====================
+   Level-Karten
+   ===================== */
+
+body.bereich-level-uebersicht .ls-levels-row {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+body.bereich-level-uebersicht .ls-level-card {
+  background: radial-gradient(circle at top left, rgba(232, 189, 79, 0.08), transparent 55%),
+              var(--card);
+  border-radius: var(--radius);
+  padding: 16px 16px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: var(--shadow-soft);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+body.bereich-level-uebersicht .ls-level-unlocked {
+  cursor: pointer;
+}
+
+body.bereich-level-uebersicht .ls-level-unlocked:hover {
+  border-color: rgba(232, 189, 79, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.55);
+}
+
+body.bereich-level-uebersicht .ls-level-unlocked:active {
+  transform: translateY(0);
+}
+
+body.bereich-level-uebersicht .ls-level-locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+body.bereich-level-uebersicht .ls-level-completed {
+  border-color: rgba(232, 189, 79, 0.25);
+}
+
+/* Karten-Kopf (Level-Badge + Check/Lock) */
+
+body.bereich-level-uebersicht .ls-level-card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+body.bereich-level-uebersicht .ls-level-number {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  background: rgba(232, 189, 79, 0.12);
+  border: 1px solid rgba(232, 189, 79, 0.28);
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+
+body.bereich-level-uebersicht .ls-level-lock {
+  margin-left: auto;
+  font-size: 15px;
+}
+
+body.bereich-level-uebersicht .ls-level-check {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(232, 189, 79, 0.15);
+  border: 1px solid rgba(232, 189, 79, 0.4);
+  border-radius: 999px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Texte */
+
+body.bereich-level-uebersicht .ls-level-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 3px;
+  line-height: 1.25;
+}
+
+body.bereich-level-uebersicht .ls-level-desc {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+body.bereich-level-uebersicht .ls-level-meta {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+/* Fortschrittsbalken */
+
+body.bereich-level-uebersicht .ls-level-progress-bar {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+body.bereich-level-uebersicht .ls-level-progress-inner {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand), var(--accent));
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+body.bereich-level-uebersicht .ls-level-progress-label {
+  font-size: 10px;
+  color: var(--muted);
+}
+
+body.bereich-level-uebersicht .ls-level-locked-hint {
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* =====================
+   ZurÃ¼ck-Button (auf der Map)
+   ===================== */
+
+body.bereich-level-uebersicht .map-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--muted);
+  font-size: 12px;
+  border-radius: 999px;
+  padding: 5px 12px;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+body.bereich-level-uebersicht .map-back-btn:hover {
+  border-color: rgba(232, 189, 79, 0.5);
+  color: var(--accent);
+}
+
+/* =====================
+   Mobile-Optimierung (+ ca. 20% GrÃƒÂ¶ÃƒÅ¸e)
+   ===================== */
+
+@media (max-width: 768px) {
+  body.bereich-level-uebersicht .ls-header {
+    padding: 22px 16px 0;
+  }
+
+body.bereich-level-uebersicht .ls-header-title {
+    font-size: 24px;
+  }
+
+body.bereich-level-uebersicht .ls-header-subtitle {
+    font-size: 15px;
+  }
+
+body.bereich-level-uebersicht .ls-screen-wrapper {
+    gap: 40px;
+    padding: 28px 18px 0;
+  }
+
+body.bereich-level-uebersicht .ls-jahr-title {
+    font-size: 17px;
+  }
+
+body.bereich-level-uebersicht .ls-lock-icon {
+    font-size: 15px;
+  }
+
+body.bereich-level-uebersicht .ls-level-card {
+    padding: 24px 22px 20px;
+  }
+
+body.bereich-level-uebersicht .ls-level-number {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+
+body.bereich-level-uebersicht .ls-level-name {
+    font-size: 22px;
+  }
+
+body.bereich-level-uebersicht .ls-level-desc {
+    font-size: 15px;
+  }
+
+body.bereich-level-uebersicht .ls-level-meta {
+    font-size: 13px;
+  }
+
+body.bereich-level-uebersicht .ls-level-progress-label {
+    font-size: 12px;
+  }
+
+  body.bereich-level-uebersicht .ls-level-locked-hint {
+    font-size: 13px;
+  }
+
+  body.bereich-level-uebersicht .map-back-btn {
+    font-size: 14px;
+    padding: 6px 14px;
+  }
+
+  body.bereich-level-uebersicht .ls-back-to-years {
+    font-size: 14px;
+    padding: 6px 14px;
+  }
+
+  body.bereich-level-uebersicht .ls-year-card {
+    padding: 22px 20px 18px;
+  }
+
+  body.bereich-level-uebersicht .ls-year-number {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+
+  body.bereich-level-uebersicht .ls-year-name {
+    font-size: 22px;
+  }
+
+  body.bereich-level-uebersicht .ls-year-meta {
+    font-size: 13px;
+  }
+
+  body.bereich-level-uebersicht .ls-year-progress-label {
+    font-size: 12px;
+  }
+
+  body.bereich-level-uebersicht .ls-year-locked-hint {
+    font-size: 13px;
+  }
+}
+
+

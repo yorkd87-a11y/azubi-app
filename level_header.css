@@ -1,0 +1,98 @@
+.level-header-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0 2px;
+}
+
+.level-header-meta-line {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.level-header-title {
+  margin: 0;
+  font-size: clamp(1.42rem, 4.2vw, 1.95rem);
+  line-height: 1.08;
+  color: rgba(255, 255, 255, 0.94);
+  max-width: 14ch;
+}
+
+.level-header-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.level-header-progress-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.level-header-progress-text,
+.level-header-progress-percent {
+  font-size: 0.8rem;
+  line-height: 1.2;
+}
+
+.level-header-progress-text {
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.level-header-progress-percent {
+  color: #e8bd4f;
+  font-weight: 700;
+}
+
+.level-header-progress-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(232, 189, 79, 0.14);
+  overflow: hidden;
+}
+
+.level-header-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(232, 189, 79, 0.72), #e8bd4f);
+  box-shadow: 0 0 12px rgba(232, 189, 79, 0.22);
+}
+
+.level-header-status {
+  font-size: 0.78rem;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+@media (max-width: 768px) {
+  .level-header-card {
+    gap: 7px;
+    padding: 2px 0 0;
+  }
+
+  .level-header-meta-line {
+    font-size: 0.66rem;
+  }
+
+  .level-header-title {
+    max-width: none;
+    font-size: clamp(1.18rem, 6vw, 1.56rem);
+  }
+
+  .level-header-progress-text,
+  .level-header-progress-percent {
+    font-size: 0.74rem;
+  }
+
+  .level-header-status {
+    font-size: 0.72rem;
+  }
+}

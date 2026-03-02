@@ -1,0 +1,179 @@
+/* games/quickfire_streak/quickfire_streak.css */
+
+.qf-card-main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 920px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 18px 20px 20px;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.22);
+  color: #1c2342;
+}
+
+.qf-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #6b6f76;
+}
+
+.qf-topic {
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.qf-meta-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.qf-counter {
+  font-weight: 500;
+}
+
+.qf-quest-pos {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.qf-title {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.qf-timer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qf-timer-bar-wrap {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.2);
+  overflow: hidden;
+}
+
+.qf-timer-bar {
+  width: calc(var(--qf-timer-progress, 1) * 100%);
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #22c55e, #eab308, #ef4444);
+  transition: width 0.2s linear;
+}
+
+.qf-timer-label {
+  font-size: 0.85rem;
+  min-width: 40px;
+  text-align: right;
+}
+
+.qf-question-box {
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: #f8fafc;
+}
+
+.qf-question-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.qf-question-text {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.qf-answer-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.qf-btn {
+  flex: 1;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease;
+}
+
+.qf-btn-true {
+  background: #22c55e;
+  color: #ffffff;
+}
+
+.qf-btn-false {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.qf-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.3);
+}
+
+.qf-btn[disabled] {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.qf-btn-correct {
+  box-shadow: 0 0 0 2px #22c55e;
+}
+
+.qf-btn-wrong {
+  box-shadow: 0 0 0 2px #ef4444;
+}
+
+.qf-feedback {
+  min-height: 24px;
+  font-size: 0.9rem;
+  color: #1e293b;
+}
+
+.qf-summary {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.qf-stats-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.8rem;
+  color: #4b5563;
+}
+
+.qf-error {
+  font-size: 0.95rem;
+  color: #b91c1c;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .qf-card-main {
+    padding: 16px 14px 18px;
+  }
+
+  .qf-answer-buttons {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,87 @@
+1.4Du bist Codex und sollst in unserer Azubi-Lernapp (aktuell HTML/CSS/JS, ohne Framework) eine „Duolingo-aehnliche“ Lernlogik umsetzen: pro Arbeitstag sollen 2 Lernsessions geplant werden, damit Azubis nicht nach wenigen Wochen „durch“ sind. 
+Wir behalten die interne Content-Struktur (Lehrjahr -> Level -> Abschnitt -> Step 1–8 mit Quiz als Step 8) bei, aber die Oberflaeche darf wie ein endloser Lernpfad wirken. Ziel ist ein Mastery-Loop: Jede Kernlektion erzeugt automatisch Wiederholungen, und zusaetzlich gibt es Daily Missions. 
+Wichtig: Der Umbau soll in kleinen, sicheren Schritten erfolgen, nach jedem Schritt ein Zwischen-Check im Browser. Bitte schreibe Code und Datei-Aenderungen so, dass ich sie als Laie wiederfinde und verstehe (deutsche Dateinamen, keine kryptischen Abkuerzungen; Umlaute in Dateinamen vermeiden -> ae/oe/ue).
+
+Fachliches Zielbild (Lern-Slots):
+- Ein Jahr hat ca. 224 effektive Arbeitstage (Urlaub/Krankheit bereits abgezogen). Bei 2 Sessions pro Tag ergeben sich 448 Sessions.
+- Wir wollen NICHT 448 neue Theorie-Lektionen schreiben, sondern 448 Sessions aus: Kernlektion (neuer Stoff) + Wiederholung (Spaced Repetition) + Daily Missions (Praxis/Schwachstellen/Checkpoint).
+- Konkrete Logik fuer den Start: Jeder Step (inkl. Quiz-Step) erzeugt nach Abschluss automatisch 2 Wiederholungen: eine nach 3 Lerntagen und eine nach 10 Lerntagen. Wenn ein Tag ausfaellt, wird nichts geloescht, sondern die Wiederholung ist einfach spaeter faellig.
+- Tagesplanung: Es gibt pro Tag 2 Slots. Slot 1 ist bevorzugt eine faellige Wiederholung, sonst die naechste Kernlektion. Slot 2 ist bevorzugt eine Daily Mission (oder eine zweite Wiederholung, wenn viele faellig sind). Das System soll verhindern, dass die App nur noch Wiederholungen ausspielt: maximal 1 Wiederholung pro Tag, wenn moeglich; nur wenn extrem viele faellig sind, darf Slot 2 auch eine Wiederholung sein.
+
+Technische Rahmenbedingungen:
+- Wir haben aktuell HTML-Seiten und JS. Bitte analysiere zuerst, ob es mehrere HTML-Seiten gibt oder eine zentrale Seite mit Screen-Wechsel per JS. Passe die Einbindung entsprechend an, aber die Lernlogik soll als saubere JS-Module implementiert werden.
+- Fortschritt wird zunaechst lokal gespeichert (localStorage). Spaeter kommt Backend/Salon-Accounts/Seats, aber das ist heute nicht Teil der Umsetzung. Trotzdem soll der Code so geschrieben sein, dass man spaeter leicht auf Server-Speicherung umstellen kann (eine Speicher-Schnittstelle).
+- Inhalte (Lektionen/Questions) bleiben wie sie sind. Du sollst nur eine „Session-Planung“ drum herum bauen, die entscheidet, was heute gespielt wird.
+
+Arbeitsplan in kleinen Schritten (bitte genau so vorgehen):
+
+Schritt 1: Bestandsaufnahme und Plan-Datei
+- Lege eine Datei DOKU_LERNLOGIK.md an und beschreibe in einfachen Worten: Was ist eine Kernlektion, was ist eine Wiederholung, was ist eine Daily Mission, wie werden 2 Sessions pro Tag geplant.
+- Suche im Projekt die zentrale Stelle, an der aktuell „naechste Lektion“ gestartet wird. Dokumentiere die Stelle (Dateiname + Funktion) in DOKU_LERNLOGIK.md.
+Zwischen-Check: App laeuft wie vorher, noch keine Logik aktiv.
+
+Schritt 2: Neue Ordnerstruktur fuer Lernlogik anlegen
+- Lege einen Ordner /lernlogik an (oder /js/lernlogik, je nach Projektstruktur).
+- Erstelle dort diese Dateien (erstmal minimal, noch ohne grosse Umbauten):
+  1) speicher.js (einheitliche Funktionen: laden(), speichern(), reset(); aktuell localStorage)
+  2) zeit.js (Hilfen: heutigesDatumKey(), tageSeit(), lerntagZaehler; ohne komplizierte Kalenderlogik, aber so, dass man spaeter Arbeitstage ergaenzen kann)
+  3) session_planer.js (entscheidet, welche 2 Sessions heute dran sind)
+  4) fortschritt.js (Funktionen, um Abschluss einer Session zu protokollieren und Reviews zu erzeugen)
+Zwischen-Check: Keine Aenderung am UI, nur Dateien existieren.
+
+Schritt 3: Datenmodell fuer Nutzer-Status (localStorage)
+- Implementiere in speicher.js ein klares JSON-Objekt, z.B.:
+  version, nutzerRolle (azubi/stylist), erledigteSteps (Map stepId -> {datum, perfekterDurchlauf}), geplanteWiederholungen (Liste), missionVerlauf (Liste), tagesZaehler (wie viele Sessions heute schon gemacht wurden), letzterAktivTag.
+- Halte es bewusst simpel. Alles auf Deutsch benennen.
+- Erstelle eine Funktion initialerStatus(), die einen frischen Status anlegt.
+Zwischen-Check: In der Konsole kann man status laden/speichern, App weiterhin unveraendert.
+
+Schritt 4: Regeln fuer Wiederholungen (Spaced Repetition)
+- In fortschritt.js: Wenn ein Step abgeschlossen wird, sollen automatisch 2 Wiederholungen erzeugt werden:
+  - Wiederholung A faellig nach 3 Lerntagen
+  - Wiederholung B faellig nach 10 Lerntagen
+- „Lerntag“ bedeutet: ein Tag, an dem mindestens eine Session gestartet wurde. Nutze dafuer einen Tages-Key (YYYY-MM-DD) und zaehle Lerntage hoch. Kein kompliziertes Arbeitskalender-System, nur stabile Logik.
+- Wiederholungen als Objekte speichern: {id, stepId, stufe: 1 oder 2, faelligAbLerntagNummer, status: offen/erledigt, erstelltAm}.
+Zwischen-Check: Simuliere im Code einen Step-Abschluss und pruefe, dass 2 Reviews erzeugt werden.
+
+Schritt 5: Tagesplanung (2 Sessions)
+- In session_planer.js: Implementiere getHeutigeSessions(status, inhaltsIndex):
+  - Ergebnis: genau 2 Session-Vorschlaege fuer heute, jeweils {typ: kernlektion|wiederholung|mission, stepId oder missionTyp, titel}.
+  - Prioritaet Slot 1: faellige Wiederholung, sonst naechste Kernlektion.
+  - Prioritaet Slot 2: Daily Mission, sonst (wenn Slot 1 keine Wiederholung war und eine faellige existiert) eine Wiederholung, ansonsten naechste Kernlektion.
+  - Begrenzung: maximal 1 Wiederholung pro Tag, ausser wenn mehr als X Wiederholungen ueberfaellig sind (X = 5 als Startwert). Dann darf Slot 2 auch Wiederholung sein.
+- inhaltsIndex: Baue eine Hilfsfunktion, die die naechste Kernlektion (stepId) aus dem vorhandenen Content findet (nach eurer Reihenfolge Lehrjahr->Level->Abschnitt->Step). Keine Inhalte umsortieren.
+Zwischen-Check: Ausgabe der heutigen Sessions in der Konsole ist plausibel.
+
+Schritt 6: Daily Missions (ohne neue Inhalte schreiben zu muessen)
+- Implementiere mindestens 4 Mission-Typen, die aus vorhandenem Material funktionieren:
+  1) schwachstelle: nimm die letzten 10 beantworteten Fragen und waehle Themen mit hoher Fehlerquote (wenn diese Daten noch nicht existieren, starte mit Platzhalter: zufaellige Wiederholungsfragen aus bereits erledigten Steps)
+  2) checkpoint_woche: 6 gemischte Fragen aus den letzten Steps
+  3) praxisauftrag: zeige einen kurzen Praxisauftrag-Text (aus microLearning.practiceTask, falls vorhanden; sonst Platzhaltertext)
+  4) speed_drill: kurze Session mit wenigen Fragen (z.B. 8 Fragen) aus bereits erledigten Bereichen
+- Missions sollen keine neuen Content-Dateien erzwingen. Wenn Daten fehlen, nutze sinnvolle Fallbacks.
+Zwischen-Check: Mission kann gestartet werden und wird als „erledigt“ gespeichert.
+
+Schritt 7: UI-Anbindung minimal und sauber
+- Baue eine einfache Startansicht „Heute“ (oder erweitere die vorhandene Startseite), die zwei Karten zeigt:
+  - „Session 1“ mit Typ-Label (Wiederholung / Neue Lektion / Daily Mission) und Start-Button
+  - „Session 2“ mit Typ-Label und Start-Button
+- Wenn der Nutzer eine Session startet, markiere sie fuer heute als „gestartet“. Wenn sie abgeschlossen wird, markiere sie als „erledigt“ und aktualisiere den Status.
+- Wichtig: Kein komplettes Redesign. Nur so viel UI, dass die Logik getestet werden kann.
+Zwischen-Check: 2 Sessions erscheinen, nach Abschluss werden am gleichen Tag keine neuen „frischen“ Sessions mehr generiert.
+
+Schritt 8: Endloser Lernpfad (nur Anzeige-Logik, ohne alles neu zu bauen)
+- Behalte Lehrjahr/Level/Abschnitt als interne Struktur, aber zeige im Lernpfad eine lange Liste/Route:
+  - Abschnitte als „Meilensteine“ (Ueberschrift)
+  - Steps als Knoten mit Status: erledigt, aktuell, gesperrt, wiederholung-faellig
+- Der Nutzer soll aus dem Lernpfad immer „weiter“ starten koennen, ohne Karten-Menues anklicken zu muessen.
+Zwischen-Check: Lernpfad zeigt Status korrekt, Start startet die Session-Planung.
+
+Qualitaetsregeln:
+- Keine optischen Seiteneffekte: Änderungen nur dort, wo notwendig.
+- Kein Umbenennen bestehender Content-IDs.
+- Alles in kleinen Commits/Schritten, nach jedem Schritt testen.
+- Deutsche Dateinamen, klare Funktionsnamen, kurze Kommentare, damit ich es verstehe.
+- Wenn etwas unklar ist (mehrere HTML-Seiten vs Single-Page), analysiere es zuerst und entscheide dann die Einbindung. Dokumentiere die Entscheidung in DOKU_LERNLOGIK.md.
+
+Am Ende soll es moeglich sein, dass ein Azubi jeden Arbeitstag 2 Sessions hat, ohne dass wir hunderte neue Lektionen schreiben muessen: Kerncontent + 2 Reviews pro Step + Missions/Checkpoints fuellen das Jahr sinnvoll auf.

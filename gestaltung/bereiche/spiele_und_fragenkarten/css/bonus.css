@@ -1,0 +1,534 @@
+/* Spiele Bonus */
+
+.gm-energy-bonus {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top, rgba(15, 23, 42, 0.1), rgba(15, 23, 42, 0.85));
+  backdrop-filter: blur(3px);
+  z-index: 50;
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: auto;
+}
+
+.gm-energy-bonus--visible {
+  animation: gmEnergyBonusIn 0.35s ease-out forwards;
+}
+
+.gm-energy-bonus--hide {
+  animation: gmEnergyBonusOut 0.35s ease-in forwards;
+}
+
+.gm-energy-bonus-inner {
+  max-width: 420px;
+  width: 90%;
+  padding: 20px 24px;
+  border-radius: 24px;
+  border: 1px solid #e8bd4f;
+  background: radial-gradient(circle at top, rgba(232, 189, 79, 0.22), rgba(15, 23, 42, 0.98));
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+  text-align: center;
+}
+
+.gm-energy-bonus-title {
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #e8bd4f;
+  margin-bottom: 4px;
+}
+
+.gm-energy-bonus-subtitle {
+  font-size: 0.8rem;
+  color: #e5e7eb;
+  margin-bottom: 10px;
+}
+
+.gm-energy-bonus-roll {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fefce8;
+  text-shadow: 0 0 14px rgba(232, 189, 79, 0.95);
+}
+
+.gm-energy-bonus-roll-icon {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  flex: 0 0 34px;
+}
+
+.gm-energy-bonus-roll--final {
+  animation: gmEnergyBonusPulse 0.4s ease-out;
+}
+
+.gm-energy-bonus-note {
+  font-size: 0.75rem;
+  color: #d1d5db;
+  margin-top: 10px;
+}
+
+.gm-energy-bonus-flash {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 107, 53, 0);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  animation: gmEnergyBonusFlash 0.55s ease forwards;
+}
+
+.gm-energy-bonus-phase {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 460px);
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.32s ease, transform 0.32s ease;
+}
+
+.gm-energy-bonus-phase--slots {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+.gm-energy-bonus-phase--results {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.92);
+  pointer-events: none;
+}
+
+.gm-energy-bonus--results .gm-energy-bonus-phase--slots {
+  opacity: 0;
+  transform: scale(0.92);
+  pointer-events: none;
+}
+
+.gm-energy-bonus--results .gm-energy-bonus-phase--results {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.gm-energy-bonus-header {
+  text-align: center;
+}
+
+.gm-energy-bonus-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #ff8a3d;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.gm-energy-bonus-title {
+  font-size: 28px;
+  font-weight: 900;
+  color: #fff;
+  margin: 0;
+  text-shadow: 0 0 22px rgba(255, 107, 53, 0.28);
+}
+
+.gm-energy-bonus-slots {
+  display: grid;
+  gap: 12px;
+  width: min(100%, 520px);
+}
+
+.gm-energy-slot {
+  position: relative;
+  height: 96px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #0e0600;
+  border: 2px solid #3a1a00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.36);
+}
+
+.gm-energy-slot::before,
+.gm-energy-slot::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 16px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.gm-energy-slot::before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(14, 6, 0, 0.94), transparent);
+}
+
+.gm-energy-slot::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(14, 6, 0, 0.94), transparent);
+}
+
+.gm-energy-slot-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  line-height: 1;
+  will-change: transform;
+}
+
+.gm-energy-slot-inner--settled {
+  transform: translateY(0);
+}
+
+.gm-energy-slot--spinning .gm-energy-slot-inner {
+  animation: gmEnergySlotSpin 0.13s linear infinite;
+}
+
+.gm-energy-slot--turbo {
+  animation: gmEnergySlotShake 0.08s linear infinite;
+  border-color: #ff6b35;
+  box-shadow: 0 0 18px rgba(255, 107, 53, 0.5);
+}
+
+.gm-energy-slot--turbo .gm-energy-slot-inner {
+  animation: gmEnergySlotSpin 0.06s linear infinite;
+}
+
+.gm-energy-slot--landing .gm-energy-slot-inner {
+  animation: gmEnergySlotLand 0.55s cubic-bezier(0.12, 0, 0.08, 1) forwards;
+}
+
+.gm-energy-slot--final {
+  border-color: #ffd60a;
+  animation: gmEnergySlotWin 1s ease-in-out infinite alternate;
+}
+
+.gm-energy-slot-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  line-height: 1;
+}
+
+.gm-energy-slot-symbol img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.gm-energy-slot-symbol--cross {
+  font-size: 2.7rem;
+  font-weight: 900;
+  color: #ff5a4f;
+  text-shadow: 0 0 16px rgba(255, 90, 79, 0.35);
+}
+
+.gm-energy-bonus-footnote {
+  font-size: 0.84rem;
+  color: #d9c1aa;
+  text-align: center;
+}
+
+.gm-energy-bonus-result-card {
+  position: relative;
+  width: min(100%, 440px);
+  border-radius: 24px;
+  padding: 28px 24px 26px;
+  background: linear-gradient(160deg, #160700 0%, #2a1000 55%, #160700 100%);
+  border: 2px solid #e85d04;
+  box-shadow:
+    0 0 0 1px rgba(255, 107, 53, 0.18),
+    0 0 60px rgba(232, 93, 4, 0.46),
+    0 30px 80px rgba(0, 0, 0, 0.9);
+  text-align: center;
+}
+
+.gm-energy-bonus-result-card::before {
+  content: "";
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 120px;
+  background: radial-gradient(ellipse, rgba(232, 93, 4, 0.34) 0%, transparent 70%);
+  animation: gmEnergyBonusFirePulse 1.3s ease-in-out infinite alternate;
+}
+
+.gm-energy-bonus-result-kicker,
+.gm-energy-bonus-result-title,
+.gm-energy-bonus-result-subtitle,
+.gm-energy-bonus-result-meter {
+  position: relative;
+  z-index: 1;
+}
+
+.gm-energy-bonus-result-kicker {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #ff8a3d;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.gm-energy-bonus-result-title {
+  font-size: 30px;
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 10px;
+  text-shadow: 0 0 24px rgba(255, 107, 53, 0.4);
+}
+
+.gm-energy-bonus-result-subtitle {
+  font-size: 15px;
+  color: #d39a72;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+.gm-energy-bonus-result-meter {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.gm-energy-bonus-result-symbols {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 18px 0 18px;
+}
+
+.gm-energy-bonus-result-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(16, 8, 1, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gm-energy-bonus-result-symbol .gm-energy-slot-symbol {
+  width: 36px;
+  height: 36px;
+}
+
+.gm-energy-bonus-result-symbol .gm-energy-slot-symbol img {
+  width: 30px;
+  height: 30px;
+}
+
+.gm-energy-bonus-result-symbol .gm-energy-slot-symbol--cross {
+  font-size: 1.8rem;
+}
+
+.gm-energy-bonus-result-symbol--tube {
+  box-shadow: 0 0 20px rgba(244, 207, 99, 0.18);
+}
+
+.gm-energy-bonus-result-symbol--cross {
+  opacity: 0.9;
+}
+
+.gm-energy-bonus-result-energy {
+  position: relative;
+  z-index: 1;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff1d1;
+}
+
+.gm-energy-flight-tube {
+  position: fixed;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  z-index: 10060;
+  pointer-events: none;
+  filter:
+    drop-shadow(0 0 14px rgba(244, 207, 99, 0.9))
+    drop-shadow(0 0 26px rgba(255, 214, 10, 0.46));
+  opacity: 1;
+  transform: translate(0, 0) scale(1.2);
+  transform-origin: center center;
+  transition:
+    transform 0.42s cubic-bezier(0.22, 0.8, 0.2, 1),
+    opacity 0.42s ease,
+    filter 0.28s ease;
+  will-change: transform, opacity;
+}
+
+.gm-energy-flight-tube--drop {
+  transition-duration: 0.24s;
+}
+
+.gm-energy-flight-tube--float {
+  transition-duration: 0.46s;
+}
+
+.gm-energy-flight-tube--cruise {
+  transition-duration: 0.62s;
+}
+
+.gm-energy-result-bar {
+  width: 32px;
+  height: 5px;
+  border-radius: 3px;
+  background: #2a1200;
+  overflow: hidden;
+  position: relative;
+}
+
+.gm-energy-result-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #e85d04, #ffd60a);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.gm-energy-result-bar--active::after {
+  animation: gmEnergyHeatFill 0.35s ease forwards;
+}
+
+.gm-energy-result-bar--active:nth-child(1)::after { animation-delay: 0.08s; }
+.gm-energy-result-bar--active:nth-child(2)::after { animation-delay: 0.18s; }
+.gm-energy-result-bar--active:nth-child(3)::after { animation-delay: 0.28s; }
+.gm-energy-result-bar--active:nth-child(4)::after { animation-delay: 0.38s; }
+.gm-energy-result-bar--active:nth-child(5)::after { animation-delay: 0.48s; }
+.gm-energy-result-bar--active:nth-child(6)::after { animation-delay: 0.58s; }
+
+@keyframes gmEnergyBonusIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes gmEnergyBonusOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+@keyframes gmEnergyBonusPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes gmEnergyBonusFlash {
+  0% { opacity: 0; }
+  12% { opacity: 0.45; }
+  100% { opacity: 0; }
+}
+
+@keyframes gmEnergySlotSpin {
+  from { transform: translateY(0); }
+  to { transform: translateY(-96px); }
+}
+
+@keyframes gmEnergySlotLand {
+  0% { transform: translateY(-280px); }
+  70% { transform: translateY(10px); }
+  85% { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes gmEnergySlotShake {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  15% { transform: translate(-4px, 1px) rotate(-1.5deg); }
+  30% { transform: translate(4px, -1px) rotate(1.5deg); }
+  45% { transform: translate(-3px, 2px) rotate(-1deg); }
+  60% { transform: translate(5px, -2px) rotate(2deg); }
+  75% { transform: translate(-5px, 1px) rotate(-2deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes gmEnergySlotWin {
+  from {
+    box-shadow: 0 0 8px rgba(255, 214, 10, 0.32);
+    border-color: rgba(255, 214, 10, 0.56);
+  }
+  to {
+    box-shadow: 0 0 30px rgba(255, 214, 10, 0.8);
+    border-color: #ffd60a;
+  }
+}
+
+@keyframes gmEnergyBonusFirePulse {
+  from {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.6;
+  }
+  to {
+    transform: translateX(-50%) scale(1.25);
+    opacity: 1;
+  }
+}
+
+@keyframes gmEnergyHeatFill {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (max-width: 600px) {
+  .gm-energy-bonus {
+    padding: 18px;
+  }
+
+  .gm-energy-bonus-slots {
+    gap: 10px;
+    max-width: 100%;
+  }
+
+  .gm-energy-slot {
+    height: 84px;
+  }
+
+  .gm-energy-slot-symbol img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .gm-energy-slot-symbol--cross {
+    font-size: 2.25rem;
+  }
+}
