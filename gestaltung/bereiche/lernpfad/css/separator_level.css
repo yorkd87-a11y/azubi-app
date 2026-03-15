@@ -1,6 +1,71 @@
 /* Lernpfad Separator: Level */
 
+.map-separator--level .map-separator-line {
+  display: none;
+}
+
 .map-separator--level .map-separator-label {
-  font-size: 0.74rem;
-  color: rgba(244, 207, 99, 0.75);
+  width: auto;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.map-level-separator-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 138, 61, 0.16), transparent 42%),
+    linear-gradient(180deg, rgba(22, 12, 8, 0.96) 0%, rgba(10, 7, 9, 0.96) 100%);
+  border: 1px solid rgba(244, 207, 99, 0.18);
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.map-level-separator-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff9d4f, #f4cf63);
+  box-shadow: 0 0 0 6px rgba(244, 207, 99, 0.08);
+}
+
+.map-level-separator-text {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 245, 231, 0.92);
+}
+
+.map-step--pre-separator--level {
+  margin-bottom: 28px;
+}
+
+.map-step--post-separator--level {
+  margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+  .map-level-separator-inline {
+    padding: 9px 14px;
+    gap: 8px;
+  }
+
+  .map-level-separator-text {
+    font-size: 0.72rem;
+  }
+
+  .map-step--pre-separator--level {
+    margin-bottom: 18px;
+  }
+
+  .map-step--post-separator--level {
+    margin-top: 16px;
+  }
 }

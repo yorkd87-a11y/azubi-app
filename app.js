@@ -4,7 +4,7 @@ import CONTENT from "./content/content_index.js";
 import { renderLevelSelect } from "./level_select.js";
 import { startLessonGame } from "./games/game_main.js";
 import { showEnergyBonusPopup } from "./games/game_bonus_popup.js";
-import { initLessonMap, renderLessonMap } from "./lesson_map.js";
+import { initLessonMap, renderLessonMap, playMapVideoOverlay } from "./lesson_map.js";
 import {
   initEnergySystem,
   onEnergyChange,
@@ -13,6 +13,21 @@ import {
   grantEnergyBonus
 } from "./core/energy_system.js";
 import { LessonSession, showLessonSummary } from "./core/lesson_summary.js";
+import CARMEN_INTRO_STEPS from "./core/carmen_intro_flow.js";
+import { createVideoAudioGate } from "./core/video_audio_gate.js";
+import {
+  completeSectionQuiz,
+  completeSectionVideo,
+  forceUnlockSectionVideo,
+  getJustUnlockedSectionVideoId
+} from "./core/section_video_flow.js";
+import { getSectionSeparatorUiState } from "./core/section_video_gate.js";
+import {
+  isLevelTransitionWatched,
+  markLevelTransitionWatched,
+  resetLevelTransitionWatched
+} from "./core/level_transition_progress.js";
+import { getYear1LevelTransition } from "./content/jahr_1/level_transition_config.js";
 
 import {
   hasDailyMission,
@@ -174,6 +189,9 @@ let currentLessons = [];
 let CURRENT_MODULE = null;
 let currentModuleId = null;
 let pendingUnlockReveal = null;
+let pendingSectionVideoUnlockId = null;
+let pendingLevelTransitionTestId = "";
+let lastLevelTransitionVideoUrl = "";
 const CURRENT_GAME_PREVIEW_TYPE = "match_pairs";
 
 function clonePreviewData(data) {
@@ -421,6 +439,87 @@ function buildModuleFromLevel(level) {
   };
 }
 
+function getSectionByIdFromCurrentLevel(sectionId) {
+  return CURRENT_LEVEL?.sections?.find((section) => section?.id === sectionId) || null;
+}
+
+function getFirstLessonIndexForSection(level, sectionId) {
+  const lessons = buildModuleFromLevel(level).lessons || [];
+  return lessons.findIndex((lesson) => lesson?._sectionId === sectionId);
+}
+
+function getSectionBoundaryStateForLevel(level, section) {
+  return getSectionSeparatorUiState(section, {
+    justUnlockedSectionId: pendingSectionVideoUnlockId || getJustUnlockedSectionVideoId(level)
+  });
+}
+
+function isLevelCompleted(level) {
+  const lessons = buildModuleFromLevel(level).lessons || [];
+  if (!lessons.length) return false;
+  return getMaxUnlockedForLevel(level) >= lessons.length - 1;
+}
+
+function getLevelTransitionState(jahr, level, levelIndex) {
+  if (!jahr || !level || levelIndex <= 0) return null;
+
+  const transition = jahr.jahr === 1 ? getYear1LevelTransition(level.id) : null;
+  const videoUrls = Array.isArray(transition?.videoUrls)
+    ? transition.videoUrls.filter((url) => typeof url === "string" && url.trim())
+    : transition?.videoUrl
+      ? [transition.videoUrl]
+      : [];
+  if (!videoUrls.length) return null;
+
+  const previousLevel = jahr.levels?.[levelIndex - 1] || null;
+  const previousLevelCompleted = previousLevel ? isLevelCompleted(previousLevel) : false;
+  const watched = isLevelTransitionWatched(level.id);
+  const shouldAutoPlay = pendingLevelTransitionTestId === level.id || (
+    transition.autoPlayOnReach === true &&
+    previousLevelCompleted &&
+    !watched
+  );
+
+  return {
+    ...transition,
+    videoUrls,
+    watched,
+    shouldAutoPlay
+  };
+}
+
+function pickRandomLevelTransitionVideo(videoUrls) {
+  if (!Array.isArray(videoUrls) || videoUrls.length === 0) return "";
+  if (videoUrls.length === 1) return videoUrls[0];
+
+  const candidates = videoUrls.filter((url) => url !== lastLevelTransitionVideoUrl);
+  const pool = candidates.length ? candidates : videoUrls;
+  const nextUrl = pool[Math.floor(Math.random() * pool.length)] || pool[0] || "";
+  if (nextUrl) {
+    lastLevelTransitionVideoUrl = nextUrl;
+  }
+  return nextUrl;
+}
+
+function findAutoLevelTransitionForMap(content) {
+  const jahre = content?.jahre || [];
+  for (const jahr of jahre) {
+    const levels = jahr?.levels || [];
+    for (let levelIndex = 0; levelIndex < levels.length; levelIndex += 1) {
+      const level = levels[levelIndex];
+      const transition = getLevelTransitionState(jahr, level, levelIndex);
+      if (transition?.shouldAutoPlay) {
+        return {
+          ...transition,
+          videoUrl: pickRandomLevelTransitionVideo(transition.videoUrls),
+          levelId: level.id
+        };
+      }
+    }
+  }
+  return null;
+}
+
 /**
  * Wird aufgerufen, wenn der Nutzer ein Level in der Auswahl anklickt.
  * Setzt alle Level-abhÃ¤ngigen Variablen und zeigt den Lernpfad.
@@ -459,26 +558,24 @@ function buildGlobalMapData(content) {
     });
 
     (jahr.levels || []).forEach((level, levelIndex) => {
-      const levelTitle = level.levelName || `Level ${level.levelNumber || levelIndex + 1}`;
-      items.push({
-        type: "separator",
-        kind: "level",
-        title: levelTitle
-      });
-
       let levelLessonIndex = 0;
       const maxUnlocked = getMaxUnlockedForLevel(level);
 
       (level.sections || []).forEach((section) => {
         const sectionTitle = section.title || section.id || "Abschnitt";
-        const videoUrl = section.videoUrl || section.video?.url || "";
-        const videoRequired = Boolean(section.videoRequired || section.video?.required);
+        const sectionGate = getSectionBoundaryStateForLevel(level, section);
         items.push({
           type: "separator",
           kind: "section",
           title: sectionTitle,
-          videoUrl,
-          videoRequired
+          sectionId: section.id,
+          videoUrl: sectionGate?.videoUrl || "",
+          videoRequired: Boolean(sectionGate?.videoRequired),
+          showVideoCta: Boolean(sectionGate?.showCta),
+          videoCtaAnimated: Boolean(sectionGate?.isAnimated),
+          videoDone: sectionGate?.state === "done",
+          videoLocked: Boolean(sectionGate?.isLocked),
+          videoButtonLabel: sectionGate?.buttonLabel || "Video starten"
         });
 
         (section.lessons || []).forEach((lesson) => {
@@ -540,9 +637,11 @@ let xp = 0;
 let streak = 0;
 let lastStudyDate = null;
 
-// Intro-Text-Animation
-let introTextTimeouts = [];
-let introTextAnimatedOnce = false;
+let currentIntroStepIndex = 0;
+let introScriptVisible = false;
+let introReplayMode = false;
+let introMuted = true;
+let introAdvanceTimer = null;
 
 // Bereichs-Klassen am Body (nur eine aktiv)
 const BEREICH_KLASSEN = [
@@ -979,9 +1078,15 @@ const nextBtn            = document.getElementById("next-btn");
 // DOM â€“ Intro / Map / Layout
 const introScreenEl      = document.getElementById("intro-screen");
 const introStartBtn      = document.getElementById("intro-start-btn");
-const introAudioBtn      = document.getElementById("intro-audio-btn");
-const introAudioEl       = document.getElementById("intro-audio");
-const introBubbleTextEl  = document.getElementById("intro-bubble-text");
+const introVideoEl       = document.getElementById("intro-video");
+const introMuteBtn       = document.getElementById("intro-mute-btn");
+const introHeadlineEl    = document.getElementById("intro-headline");
+const introScriptEl      = document.getElementById("intro-script");
+const introScriptToggleBtn = document.getElementById("intro-script-toggle-btn");
+const introStepCounterEl = document.getElementById("intro-step-counter");
+const introReactionLayerEl = document.getElementById("intro-reaction-layer");
+const introVideoTransitionCoverEl = document.getElementById("intro-video-transition-cover");
+const introChatStackEl   = document.getElementById("intro-chat-stack");
 const todayScreenEl      = document.getElementById("today-screen");
 const todaySessionListEl = document.getElementById("today-session-list");
 const todayProgressPillEl = document.getElementById("today-progress-pill");
@@ -994,11 +1099,31 @@ const levelSelectScreenEl = document.getElementById("level-select-screen");
 const mapScreenEl        = document.getElementById("map-screen");
 const mapRootEl          = document.getElementById("map-root");
 const promoScreenEl      = document.getElementById("promo-screen");
+const promoVideoShellEl  = document.getElementById("promo-video-shell");
 const promoVideoEl       = document.getElementById("promo-video");
 const promoCountdownEl   = document.getElementById("promo-countdown");
 const promoUnmuteBtn     = document.getElementById("promo-unmute-btn");
 const promoReplayOverlayBtn = document.getElementById("promo-replay-overlay-btn");
 const promoContinueBtn   = document.getElementById("promo-continue-btn");
+const introVideoFrameEl  = introVideoEl?.closest(".intro-video-frame") || null;
+const introVideoGate = createVideoAudioGate({
+  videoEl: introVideoEl,
+  containerEl: introVideoFrameEl,
+  title: "Ton für Carmens Intro aktivieren?",
+  text: "Carmen spricht in diesem Video mit dir. Aktiviere den Ton oder schaue bewusst stumm weiter.",
+  onEnableSound: () => {
+    introMuted = false;
+  },
+  onContinueMuted: () => {
+    introMuted = true;
+  }
+});
+const promoVideoGate = createVideoAudioGate({
+  videoEl: promoVideoEl,
+  containerEl: promoVideoShellEl,
+  title: "Ton für dieses Video aktivieren?",
+  text: "Dieses Video ist noch stumm. Für Sprache und Hinweise kannst du jetzt den Ton einschalten."
+});
 
 const learnHeaderEl      = document.getElementById("learn-header");
 const learnMainEl        = document.getElementById("learn-main");
@@ -1015,8 +1140,15 @@ let aktuelleSessionQuelle = null;
 const PROMO_VIDEO_DIR = "./media/videos/advertisment/";
 const PROMO_VIDEO_FALLBACKS = [
   `${PROMO_VIDEO_DIR}ad_1.mp4`,
+  `${PROMO_VIDEO_DIR}ad_10.mp4`,
   `${PROMO_VIDEO_DIR}ad_2.mp4`,
-  `${PROMO_VIDEO_DIR}ad_3.mp4`
+  `${PROMO_VIDEO_DIR}ad_3.mp4`,
+  `${PROMO_VIDEO_DIR}ad_4.mp4`,
+  `${PROMO_VIDEO_DIR}ad_5.mp4`,
+  `${PROMO_VIDEO_DIR}ad_6.mp4`,
+  `${PROMO_VIDEO_DIR}ad_7.mp4`,
+  `${PROMO_VIDEO_DIR}ad_8.mp4`,
+  `${PROMO_VIDEO_DIR}ad_9.mp4`
 ];
 const INTRO_GESEHEN_KEY = "friseurTrainerIntroGesehen_v1";
 const ENERGY_ICON_SRC = "./media/Bilder/Icons/Farbtupe-Energie.png";
@@ -1133,6 +1265,24 @@ function saveLessonProgress() {
 function advanceLessonUnlock() {
   const lastIndex = currentLessons.length - 1;
   if (currentLessonIndex === maxUnlockedLessonIndex && maxUnlockedLessonIndex < lastIndex) {
+    const currentLesson = currentLessons[currentLessonIndex];
+    const nextLesson = currentLessons[currentLessonIndex + 1];
+    const currentSectionId = currentLesson?._sectionId || "";
+    const nextSectionId = nextLesson?._sectionId || "";
+
+    if (
+      currentSectionId &&
+      nextSectionId &&
+      currentSectionId !== nextSectionId &&
+      CURRENT_LEVEL
+    ) {
+      const result = completeSectionQuiz(CURRENT_LEVEL, nextSectionId);
+      if (result?.shouldShowVideoGate) {
+        pendingSectionVideoUnlockId = nextSectionId;
+        return;
+      }
+    }
+
     pendingUnlockReveal = {
       levelId: currentModuleId,
       lessonIndex: maxUnlockedLessonIndex + 1
@@ -1207,45 +1357,10 @@ function initDailyMissionBadgeOnMap() {
 
 
 // =======================================
-// INTRO-TEXT-ANIMATION
-// =======================================
-
-function resetIntroTextAnimation() {
-  if (!introBubbleTextEl) return;
-
-  introTextTimeouts.forEach(id => clearTimeout(id));
-  introTextTimeouts = [];
-
-  const elements = introBubbleTextEl.querySelectorAll("h2, p");
-  elements.forEach(el => el.classList.remove("visible"));
-}
-
-function startIntroTextAnimation() {
-  if (!introBubbleTextEl) return;
-
-  resetIntroTextAnimation();
-
-  const elements = introBubbleTextEl.querySelectorAll("h2, p");
-  const baseDelay = 200;
-  const stepDelay = 900;
-
-  elements.forEach((el, index) => {
-    const timeoutId = setTimeout(() => {
-      el.classList.add("visible");
-    }, baseDelay + index * stepDelay);
-    introTextTimeouts.push(timeoutId);
-  });
-
-  introTextAnimatedOnce = true;
-}
-
-
-// =======================================
 // INTRO & MAP
 // =======================================
 
 function setupIntro() {
-  // Lernbereich & Screens nur vorbereiten, aber noch keinen final anzeigen
   if (learnHeaderEl) learnHeaderEl.style.display = "none";
   if (learnMainEl)   learnMainEl.style.display   = "none";
   if (learnFooterEl) learnFooterEl.style.display = "none";
@@ -1268,34 +1383,273 @@ function setupIntro() {
   }
 
   if (introStartBtn) {
-    introStartBtn.addEventListener("click", () => {
-      if (introAudioEl) introAudioEl.pause();
-      markiereIntroAlsGesehen();
-      const defaultLevel = getDefaultLevel(CONTENT);
-      if (defaultLevel) {
-        selectLevel(defaultLevel, { ziel: "today" });
-      } else {
-        showToday();
+    introStartBtn.addEventListener("click", advanceIntroStep);
+  }
+
+  if (introScriptToggleBtn) {
+    introScriptToggleBtn.addEventListener("click", () => {
+      introScriptVisible = !introScriptVisible;
+      syncIntroScriptVisibility();
+    });
+  }
+
+  if (introMuteBtn) {
+    introMuteBtn.addEventListener("click", () => {
+      introMuted = !introMuted;
+      syncIntroMuteButton();
+      if (introVideoEl) {
+        introVideoEl.muted = introMuted;
+        if (!introMuted) {
+          introVideoEl.play().catch(() => {});
+        }
       }
     });
   }
 
-  if (introAudioBtn && introAudioEl) {
-    introAudioBtn.addEventListener("click", () => {
-      try {
-        introAudioEl.currentTime = 0;
-        introAudioEl.play();
-        startIntroTextAnimation();
-      } catch (e) {
-        console.warn("Intro-Audio konnte nicht abgespielt werden:", e);
+  if (introVideoEl) {
+    introVideoEl.addEventListener("click", () => {
+      if (introVideoEl.paused) {
+        introVideoEl.play().catch(() => {});
+        return;
+      }
+      introVideoEl.pause();
+    });
+    introVideoEl.addEventListener("ended", () => {
+      if (introStartBtn) {
+        introStartBtn.disabled = false;
       }
     });
   }
 }
 
-function showIntro() {
+function syncIntroScriptVisibility() {
+  if (!introScriptEl || !introScriptToggleBtn) return;
+  introScriptEl.classList.toggle("hidden", !introScriptVisible);
+  introScriptToggleBtn.textContent = introScriptVisible
+    ? "Skript ausblenden"
+    : "Skript mitlesen";
+}
+
+function syncIntroMuteButton() {
+  if (!introMuteBtn) return;
+  introMuteBtn.textContent = introMuted ? "Ton an" : "Ton aus";
+  introMuteBtn.classList.toggle("is-active", !introMuted);
+  if (!introMuted) {
+    introVideoGate.acknowledge();
+  }
+}
+
+function animateIntroReplyButton() {
+  if (!introStartBtn) return;
+  introStartBtn.classList.remove("is-pressing");
+  void introStartBtn.offsetWidth;
+  introStartBtn.classList.add("is-pressing");
+  window.setTimeout(() => {
+    introStartBtn.classList.remove("is-pressing");
+  }, 420);
+}
+
+function animateIntroReplyMessage() {
+  const messageText = introStartBtn?.textContent?.trim() || "";
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!messageText || !introReactionLayerEl || !introChatStackEl || !introStartBtn) {
+    return Promise.resolve();
+  }
+
+  introReactionLayerEl.innerHTML = "";
+  introChatStackEl.innerHTML = "";
+
+  const layerRect = introReactionLayerEl.getBoundingClientRect();
+  const stackRect = introChatStackEl.getBoundingClientRect();
+  const buttonRect = introStartBtn.getBoundingClientRect();
+
+  const flyingMessage = document.createElement("div");
+  flyingMessage.className = "intro-flying-message";
+  flyingMessage.innerHTML = `
+    <span class="intro-chat-text">${messageText}</span>
+    <span class="intro-chat-status" data-status>✓</span>
+    <span class="intro-chat-hearts" data-hearts><span></span><span></span></span>
+  `;
+  introReactionLayerEl.appendChild(flyingMessage);
+
+  const flyingRect = flyingMessage.getBoundingClientRect();
+  const fromX = buttonRect.left - layerRect.left + (buttonRect.width - flyingRect.width) / 2;
+  const fromY = buttonRect.top - layerRect.top + (buttonRect.height - flyingRect.height) / 2;
+  const toX = stackRect.right - layerRect.left - flyingRect.width;
+  const toY = stackRect.bottom - layerRect.top - flyingRect.height;
+
+  flyingMessage.style.transform = `translate(${fromX}px, ${fromY}px)`;
+  flyingMessage.style.opacity = "1";
+
+  return new Promise((resolve) => {
+    const confirmMessage = () => {
+      const statusEl = flyingMessage.querySelector("[data-status]");
+      const heartsEl = flyingMessage.querySelector("[data-hearts]");
+      if (statusEl) {
+        statusEl.textContent = "✓";
+        statusEl.classList.add("is-visible", "is-delivered");
+      }
+
+      window.setTimeout(() => {
+        if (statusEl) {
+          statusEl.textContent = "✓✓";
+          statusEl.classList.remove("is-delivered");
+          statusEl.classList.add("is-read");
+        }
+      }, reducedMotion ? 30 : 800);
+
+      window.setTimeout(() => {
+        flyingMessage.classList.add("is-loved");
+        heartsEl?.classList.add("is-active");
+      }, reducedMotion ? 50 : 1500);
+
+      window.setTimeout(resolve, reducedMotion ? 90 : 3600);
+    };
+
+    const showFinalMessage = () => {
+      introChatStackEl.innerHTML = "";
+      introReactionLayerEl.innerHTML = "";
+      flyingMessage.classList.remove("intro-flying-message");
+      flyingMessage.classList.add("intro-chat-message", "is-visible");
+      flyingMessage.style.transform = "";
+      flyingMessage.style.opacity = "";
+      flyingMessage.style.left = "";
+      flyingMessage.style.top = "";
+      introChatStackEl.appendChild(flyingMessage);
+      requestAnimationFrame(() => {
+        window.setTimeout(confirmMessage, reducedMotion ? 40 : 520);
+      });
+    };
+
+    if (reducedMotion || typeof flyingMessage.animate !== "function") {
+      showFinalMessage();
+      return;
+    }
+
+    const animation = flyingMessage.animate(
+      [
+        { transform: `translate(${fromX}px, ${fromY}px) scale(1)`, opacity: 1 },
+        { transform: `translate(${toX + 34}px, ${toY - 28}px) scale(1.08) rotate(-3deg)`, opacity: 1, offset: 0.68 },
+        { transform: `translate(${toX}px, ${toY}px) scale(1) rotate(0deg)`, opacity: 1, offset: 1 }
+      ],
+      {
+        duration: 1500,
+        easing: "cubic-bezier(0.12, 0.82, 0.18, 1)",
+        fill: "forwards"
+      }
+    );
+
+    // Settled-Guard: WAAPI-Fill entfernen bevor Element umgehängt wird,
+    // damit kein Fill-Transform auf dem neuen Parent-Kontext wirkt.
+    let settled = false;
+    const settle = () => {
+      if (settled) return;
+      settled = true;
+      try { animation.cancel(); } catch (e) {} // Fill sofort entfernen (sync)
+      showFinalMessage();
+    };
+    animation.addEventListener("finish", settle, { once: true });
+    animation.addEventListener("cancel", settle, { once: true });
+  });
+}
+
+function startFirstIntroLesson() {
+  const defaultLevel = getDefaultLevel(CONTENT);
+  if (defaultLevel) {
+    enterLessonByLevel(defaultLevel.id, 0);
+    return;
+  }
+  showToday();
+}
+
+function renderIntroStep(stepIndex) {
+  const step = CARMEN_INTRO_STEPS[stepIndex];
+  if (!step) return;
+
+  currentIntroStepIndex = stepIndex;
+
+  if (introHeadlineEl) {
+    introHeadlineEl.textContent = step.script;
+  }
+  if (introScriptEl) {
+    introScriptEl.textContent = step.script;
+  }
+  if (introStartBtn) {
+    const isLastStep = stepIndex >= CARMEN_INTRO_STEPS.length - 1;
+    introStartBtn.textContent = introReplayMode && isLastStep
+      ? "Zurück zum Lernpfad"
+      : step.buttonLabel;
+    introStartBtn.disabled = false;
+  }
+  if (introStepCounterEl) {
+    introStepCounterEl.textContent = `${stepIndex + 1} / ${CARMEN_INTRO_STEPS.length}`;
+  }
+  if (introVideoEl) {
+    const finishVideoTransition = async () => {
+      const blockedByAudioGate = await introVideoGate.requestConfirmation(async () => {
+        await introVideoEl.play().catch(() => {});
+      });
+      if (!blockedByAudioGate) {
+        introVideoEl.play().catch(() => {});
+      }
+      window.setTimeout(() => {
+        introVideoEl.classList.remove("is-transitioning");
+        introVideoTransitionCoverEl?.classList.remove("is-visible");
+      }, 240);
+    };
+
+    introVideoEl.classList.add("is-transitioning");
+    introVideoTransitionCoverEl?.classList.add("is-visible");
+    introVideoEl.pause();
+    introVideoEl.addEventListener("loadeddata", finishVideoTransition, { once: true });
+    introVideoEl.muted = introMuted;
+    introVideoEl.src = step.videoUrl;
+    introVideoEl.currentTime = 0;
+    introVideoEl.load();
+  }
+
+  syncIntroScriptVisibility();
+  syncIntroMuteButton();
+}
+
+function finishIntroFlow() {
+  if (introReplayMode) {
+    introReplayMode = false;
+    showMap();
+    return;
+  }
+
+  markiereIntroAlsGesehen();
+  startFirstIntroLesson();
+}
+
+function advanceIntroStep() {
+  if (introAdvanceTimer) return;
+
+  if (introStartBtn) {
+    introStartBtn.disabled = true;
+  }
+  animateIntroReplyButton();
+  introAdvanceTimer = true; // Guard gegen Doppelaufruf
+
+  const nextIndex = currentIntroStepIndex + 1;
+  const onDone = () => {
+    introAdvanceTimer = null;
+    if (nextIndex >= CARMEN_INTRO_STEPS.length) {
+      finishIntroFlow();
+      return;
+    }
+    renderIntroStep(nextIndex);
+  };
+  animateIntroReplyMessage().then(onDone).catch(onDone);
+}
+
+function showIntro(options = {}) {
+  introReplayMode = options.replay === true;
   mode = "intro";
   setBereichKlasse("bereich-carmen-intro");
+  introMuted = true;
+  introVideoGate.reset();
 
   if (introScreenEl) {
     introScreenEl.classList.remove("hidden");
@@ -1317,8 +1671,18 @@ function showIntro() {
   if (learnHeaderEl) learnHeaderEl.style.display = "none";
   if (learnMainEl)   learnMainEl.style.display   = "none";
   if (learnFooterEl) learnFooterEl.style.display = "none";
-
-  startIntroTextAnimation();
+  if (introAdvanceTimer) {
+    window.clearTimeout(introAdvanceTimer);
+    introAdvanceTimer = null;
+  }
+  if (introReactionLayerEl) {
+    introReactionLayerEl.innerHTML = "";
+  }
+  if (introChatStackEl) {
+    introChatStackEl.innerHTML = "";
+  }
+  introScriptVisible = false;
+  renderIntroStep(0);
 }
 
 function showToday(options = {}) {
@@ -1426,11 +1790,28 @@ function showMap() {
   if (learnMainEl)   learnMainEl.style.display   = "none";
   if (learnFooterEl) learnFooterEl.style.display = "none";
 
+  const autoLevelTransition = findAutoLevelTransitionForMap(CONTENT);
+
   // Lernpfad zeichnen
   renderLessonMap(buildGlobalMapData(CONTENT), undefined, {
     unlockReveal: pendingUnlockReveal
   });
   pendingUnlockReveal = null;
+  pendingSectionVideoUnlockId = null;
+  pendingLevelTransitionTestId = "";
+
+  if (autoLevelTransition?.videoUrl) {
+    window.setTimeout(() => {
+      playMapVideoOverlay(autoLevelTransition.videoUrl, autoLevelTransition.title || "Level geschafft", {
+        kicker: "Level geschafft",
+        autoCompleteOnEnded: true,
+        showContinueButtonOnEnded: false,
+        onComplete: () => {
+          handleLevelTransitionCompleted(autoLevelTransition.levelId || "");
+        }
+      });
+    }, 280);
+  }
 
   // ZurÃ¼ck-Button zur Level-Auswahl einbauen
   const existingBackBtn = mapScreenEl.querySelector(".map-back-btn");
@@ -1471,6 +1852,28 @@ function showMap() {
   }
 }
 
+function handleSectionVideoStarted(sectionId) {
+  if (!CURRENT_LEVEL || !sectionId) return;
+
+  completeSectionVideo(CURRENT_LEVEL, sectionId);
+  const firstLessonIndex = getFirstLessonIndexForSection(CURRENT_LEVEL, sectionId);
+  if (firstLessonIndex >= 0 && firstLessonIndex > maxUnlockedLessonIndex) {
+    maxUnlockedLessonIndex = firstLessonIndex;
+    pendingUnlockReveal = {
+      levelId: currentModuleId,
+      lessonIndex: firstLessonIndex
+    };
+    saveLessonProgress();
+  }
+
+  showMap();
+}
+
+function handleLevelTransitionCompleted(levelId) {
+  if (!levelId) return;
+  markLevelTransitionWatched(levelId);
+}
+
 function hidePromoScreen() {
   if (!promoScreenEl) return;
   promoScreenEl.classList.add("hidden");
@@ -1500,33 +1903,33 @@ function startPromoCountdown() {
 async function tryPlayPromoVideo() {
   if (!promoVideoEl) return false;
 
-  promoVideoEl.muted = false;
+  promoVideoEl.muted = true;
   promoVideoEl.volume = 1;
-
-  try {
-    await promoVideoEl.play();
-    if (promoUnmuteBtn) {
-      promoUnmuteBtn.classList.add("hidden");
-    }
-    return true;
-  } catch (error) {
-    console.warn("Promo-Video mit Ton konnte nicht automatisch abgespielt werden:", error);
+  promoVideoGate.reset();
+  if (promoUnmuteBtn) {
+    promoUnmuteBtn.classList.remove("hidden");
   }
 
-  try {
-    promoVideoEl.muted = true;
-    await promoVideoEl.play();
-    if (promoUnmuteBtn) {
-      promoUnmuteBtn.classList.remove("hidden");
+  const blockedByAudioGate = await promoVideoGate.requestConfirmation(async () => {
+    await promoVideoEl.play().catch(() => {});
+    startPromoCountdown();
+  });
+
+  if (!blockedByAudioGate) {
+    try {
+      await promoVideoEl.play();
+      if (promoUnmuteBtn) {
+        promoUnmuteBtn.classList.add("hidden");
+      }
+      startPromoCountdown();
+      return true;
+    } catch (error) {
+      console.warn("Promo-Video konnte nicht abgespielt werden:", error);
+      return false;
     }
-    return false;
-  } catch (error) {
-    console.warn("Promo-Video konnte auch stumm nicht automatisch abgespielt werden:", error);
-    if (promoUnmuteBtn) {
-      promoUnmuteBtn.classList.remove("hidden");
-    }
-    return false;
   }
+
+  return false;
 }
 
 async function getPromoVideoUrls() {
@@ -1587,7 +1990,7 @@ async function updatePromoVideo() {
   }
 
   promoVideoEl.src = nextUrl;
-  promoVideoEl.muted = false;
+  promoVideoEl.muted = true;
   promoVideoEl.loop = false;
   promoVideoEl.load();
   if (promoUnmuteBtn) {
@@ -1604,7 +2007,6 @@ async function updatePromoVideo() {
   }
 
   await tryPlayPromoVideo();
-  startPromoCountdown();
 }
 
 function continueAfterPromo() {
@@ -1906,6 +2308,14 @@ function init() {
         }
       },
       (action) => {
+        if (action && typeof action === "object" && action.type === "section-video-completed") {
+          handleSectionVideoStarted(action.sectionId || "");
+          return;
+        }
+        if (action && typeof action === "object" && action.type === "level-transition-completed") {
+          handleLevelTransitionCompleted(action.levelId || "");
+          return;
+        }
         if (action === "level-overview") {
           showLevelSelect();
           return;
@@ -1915,16 +2325,24 @@ function init() {
           return;
         }
         if (action === "carmen-preview") {
-          showIntro();
+          showIntro({ replay: true });
           return;
         }
-        if (action === "settings") {
-          showGameTypePreview();
+        if (action === "intro-preview") {
+          showIntro({ replay: true });
           return;
         }
         if (action === "toggle-test-unlock") {
           setTestUnlockAllEnabled(!isTestUnlockAllEnabled());
           refreshCurrentScreenAfterTestToggle();
+          return;
+        }
+        if (action === "prepare-section-video-test") {
+          prepareSectionVideoTestState();
+          return;
+        }
+        if (action === "prepare-level-video-test") {
+          prepareLevelTransitionTestState();
           return;
         }
       }
@@ -1939,8 +2357,32 @@ function init() {
   } else if (istIntroBereitsGesehen()) {
     starteRegulaerenAppStart();
   } else {
-    showIntro();
-  }
+  showIntro();
+}
+
+function prepareSectionVideoTestState() {
+  const defaultLevel = getDefaultLevel(CONTENT);
+  if (!defaultLevel) return;
+
+  CURRENT_LEVEL = defaultLevel;
+  CURRENT_MODULE = buildModuleFromLevel(defaultLevel);
+  currentModuleId = CURRENT_MODULE.id;
+  currentLessons = CURRENT_MODULE.lessons;
+  currentLessonIndex = 0;
+
+  setTestUnlockAllEnabled(false);
+  forceUnlockSectionVideo(defaultLevel, "j1_l1_a2");
+  maxUnlockedLessonIndex = 7;
+  pendingSectionVideoUnlockId = "j1_l1_a2";
+  saveLessonProgress();
+  showMap();
+}
+
+function prepareLevelTransitionTestState() {
+  pendingLevelTransitionTestId = "jahr1_level2";
+  resetLevelTransitionWatched("jahr1_level2");
+  showMap();
+}
 
   if (todayMapBtn) {
     todayMapBtn.addEventListener("click", () => {
@@ -1981,8 +2423,14 @@ function init() {
         promoContinueBtn.classList.add("hidden");
       }
       try {
-        await promoVideoEl.play();
-        startPromoCountdown();
+        const blockedByAudioGate = await promoVideoGate.requestConfirmation(async () => {
+          await promoVideoEl.play().catch(() => {});
+          startPromoCountdown();
+        });
+        if (!blockedByAudioGate) {
+          await promoVideoEl.play();
+          startPromoCountdown();
+        }
       } catch (error) {
         console.warn("Promo-Video konnte nicht neu gestartet werden:", error);
       }
@@ -1992,9 +2440,11 @@ function init() {
     promoUnmuteBtn.addEventListener("click", async () => {
       promoVideoEl.muted = false;
       promoVideoEl.volume = 1;
+      promoVideoGate.acknowledge();
       try {
         await promoVideoEl.play();
         promoUnmuteBtn.classList.add("hidden");
+        startPromoCountdown();
       } catch (error) {
         console.warn("Promo-Ton konnte nicht aktiviert werden:", error);
       }
@@ -2024,9 +2474,3 @@ function init() {
 if (ensureLiveAccess()) {
   init();
 }
-
-
-
-
-
-

@@ -1,5 +1,28 @@
 ﻿# Changelog
 
+## 2026-03-02
+- Carmen-Intro komplett auf einen datengetriebenen Video-Flow mit 10 Schritten umgestellt. Das Intro laeuft jetzt hochkant/fullscreen, nutzt echte Videos statt Bild+Audio und kann spaeter ueber den Lernpfad erneut gestartet werden.
+- Carmen-Intro mobil optimiert: grosser Hauptbutton, dezentes `Skript mitlesen`, Tap auf das Video fuer Play/Pause, Ton-Button direkt im Videoframe.
+- Carmen-Intro-Interaktion erweitert: Button-Antworten erscheinen jetzt als verspielte Chat-Animation mit Bubble-Flug, Zustell-/Herz-Feedback und weicherem Uebergang zum naechsten Video.
+- Intro-Finish geschaerft: Nach dem letzten Intro-Schritt startet beim Erstintro direkt die allererste Lektion; der Replay-Fall aus dem Lernpfad bleibt separat.
+- Neuer zentraler Video-Audio-Gate eingefuehrt (`core/video_audio_gate.js`): Wenn Videos stumm starten, wird zuerst ein Ton-Hinweis gezeigt. Eingeschalteter Ton bleibt in Intro-Serien stabil erhalten.
+- Abschnittsvideos als einheitliches System vorbereitet und eingebunden: neue Module `section_progress`, `section_video_gate`, `section_video_flow` sowie zentrale Video-Konfiguration fuer `Lehrjahr 1 / Level 1`.
+- Level-1-Abschnitte auf gemeinsame Video-Struktur umgestellt (`section_video_config.js`), damit kuenftig vor allem nur noch neue Videos eingetragen werden muessen.
+- Abschnitts-Gate-Logik umgesetzt: Nach dem Ende eines Abschnitts wird an der Abschnittsgrenze ein Video freigeschaltet; erst nach dem Abschnittsvideo werden die Lektionen des naechsten Abschnitts freigegeben.
+- Lernpfad-Separatoren fuer Abschnitte ueberarbeitet: ganzer Banner klickbar, kompakter Play-Slot links, Status-Symbol rechts, Dummy-Slot fuer videolose Separatoren und sauber zentrierte Titel.
+- Abschnitts-Video-Overlay ueberarbeitet: gleicher Grundcontainer fuer Abschnitts- und Levelvideos, smartphone-tauglicher Portrait-Look, automatische Anpassung an das echte Seitenverhaeltnis des geladenen Videos.
+- Abschnitts-Video-Testflow ergaenzt: eigener `Video-Test` in der Topbar, um die Freigabe fuer `Arbeits- & Wegeunfaelle` ohne komplettes Durchspielen direkt zu pruefen.
+- Lernpfad-Section-Banner optisch weiter verfeinert: waermere, roetlichere Separator-Optik statt zu dunklem Braun/Schwarz.
+- Levelwechsel als sichtbarer Lernpfad-Block wieder entfernt. Stattdessen wird der Leveluebergang jetzt als Hintergrund-Event behandelt und spielt beim Erreichen automatisch ein Levelvideo ab.
+- Levelwechsel vorbereitet: neuer Fortschrittsspeicher fuer gesehene Leveluebergangsvideos sowie Konfiguration fuer `jahr1_level2`; Test ueber `Level-Test` in der Topbar moeglich.
+- Start-Flash behoben: alte Lern-UI startet in `index.html` bereits versteckt, sodass beim Laden kein falscher alter Screen mehr kurz aufblitzt.
+- GitHub-Livezugang abgesichert: einfache Passwortabfrage fuer `github.io`, lokal weiterhin ohne Abfrage.
+- Testmodus ausgebaut: globale Freischaltung `alle frei` und zusaetzliche lokale Testpfade fuer Abschnitts- und Levelvideo-Tests.
+- Daily-Mission-/Wiederholungslogik korrigiert: Review-Abschluesse markieren Wiederholungen jetzt sauber als erledigt, statt dieselben ueberfaelligen Inhalte immer wieder neu zu planen.
+- Streak-Bonus-Logik korrigiert: Lektionen verbrauchen den Energie-Serienbonus nicht mehr schon beim Start, sondern erst dann, wenn der Bonus tatsaechlich relevant wird.
+- Promo-/Werbevideos erweitert: Fallback-Liste auf `ad_1` bis `ad_10` ausgebaut und neue Videos fuer den bestehenden Werbe-Flow vorbereitet.
+- Neues Level- und Intro-Planungsmaterial in `Infos GPT/` dokumentiert, darunter der Split-Plan fuer die wachsende `app.js` sowie die Vorbereitung fuer Abschnittsvideo-Gates.
+
 ## 2026-02-24
 - Mobile Lernpfad: Header vereinfacht, Map-Abstaende vergroessert, Labels lesbarer, Wortumbruch verbessert.
 - Sticky-Step-Bar: erscheint beim Scrollen, zeigt aktuellen Schritt dynamisch.

@@ -76,17 +76,41 @@
     <div id="intro-screen" class="intro-screen hidden">
       <div class="intro-card">
         <div class="intro-layout">
+          <div class="intro-video-shell">
+            <div class="intro-video-frame">
+              <video id="intro-video" class="intro-video" playsinline preload="auto"></video>
+              <div id="intro-video-transition-cover" class="intro-video-transition-cover" aria-hidden="true"></div>
+              <div class="intro-video-gradient"></div>
+              <div id="intro-reaction-layer" class="intro-reaction-layer" aria-hidden="true"></div>
+              <div id="intro-chat-stack" class="intro-chat-stack" aria-hidden="true"></div>
+              <div class="intro-progress-pill">
+                <span id="intro-step-counter">1 / 10</span>
+              </div>
+              <button id="intro-mute-btn" class="intro-mute-btn" type="button">
+                Ton aus
+              </button>
+            </div>
+          </div>
+
+          <div class="intro-copy">
+            <div class="intro-kicker">Einführung</div>
+            <h2 id="intro-headline" class="intro-headline">Hi, ich bin Carmen.</h2>
+            <p id="intro-script" class="intro-script hidden"></p>
+            <button id="intro-script-toggle-btn" class="intro-script-toggle-btn" type="button">
+              Skript mitlesen
+            </button>
+          </div>
 
           <!-- Carmen Bild -->
-          <div class="intro-avatar">
+          <div class="intro-avatar intro-avatar--legacy">
             <img
               src="media/carmen_intro.png"
               alt="Carmen – deine Begleiterin in der Friseurausbildung">
           </div>
 
           <!-- Sprechblase mit Einleitungstext -->
-          <div class="intro-bubble">
-            <div id="intro-bubble-text">
+          <div class="intro-bubble intro-bubble--legacy">
+            <div id="intro-bubble-text-legacy">
               <h2>Hi, ich bin Carmen 👋</h2>
               <p>
                 Ich bin 18 Jahre alt und starte – genau wie du – meine Ausbildung im Friseurberuf.
@@ -105,15 +129,15 @@
             </div>
 
             <!-- Audio-Button (Intro-Voice von Carmen) -->
-            <button id="intro-audio-btn" class="intro-audio-btn">
+            <button id="intro-audio-btn-legacy" class="intro-audio-btn">
               ▶ Intro anhören
             </button>
-            <audio id="intro-audio" src="media/carmen_intro_audio.wav"></audio>
+            <audio id="intro-audio-legacy" src="media/carmen_intro_audio.wav"></audio>
           </div>
         </div>
 
         <!-- Button, um von Intro → Lernpfad zu wechseln -->
-        <button id="intro-start-btn" class="intro-start-btn">
+        <button id="intro-start-btn" class="intro-start-btn" type="button">
           Mit Carmen starten ✂️
         </button>
       </div>
@@ -162,7 +186,7 @@
       <div class="promo-card">
         <div class="promo-layout">
           <span class="promo-kicker">Empfehle unsere App an deine Freunde</span>
-          <div class="promo-video-shell">
+          <div id="promo-video-shell" class="promo-video-shell">
             <div id="promo-countdown" class="promo-countdown">--s</div>
             <button id="promo-unmute-btn" class="promo-unmute-btn hidden" type="button">
               Ton einschalten

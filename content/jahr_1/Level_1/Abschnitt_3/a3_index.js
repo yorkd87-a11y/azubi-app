@@ -8,6 +8,7 @@ import LEKTION_5 from "./lv1_A3_Lektion_5.js";
 import LEKTION_6 from "./lv1_A3_Lektion_6.js";
 import LEKTION_7 from "./lv1_A3_Lektion_7.js";
 import LEKTION_8 from "./lv1_A3_Lektion_8.js";
+import { getLevel1SectionVideoConfig } from "../section_video_config.js";
 
 /**
  * Abschnitt 3 - Jahr 1 / Level 1
@@ -21,6 +22,7 @@ const ABSCHNITT_3 = {
   index: 3,
   title: "Hygiene im Salon",
   description: "Infektionskette verstehen und Hygienemassnahmen richtig anwenden.",
+  video: getLevel1SectionVideoConfig("j1_l1_a3"),
   lessons: [
     LEKTION_1,
     LEKTION_2,

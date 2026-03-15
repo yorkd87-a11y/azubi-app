@@ -4,6 +4,7 @@
 import { renderLevelHeader } from "./level_header.js";
 import { getEnergy, onEnergyChange, MAX_ENERGY } from "./core/energy_system.js";
 import { getLessonCompletionPercent } from "./core/progress_store.js";
+import { createVideoAudioGate } from "./core/video_audio_gate.js";
 
 let mapRoot = null;
 let onLessonSelect = null;
@@ -50,8 +51,15 @@ function closeSectionVideoOverlay() {
   activeSectionVideoOverlay = null;
 }
 
-function openSectionVideoOverlay(videoUrl, title = "Abschnittsvideo") {
+function openSectionVideoOverlay(videoUrl, title = "Abschnittsvideo", options = {}) {
   if (!videoUrl) return;
+  const {
+    onComplete = null,
+    kicker = "Abschnittsvideo",
+    completeLabel = "Weiter zum nächsten Abschnitt",
+    showContinueButtonOnEnded = true,
+    autoCompleteOnEnded = false
+  } = options;
 
   closeSectionVideoOverlay();
 
@@ -60,18 +68,30 @@ function openSectionVideoOverlay(videoUrl, title = "Abschnittsvideo") {
   overlay.innerHTML = `
     <div class="map-video-dialog" role="dialog" aria-modal="true" aria-label="${title}">
       <div class="map-video-header">
-        <div class="map-video-kicker">Abschnittsvideo</div>
+        <div class="map-video-kicker">${kicker}</div>
         <button class="map-video-close" type="button" aria-label="Video schließen">×</button>
       </div>
       <h3 class="map-video-title">${title}</h3>
       <div class="map-video-frame">
         <video class="map-video-player" controls playsinline preload="metadata" src="${videoUrl}"></video>
       </div>
+      <div class="map-video-actions">
+        <button class="map-video-complete hidden" type="button">${completeLabel}</button>
+      </div>
     </div>
   `;
 
   const closeBtn = overlay.querySelector(".map-video-close");
+  const dialogEl = overlay.querySelector(".map-video-dialog");
+  const frameEl = overlay.querySelector(".map-video-frame");
   const videoEl = overlay.querySelector(".map-video-player");
+  const completeBtn = overlay.querySelector(".map-video-complete");
+  const videoGate = createVideoAudioGate({
+    videoEl,
+    containerEl: frameEl,
+    title: "Ton für dieses Abschnittsvideo aktivieren?",
+    text: "Dieses Video startet aktuell stumm. Du kannst jetzt den Ton einschalten oder stumm weiterschauen."
+  });
   const handleEsc = (event) => {
     if (event.key === "Escape") {
       closeSectionVideoOverlay();
@@ -83,7 +103,15 @@ function openSectionVideoOverlay(videoUrl, title = "Abschnittsvideo") {
     closeSectionVideoOverlay();
   };
 
+  const finishSectionVideo = () => {
+    if (typeof onComplete === "function") {
+      onComplete();
+    }
+    closeOverlay();
+  };
+
   closeBtn?.addEventListener("click", closeOverlay);
+  completeBtn?.addEventListener("click", finishSectionVideo);
   overlay.addEventListener("click", (event) => {
     if (event.target === overlay) {
       closeOverlay();
@@ -95,8 +123,38 @@ function openSectionVideoOverlay(videoUrl, title = "Abschnittsvideo") {
   activeSectionVideoOverlay = overlay;
 
   if (videoEl && typeof videoEl.play === "function") {
-    videoEl.play().catch(() => {});
+    videoEl.addEventListener("loadedmetadata", () => {
+      const width = Number(videoEl.videoWidth) || 0;
+      const height = Number(videoEl.videoHeight) || 0;
+      if (!width || !height || !frameEl) return;
+
+      const aspectRatio = `${width} / ${height}`;
+      frameEl.style.setProperty("--map-video-aspect-ratio", aspectRatio);
+
+      if (dialogEl) {
+        dialogEl.classList.toggle("map-video-dialog--landscape", width > height);
+        dialogEl.classList.toggle("map-video-dialog--portrait", height >= width);
+      }
+    });
+    videoEl.muted = true;
+    videoGate.reset();
+    videoGate.requestConfirmation(async () => {
+      await videoEl.play().catch(() => {});
+    });
+    videoEl.addEventListener("ended", () => {
+      if (autoCompleteOnEnded) {
+        finishSectionVideo();
+        return;
+      }
+      if (showContinueButtonOnEnded) {
+        completeBtn?.classList.remove("hidden");
+      }
+    });
   }
+}
+
+export function playMapVideoOverlay(videoUrl, title = "Video", options = {}) {
+  openSectionVideoOverlay(videoUrl, title, options);
 }
 
 /**
@@ -125,12 +183,38 @@ export function initLessonMap(rootElement, handleSelectLesson, handleMapMenuActi
       return;
     }
 
-    const separatorVideoBtn = event.target.closest(".map-separator-play-btn");
-    if (separatorVideoBtn) {
-      const videoUrl = separatorVideoBtn.dataset.separatorVideo || "";
-      const videoTitle = separatorVideoBtn.dataset.separatorTitle || "Abschnittsvideo";
+    const sectionVideoTestBtn = event.target.closest(".map-section-video-test-btn");
+    if (sectionVideoTestBtn) {
+      if (typeof onMapMenuAction === "function") {
+        onMapMenuAction("prepare-section-video-test");
+      }
+      return;
+    }
+
+    const levelVideoTestBtn = event.target.closest(".map-level-video-test-btn");
+    if (levelVideoTestBtn) {
+      if (typeof onMapMenuAction === "function") {
+        onMapMenuAction("prepare-level-video-test");
+      }
+      return;
+    }
+
+    const separatorVideoTrigger = event.target.closest(".map-separator-label[data-separator-video]");
+    if (separatorVideoTrigger) {
+      const videoUrl = separatorVideoTrigger.dataset.separatorVideo || "";
+      const videoTitle = separatorVideoTrigger.dataset.separatorTitle || "Abschnittsvideo";
+      const sectionId = separatorVideoTrigger.dataset.sectionId || "";
       if (videoUrl) {
-        openSectionVideoOverlay(videoUrl, videoTitle);
+        openSectionVideoOverlay(videoUrl, videoTitle, {
+          onComplete: () => {
+            if (sectionId && typeof onMapMenuAction === "function") {
+              onMapMenuAction({
+                type: "section-video-completed",
+                sectionId
+              });
+            }
+          }
+        });
       }
       return;
     }
@@ -152,6 +236,14 @@ export function initLessonMap(rootElement, handleSelectLesson, handleMapMenuActi
         onLessonSelect(lessonIndex);
       }
     }
+  });
+
+  mapRoot.addEventListener("keydown", (event) => {
+    const separatorVideoTrigger = event.target.closest(".map-separator-label[data-separator-video]");
+    if (!separatorVideoTrigger) return;
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    separatorVideoTrigger.click();
   });
 
   // Bei Resize die Linien neu ausrichten
@@ -221,23 +313,31 @@ export function renderLessonMap(mapData, maxUnlockedLessonIndex, options = {}) {
       const label = item.title || "";
       const kind = item.kind || "abschnitt";
       const hasVideo = kind === "section" && !!item.videoUrl;
-      const videoButton = hasVideo
+      const showVideoCta = item.showVideoCta !== false;
+      const separatorStateClass = item.videoDone
+        ? " is-done"
+        : item.videoCtaAnimated
+          ? " is-unlocked"
+          : "";
+      const statusSymbol = item.videoDone
+        ? "✓"
+        : item.videoLocked
+          ? "🔒"
+          : hasVideo
+            ? "▶"
+            : "";
+      const videoSlot = hasVideo
+        ? '<span class="map-separator-play-btn" aria-hidden="true"><span class="map-separator-play-icon" aria-hidden="true">▶</span></span>'
+        : '<span class="map-separator-play-btn map-separator-play-btn--placeholder" aria-hidden="true"></span>';
+      const separatorContent = kind === "section"
         ? `
-            <button
-              class="map-separator-play-btn"
-              type="button"
-              data-separator-video="${item.videoUrl}"
-              data-separator-title="${label}"
-              data-separator-video-required="${item.videoRequired ? "true" : "false"}"
-              aria-label="Abschnittsvideo abspielen">
-              <span class="map-separator-play-icon" aria-hidden="true">▶</span>
-              <span class="map-separator-play-label">Video starten</span>
-            </button>
+            <div class="map-separator-head">
+              ${videoSlot}
+              <span class="map-separator-title">${label}</span>
+              <span class="map-separator-status" aria-hidden="true">${statusSymbol}</span>
+            </div>
           `
-        : "";
-      if (kind === "level") {
-        continue;
-      }
+        : label;
       const separatorId = `sep-${i}`;
       markNextLabelLeft = true;
       markNextSeparatorKind = kind;
@@ -246,8 +346,11 @@ export function renderLessonMap(mapData, maxUnlockedLessonIndex, options = {}) {
         <div class="map-separator map-separator--${kind}">
           <div class="map-separator-line map-separator-line--top"></div>
           <div class="map-separator-label-wrap">
-            <div class="map-separator-label">${label}</div>
-            ${videoButton}
+            <div
+              class="map-separator-label${kind === "section" && showVideoCta ? ` is-clickable${separatorStateClass}` : ""}"
+              ${kind === "section" && showVideoCta ? `data-separator-video="${item.videoUrl}" data-separator-title="${label}" data-section-id="${item.sectionId || ""}" data-separator-video-required="${item.videoRequired ? "true" : "false"}" role="button" tabindex="0" aria-label="${item.videoButtonLabel || "Video starten"}"` : ""}>
+              ${separatorContent}
+            </div>
           </div>
           <div class="map-separator-anchor map-separator-anchor--tl" data-separator-anchor="${separatorId}-tl"></div>
           <div class="map-separator-anchor map-separator-anchor--br" data-separator-anchor="${separatorId}-br"></div>
@@ -428,9 +531,9 @@ export function renderLessonMap(mapData, maxUnlockedLessonIndex, options = {}) {
         <span class="map-nav-icon">CA</span>
         <span class="map-nav-label">Carmen</span>
       </button>
-      <button class="map-nav-btn" data-action="settings" type="button">
-        <span class="map-nav-icon">E</span>
-        <span class="map-nav-label">Einst.</span>
+      <button class="map-nav-btn" data-action="intro-preview" type="button">
+        <span class="map-nav-icon">IN</span>
+        <span class="map-nav-label">Intro</span>
       </button>
     </nav>
   `;
@@ -480,6 +583,18 @@ export function renderLessonMap(mapData, maxUnlockedLessonIndex, options = {}) {
       ? "Testmodus: Alle frei"
       : "Testmodus";
     topRow.appendChild(testToggleBtn);
+
+    const sectionVideoTestBtn = document.createElement("button");
+    sectionVideoTestBtn.type = "button";
+    sectionVideoTestBtn.className = "map-section-video-test-btn";
+    sectionVideoTestBtn.textContent = "Video-Test";
+    topRow.appendChild(sectionVideoTestBtn);
+
+    const levelVideoTestBtn = document.createElement("button");
+    levelVideoTestBtn.type = "button";
+    levelVideoTestBtn.className = "map-level-video-test-btn";
+    levelVideoTestBtn.textContent = "Level-Test";
+    topRow.appendChild(levelVideoTestBtn);
 
     energyTopEl = document.createElement("div");
     energyTopEl.className = "map-energy-badge map-energy-top";

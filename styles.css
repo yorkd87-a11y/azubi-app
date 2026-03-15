@@ -247,3 +247,76 @@
   font-weight: 700;
   cursor: pointer;
 }
+
+.video-audio-gate {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(7, 5, 6, 0.72);
+  backdrop-filter: blur(10px);
+}
+
+.video-audio-gate-card {
+  width: min(100%, 360px);
+  padding: 20px 18px 18px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(244, 207, 99, 0.16), transparent 50%),
+    rgba(22, 13, 10, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.38);
+  text-align: center;
+}
+
+.video-audio-gate-kicker {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #f4cf63;
+}
+
+.video-audio-gate-title {
+  margin: 10px 0 6px;
+  font-size: 1.2rem;
+  line-height: 1.15;
+  color: #fff5dd;
+}
+
+.video-audio-gate-text {
+  margin: 0;
+  color: rgba(255, 244, 225, 0.8);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.video-audio-gate-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.video-audio-gate-primary,
+.video-audio-gate-secondary {
+  min-height: 46px;
+  border-radius: 16px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.video-audio-gate-primary {
+  border: none;
+  background: linear-gradient(135deg, #ff9d4f, #f4cf63);
+  color: #2b1604;
+}
+
+.video-audio-gate-secondary {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(30, 18, 12, 0.88);
+  color: #fff3df;
+}

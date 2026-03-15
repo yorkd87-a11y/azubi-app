@@ -5,37 +5,85 @@
 }
 
 .map-separator--section .map-separator-label {
+  position: relative;
   display: grid;
   place-items: center;
   font-size: 1.0875rem;
   font-weight: 800;
-  color: rgba(255, 242, 222, 0.96);
-  width: min(680px, 99%);
+  color: rgba(255, 245, 231, 0.96);
+  width: min(760px, 99%);
   letter-spacing: 0.08em;
   text-align: center;
   line-height: 1.3;
-  padding: 28px 20px 40px;
-  border-radius: 22px;
+  padding: 30px 22px 30px;
+  border-radius: 28px;
   background:
-    radial-gradient(circle at top left, rgba(255, 160, 90, 0.18), transparent 58%),
-    radial-gradient(circle at bottom right, rgba(255, 107, 53, 0.16), transparent 62%),
-    linear-gradient(155deg, rgba(63, 22, 11, 0.96), rgba(46, 17, 9, 0.94));
-  border: 1px solid rgba(255, 168, 103, 0.22);
+    radial-gradient(circle at top left, rgba(255, 120, 58, 0.3), transparent 34%),
+    radial-gradient(circle at top right, rgba(244, 207, 99, 0.18), transparent 28%),
+    linear-gradient(180deg, rgba(52, 22, 14, 0.98) 0%, rgba(28, 12, 10, 0.98) 100%);
+  border: 1px solid rgba(244, 207, 99, 0.24);
   box-shadow:
-    0 18px 36px rgba(0, 0, 0, 0.22),
+    0 26px 60px rgba(0, 0, 0, 0.26),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.map-separator--section .map-separator-label.is-clickable {
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease;
+}
+
+.map-separator--section .map-separator-label.is-clickable:hover,
+.map-separator--section .map-separator-label.is-clickable:focus-visible {
+  transform: translateY(-2px);
+  box-shadow:
+    0 28px 64px rgba(0, 0, 0, 0.24),
+    0 0 0 1px rgba(255, 170, 104, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  outline: none;
+}
+
+.map-separator-head {
+  width: min(100%, 560px);
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 12px;
 }
 
 .map-separator--section .map-separator-label::after {
   content: "";
   position: absolute;
   left: 50%;
-  bottom: 24px;
-  width: 72px;
+  bottom: 18px;
+  width: 86px;
   height: 2px;
   transform: translateX(-50%);
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(255, 138, 61, 0.2), rgba(244, 207, 99, 0.95), rgba(255, 138, 61, 0.2));
+  background: linear-gradient(90deg, rgba(255, 138, 61, 0.16), rgba(244, 207, 99, 0.95), rgba(255, 138, 61, 0.16));
+}
+
+.map-separator-title {
+  display: block;
+  max-width: 100%;
+  text-align: center;
+}
+
+.map-separator-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 214, 164, 0.14);
+  color: rgba(255, 245, 231, 0.84);
+  font-size: 0.9rem;
+  line-height: 1;
 }
 
 .map-separator--section .map-separator-label-wrap::before,
@@ -65,34 +113,80 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  min-height: 42px;
-  padding: 0 16px;
+  min-width: 44px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
   border-radius: 999px;
-  border: 1px solid rgba(244, 207, 99, 0.24);
-  background: rgba(28, 13, 8, 0.94);
-  color: rgba(255, 242, 222, 0.92);
-  font-size: 0.78rem;
-  font-weight: 700;
+  border: 1px solid rgba(255, 214, 164, 0.14);
+  background: rgba(48, 22, 14, 0.72);
+  color: rgba(255, 245, 231, 0.92);
+  font-size: 0.82rem;
+  font-weight: 800;
   letter-spacing: 0.02em;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(10px);
+}
+
+.map-separator-play-btn--placeholder {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.map-separator--section .map-separator-label.is-unlocked .map-separator-play-btn {
+  border-color: rgba(244, 207, 99, 0.46);
+  background:
+    radial-gradient(circle at top left, rgba(255, 183, 110, 0.18), transparent 58%),
+    rgba(72, 34, 18, 0.84);
+  box-shadow:
+    0 18px 36px rgba(0, 0, 0, 0.24),
+    0 0 0 8px rgba(244, 207, 99, 0.08);
+  animation: map-separator-play-pulse 1.9s ease-in-out infinite;
+}
+
+.map-separator--section .map-separator-label.is-done .map-separator-play-btn {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(44, 20, 13, 0.74);
+  color: rgba(255, 242, 222, 0.72);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.14);
+}
+
+.map-separator--section .map-separator-label.is-done .map-separator-play-icon {
+  background: linear-gradient(135deg, #fff2bf, #f4cf63);
+}
+
+@keyframes map-separator-play-pulse {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow:
+      0 16px 32px rgba(0, 0, 0, 0.22),
+      0 0 0 0 rgba(244, 207, 99, 0.18);
+  }
+
+  50% {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow:
+      0 20px 38px rgba(0, 0, 0, 0.24),
+      0 0 0 12px rgba(244, 207, 99, 0.06);
+  }
 }
 
 .map-separator-play-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 999px;
   background: linear-gradient(135deg, #f4cf63, #ffb56b);
   color: #2b1705;
-  font-size: 11px;
+  font-size: 12px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
 }
 
 .map-separator-play-label {
-  transform: translateY(-0.5px);
+  display: none;
 }
 
 .map-step--pre-separator--section {
@@ -105,14 +199,18 @@
 
 @media (min-width: 1100px) {
   .map-separator--section .map-separator-label {
-    width: min(1080px, 98%);
+    width: min(1120px, 98%);
     min-height: 148px;
     padding-top: 34px;
-    padding-bottom: 26px;
+    padding-bottom: 30px;
+  }
+
+  .map-separator-head {
+    width: min(100%, 760px);
   }
 
   .map-separator--section .map-separator-label::after {
-    bottom: 40px;
+    bottom: 20px;
     width: 150px;
   }
 
@@ -132,7 +230,26 @@
 
   .map-separator--section .map-separator-label {
     font-size: 0.9rem;
-    width: min(338px, 90%);
+    width: min(352px, 92%);
+    padding: 24px 18px 26px;
+  }
+
+  .map-separator-head {
+    width: 100%;
+    gap: 10px;
+    grid-template-columns: 40px minmax(0, 1fr) 40px;
+  }
+
+  .map-separator-play-btn {
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .map-separator-status {
+    width: 26px;
+    height: 26px;
+    font-size: 0.8rem;
   }
 
   .map-step--post-separator--section {

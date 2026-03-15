@@ -1,294 +1,434 @@
-﻿/* ========== STYLES NUR FÃœR CARMENS INTRO-SCREEN ========== */
-
-  body.bereich-carmen-intro .intro-screen {
+body.bereich-carmen-intro .intro-screen {
   position: fixed;
   inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  background:
-    radial-gradient(circle at top, rgba(255, 138, 61, 0.24), transparent 24%),
-    radial-gradient(circle at 85% 12%, rgba(244, 207, 99, 0.16), transparent 18%),
-    radial-gradient(circle at bottom, #2a1000 0, #07080f 56%, #02030a 100%);
   z-index: 100;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 0;
+  background:
+    radial-gradient(circle at top left, rgba(255, 138, 61, 0.22), transparent 28%),
+    radial-gradient(circle at top right, rgba(244, 207, 99, 0.16), transparent 24%),
+    linear-gradient(180deg, #150c07 0%, #090609 54%, #040406 100%);
 }
 
-  body.bereich-carmen-intro .intro-card {
-  max-width: 1220px;
+body.bereich-carmen-intro .intro-card {
   width: 100%;
-  background:
-    radial-gradient(circle at top left, rgba(244, 207, 99, 0.22), transparent 50%),
-    radial-gradient(circle at bottom right, rgba(255, 107, 53, 0.18), transparent 60%),
-    linear-gradient(160deg, #181005 0%, #231409 52%, #120b05 100%);
-  border-radius: 28px;
-  padding: 22px 26px 18px;
-  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.65);
-  border: 1px solid rgba(244, 207, 99, 0.28);
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  background:
+    radial-gradient(circle at top, rgba(244, 207, 99, 0.1), transparent 34%),
+    linear-gradient(180deg, rgba(22, 12, 8, 0.98) 0%, rgba(10, 7, 9, 0.98) 100%);
+}
+
+body.bereich-carmen-intro .intro-layout {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 14px 0;
   gap: 14px;
 }
 
-  body.bereich-carmen-intro .intro-layout {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
-/* === Carmen Bild â€“ abgerundetes Rechteck === */
-
-  body.bereich-carmen-intro .intro-avatar {
-  flex: 0 0 210px;
-  display: flex;
-  justify-content: center;
-}
-
-  body.bereich-carmen-intro .intro-avatar img {
-  width: 320px;
-  height: 480px;
-  border-radius: 22px;
-  object-fit: cover;
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.75);
-  border: 2px solid rgba(244, 207, 99, 0.92);
-}
-
-/* === Sprechblase === */
-
-  body.bereich-carmen-intro .intro-bubble {
-  position: relative;
+body.bereich-carmen-intro .intro-video-shell {
   flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+body.bereich-carmen-intro .intro-video-frame {
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 28px;
   background:
-    radial-gradient(circle at top right, rgba(255, 138, 61, 0.1), transparent 26%),
-    rgba(14, 8, 4, 0.96);
-  border-radius: 20px;
-  padding: 14px 16px 12px;
-  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.75);
-  border: 1px solid rgba(244, 207, 99, 0.14);
+    linear-gradient(180deg, rgba(17, 9, 5, 0.9), rgba(11, 6, 4, 0.96));
+  border: 1px solid rgba(244, 207, 99, 0.18);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.44);
 }
 
-/* Dreieck der Sprechblase (zeigt zu Carmen) */
-  body.bereich-carmen-intro .intro-bubble::before {
-  content: "";
-  position: absolute;
-  left: -14px;
-  top: 42px;
-  width: 0;
-  height: 0;
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
-  border-right: 16px solid rgba(14, 8, 4, 0.96);
-}
-
-  body.bereich-carmen-intro .intro-bubble::after {
-  content: "";
-  position: absolute;
-  left: -16px;
-  top: 41px;
-  width: 0;
-  height: 0;
-  border-top: 13px solid transparent;
-  border-bottom: 13px solid transparent;
-  border-right: 18px solid rgba(244, 207, 99, 0.14);
-  z-index: -1;
-}
-
-/* Container fÃ¼r Text, damit wir ihn animieren kÃ¶nnen */
-  body.bereich-carmen-intro #intro-bubble-text h2 {
-  margin: 0 0 6px;
-  font-size: 28px;
-}
-
-/* Standardzustand: Text ist unsichtbar und leicht nach unten verschoben.
-   JS gibt nach und nach die Klasse .visible drauf. */
-  body.bereich-carmen-intro #intro-bubble-text p {
-  margin: 4px 0;
-  font-size: 25px;
-  color: var(--muted);
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-}
-
-/* Ãœberschrift auch leicht animiert */
-  body.bereich-carmen-intro #intro-bubble-text h2 {
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-}
-
-/* Sichtbar-Status, wird von JS gesetzt */
-  body.bereich-carmen-intro #intro-bubble-text .visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Audio-Button im Intro */
-
-  body.bereich-carmen-intro .intro-audio-btn {
-  margin-top: 8px;
-  padding: 7px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(244, 207, 99, 0.88);
-  background: rgba(26, 14, 6, 0.98);
-  color: #f4cf63;
-  font-size: 22px;
-  font-weight: 600;
+body.bereich-carmen-intro .intro-video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  background: #000;
   cursor: pointer;
+  transition:
+    opacity 620ms ease,
+    transform 620ms ease,
+    filter 620ms ease;
+}
+
+body.bereich-carmen-intro .intro-video.is-transitioning {
+  opacity: 0.26;
+  transform: scale(0.992);
+  filter: blur(4px);
+}
+
+body.bereich-carmen-intro .intro-video-gradient {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 34%;
+  background: linear-gradient(180deg, rgba(4, 4, 6, 0) 0%, rgba(4, 4, 6, 0.82) 100%);
+  pointer-events: none;
+}
+
+body.bereich-carmen-intro .intro-video-transition-cover {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at center, rgba(46, 22, 8, 0.1), rgba(8, 6, 8, 0.78)),
+    linear-gradient(180deg, rgba(7, 6, 8, 0.5), rgba(7, 6, 8, 0.72));
+  transition: opacity 680ms ease;
+  z-index: 1;
+}
+
+body.bereich-carmen-intro .intro-video-transition-cover.is-visible {
+  opacity: 1;
+}
+
+body.bereich-carmen-intro .intro-reaction-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 2;
+}
+
+body.bereich-carmen-intro .intro-chat-stack {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 68px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+body.bereich-carmen-intro .intro-chat-message,
+body.bereich-carmen-intro .intro-flying-message {
+  position: absolute;
+  max-width: min(82%, 310px);
+  padding: 12px 18px 28px;
+  border-radius: 20px 20px 8px 20px;
+  background: linear-gradient(135deg, rgba(255, 157, 79, 0.98), rgba(244, 207, 99, 0.96));
+  color: #2b1604;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.3;
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(255, 246, 220, 0.22) inset;
+}
+
+body.bereich-carmen-intro .intro-chat-message {
+  position: relative;
+  align-self: flex-end;
+  opacity: 0;
+  transform: translateY(26px) scale(0.8);
+}
+
+body.bereich-carmen-intro .intro-chat-message.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity 420ms ease,
+    transform 620ms cubic-bezier(0.2, 0.8, 0.24, 1);
+}
+
+body.bereich-carmen-intro .intro-chat-message.is-loved::after {
+  display: none;
+}
+
+body.bereich-carmen-intro .intro-flying-message {
+  left: 0;
+  top: 0;
+  margin: 0;
+  will-change: transform, opacity;
+}
+
+body.bereich-carmen-intro .intro-chat-text {
+  display: block;
+  padding-right: 2.6em;
+}
+
+body.bereich-carmen-intro .intro-chat-meta {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  min-height: 18px;
+}
+
+body.bereich-carmen-intro .intro-chat-status {
+  position: absolute;
+  bottom: 10px;
+  right: 18px;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  justify-content: flex-end;
+  min-width: 2.1em;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: rgba(82, 42, 6, 0.84);
+  opacity: 0;
+  transform: translateY(4px) scale(0.9);
+  transition: opacity 220ms ease, transform 260ms ease;
 }
 
-  body.bereich-carmen-intro .intro-audio-btn:hover {
-  background: rgba(38, 20, 9, 0.98);
+body.bereich-carmen-intro .intro-chat-status.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
-/* Start-Button unten */
+body.bereich-carmen-intro .intro-chat-status.is-delivered {
+  color: rgba(82, 42, 6, 0.92);
+}
 
-  body.bereich-carmen-intro .intro-start-btn {
-  margin-top: 6px;
-  width: 100%;
-  padding: 12px 18px;
+body.bereich-carmen-intro .intro-chat-status.is-read {
+  color: #fff7ef;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.34);
+}
+
+body.bereich-carmen-intro .intro-chat-hearts {
+  position: absolute;
+  bottom: 10px;
+  right: 48px;
+  width: 64px;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Herz 1 + 2 */
+body.bereich-carmen-intro .intro-chat-hearts.is-active::before,
+body.bereich-carmen-intro .intro-chat-hearts.is-active::after {
+  content: "❤";
+  position: absolute;
+  bottom: 0;
+  color: #ff7d9d;
+  font-size: 1.05rem;
+  text-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+  animation: introMessageHearts 1800ms ease-out forwards;
+}
+
+body.bereich-carmen-intro .intro-chat-hearts.is-active::before {
+  right: 4px;
+}
+
+body.bereich-carmen-intro .intro-chat-hearts.is-active::after {
+  right: 22px;
+  animation-delay: 120ms;
+}
+
+/* Herz 3 + 4 */
+body.bereich-carmen-intro .intro-chat-hearts.is-active span:first-child::before,
+body.bereich-carmen-intro .intro-chat-hearts.is-active span:first-child::after {
+  content: "❤";
+  position: absolute;
+  bottom: 0;
+  color: #ff94af;
+  font-size: 1rem;
+  text-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+  animation: introMessageHearts 1740ms ease-out forwards;
+}
+
+body.bereich-carmen-intro .intro-chat-hearts.is-active span:first-child::before {
+  right: 12px;
+  animation-delay: 60ms;
+}
+
+body.bereich-carmen-intro .intro-chat-hearts.is-active span:first-child::after {
+  right: 34px;
+  animation-delay: 190ms;
+}
+
+/* Herz 5 */
+body.bereich-carmen-intro .intro-chat-hearts.is-active span:last-child::before {
+  content: "❤";
+  position: absolute;
+  bottom: 0;
+  right: 20px;
+  color: #ff6b8a;
+  font-size: 0.92rem;
+  text-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+  animation: introMessageHearts 1660ms ease-out forwards;
+  animation-delay: 85ms;
+}
+
+body.bereich-carmen-intro .intro-progress-pill {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
   border-radius: 999px;
-  border: none;
-  background: linear-gradient(135deg, #ff9b48, #f4cf63);
-  color: #2b1604;
+  background: rgba(13, 8, 6, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 246, 226, 0.92);
+  font-size: 0.78rem;
   font-weight: 700;
-  font-size: 28px;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(10px);
+}
+
+body.bereich-carmen-intro .intro-mute-btn {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 8, 8, 0.76);
+  color: rgba(255, 245, 231, 0.92);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 28px rgba(255, 138, 61, 0.18);
-  transition: transform 0.1s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  backdrop-filter: blur(10px);
+  z-index: 2;
 }
 
-  body.bereich-carmen-intro .intro-start-btn:hover {
-  filter: brightness(1.05);
-  box-shadow: 0 20px 46px rgba(0, 0, 0, 0.75);
+body.bereich-carmen-intro .intro-mute-btn.is-active {
+  border-color: rgba(244, 207, 99, 0.42);
+  background: rgba(42, 25, 12, 0.84);
+  color: #fff2c2;
 }
 
-  body.bereich-carmen-intro .intro-start-btn:active {
-  transform: translateY(1px) scale(0.98);
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.7);
+body.bereich-carmen-intro .intro-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px;
 }
 
-/* =============================================
-   MOBILE-OPTIMIERUNG (max-width: 768px)
-   Desktop-Layout bleibt vollstÃ¤ndig unverÃ¤ndert.
-   ============================================= */
+body.bereich-carmen-intro .intro-kicker {
+  display: none;
+}
 
-@media (max-width: 768px) {
+body.bereich-carmen-intro .intro-headline {
+  display: none;
+}
 
-  /* Screen fÃ¼llt gesamten Viewport */
-  body.bereich-carmen-intro .intro-screen {
-    padding: 0;
-    align-items: stretch;
-    overflow: hidden;
-  }
+body.bereich-carmen-intro .intro-script {
+  order: 2;
+  margin: 0;
+  width: 100%;
+  max-width: 520px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(12, 8, 7, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 242, 222, 0.88);
+  font-size: 0.9rem;
+  line-height: 1.46;
+  text-align: left;
+}
 
-  /* Karte = voller Bildschirm als Flex-Spalte:
-     [Bubble] â†’ [Avatar flex:1] â†’ [Button] */
-  body.bereich-carmen-intro .intro-card {
-    height: 100dvh;
-    border-radius: 0;
-    padding: 0;
-    gap: 0;
-    display: flex;
-    flex-direction: column;
-  }
+body.bereich-carmen-intro .intro-script-toggle-btn {
+  order: 1;
+  align-self: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(20, 13, 10, 0.74);
+  color: rgba(255, 238, 213, 0.72);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+}
 
-  /* Layout-Bereich nimmt den gesamten Platz zwischen
-     Kartenrand und Button ein, kein Scrollen */
-  body.bereich-carmen-intro .intro-layout {
-    flex: 1;
-    min-height: 0;           /* Pflicht: Flex-Kind darf schrumpfen */
-    flex-direction: column;
-    align-items: center;
-    padding: 18px 18px 0;
-    gap: 14px;
-    overflow: hidden;
-  }
+body.bereich-carmen-intro .intro-start-btn {
+  width: calc(100% - 28px);
+  margin: 14px auto 0;
+  min-height: 74px;
+  padding: 0 24px calc(env(safe-area-inset-bottom, 0px) * 0.45);
+  border: none;
+  position: relative;
+  border-radius: 28px 28px 10px 28px;
+  background: linear-gradient(135deg, #ff9d4f, #f4cf63);
+  color: #2b1604;
+  font: inherit;
+  font-size: 1.18rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.24);
+  transform-origin: center bottom;
+}
 
-  /* Bubble nimmt nur so viel Platz wie nÃ¶tig â€“ nie weniger */
-  body.bereich-carmen-intro .intro-bubble {
-    order: 1;
-    flex-shrink: 0;
-    width: 100%;
-    padding: 14px 16px 12px;
-  }
+body.bereich-carmen-intro .intro-start-btn::after {
+  content: "";
+  position: absolute;
+  right: 18px;
+  bottom: -8px;
+  width: 18px;
+  height: 18px;
+  background: #f6bf58;
+  border-radius: 0 0 6px 0;
+  transform: rotate(45deg);
+  box-shadow: 6px 8px 18px rgba(0, 0, 0, 0.14);
+}
 
-  /* Pfeil zeigt nach unten zum Avatar */
-  body.bereich-carmen-intro .intro-bubble::before {
-    left: 50%;
-    top: auto;
-    bottom: -14px;
-    transform: translateX(-50%);
-    border-left: 12px solid transparent;
-    border-right: 12px solid transparent;
-    border-top: 16px solid rgba(4, 6, 18, 0.96);
-    border-bottom: none;
-  }
+body.bereich-carmen-intro .intro-start-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
 
-  body.bereich-carmen-intro .intro-bubble::after {
-    left: 50%;
-    top: auto;
-    bottom: -17px;
-    transform: translateX(-50%);
-    border-left: 14px solid transparent;
-    border-right: 14px solid transparent;
-    border-top: 18px solid rgba(255, 255, 255, 0.08);
-    border-bottom: none;
-    border-right: none;
-  }
+body.bereich-carmen-intro .intro-start-btn.is-pressing {
+  transform: scale(0.93);
+  filter: brightness(0.92) saturate(1.12);
+  transition:
+    transform 280ms ease,
+    filter 280ms ease;
+}
 
-  /* Avatar fÃ¼llt den gesamten Restplatz nach der Bubble.
-     Das Bild skaliert automatisch mit â€“ immer so groÃŸ wie mÃ¶glich. */
-  body.bereich-carmen-intro .intro-avatar {
-    order: 2;
-    flex: 1;                 /* nimmt allen verbleibenden Platz */
-    min-height: 60px;        /* mindestens sichtbar */
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    padding-bottom: 14px;
-  }
-
-  body.bereich-carmen-intro .intro-avatar img {
-    max-height: 100%;        /* nie grÃ¶ÃŸer als der verfÃ¼gbare Platz */
-    width: auto;
-    max-width: 85%;
-    object-fit: contain;
-    border-radius: 16px;
-  }
-
-  /* Texte */
-  body.bereich-carmen-intro #intro-bubble-text h2 {
-    font-size: 19px;
-    margin-bottom: 6px;
-  }
-
-  body.bereich-carmen-intro #intro-bubble-text p {
-    font-size: 14px;
-    line-height: 1.55;
-  }
-
-  /* Audio-Button */
-  body.bereich-carmen-intro .intro-audio-btn {
-    font-size: 14px;
-    padding: 6px 12px;
-    margin-top: 8px;
-  }
-
-  /* Start-Button: am unteren Rand, Safe Area fÃ¼r iPhone-Strich */
+@media (prefers-reduced-motion: reduce) {
+  body.bereich-carmen-intro .intro-video,
+  body.bereich-carmen-intro .intro-chat-message,
   body.bereich-carmen-intro .intro-start-btn {
-    flex-shrink: 0;
-    margin: 0;
-    border-radius: 0;
-    padding: 16px 20px;
-    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    font-size: 18px;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    transition: none;
   }
 }
 
+@keyframes introMessageHearts {
+  0%   { opacity: 0; transform: translateY(18px) scale(0.46); }
+  20%  { opacity: 1; transform: translateY(-10px) scale(1.22); }
+  100% { opacity: 0; transform: translateY(-130px) scale(0.88); }
+}
+
+body.bereich-carmen-intro .intro-avatar--legacy,
+body.bereich-carmen-intro .intro-bubble--legacy,
+body.bereich-carmen-intro .intro-audio-btn,
+body.bereich-carmen-intro #intro-bubble-text-legacy,
+body.bereich-carmen-intro .intro-avatar--legacy img {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  body.bereich-carmen-intro .intro-card {
+    max-width: 520px;
+    margin: 0 auto;
+    border-left: 1px solid rgba(244, 207, 99, 0.1);
+    border-right: 1px solid rgba(244, 207, 99, 0.1);
+  }
+
+  body.bereich-carmen-intro .intro-layout {
+    padding: 18px 18px 0;
+    gap: 16px;
+  }
+}

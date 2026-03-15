@@ -8,6 +8,7 @@ import LEKTION_5 from "./lv1_A1_Lektion_5.js";
 import LEKTION_6 from "./lv1_A1_Lektion_6.js";
 import LEKTION_7 from "./lv1_A1_Lektion_7.js";
 import LEKTION_8 from "./lv1_A1_Lektion_8.js";
+import { getLevel1SectionVideoConfig } from "../section_video_config.js";
 
 /**
  * Abschnitt 1 – Jahr 1 / Level 1
@@ -20,6 +21,7 @@ const ABSCHNITT_1 = {
   index: 1,
   title: "Grundlagen im Salon",
   description: "Dein start im Salon, Auftreten, Rechte und Pflichten.",
+  video: getLevel1SectionVideoConfig("j1_l1_a1"),
   lessons: [
     LEKTION_1,
     LEKTION_2,

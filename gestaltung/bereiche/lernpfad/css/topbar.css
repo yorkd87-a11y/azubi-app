@@ -16,8 +16,16 @@
   order: 2;
 }
 
+.map-top-row .map-section-video-test-btn {
+  order: 2;
+}
+
+.map-top-row .map-level-video-test-btn {
+  order: 2;
+}
+
 .map-top-row .map-energy-badge {
-  order: 3;
+  order: 4;
 }
 
 .map-top-row .map-back-btn {
@@ -47,7 +55,9 @@
   white-space: nowrap;
 }
 
-.map-test-toggle-btn {
+.map-test-toggle-btn,
+.map-section-video-test-btn,
+.map-level-video-test-btn {
   min-height: 44px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -72,6 +82,16 @@
   color: #fff6dc;
 }
 
+.map-section-video-test-btn {
+  border-color: rgba(244, 207, 99, 0.24);
+  color: rgba(255, 246, 226, 0.9);
+}
+
+.map-level-video-test-btn {
+  border-color: rgba(255, 255, 255, 0.16);
+  color: rgba(255, 246, 226, 0.88);
+}
+
 @media (max-width: 768px) {
   .map-top-row {
     flex-wrap: wrap;
@@ -88,7 +108,9 @@
     font-size: 13px;
   }
 
-  .map-test-toggle-btn {
+  .map-test-toggle-btn,
+  .map-section-video-test-btn,
+  .map-level-video-test-btn {
     min-height: 40px;
     padding: 0 12px;
     font-size: 0.68rem;

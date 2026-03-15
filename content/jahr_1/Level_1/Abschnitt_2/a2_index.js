@@ -8,20 +8,21 @@ import LEKTION_5 from "./lv1_A2_Lektion_5.js";
 import LEKTION_6 from "./lv1_A2_Lektion_6.js";
 import LEKTION_7 from "./lv1_A2_Lektion_7.js";
 import LEKTION_8 from "./lv1_A2_Lektion_8.js";
+import { getLevel1SectionVideoConfig } from "../section_video_config.js";
 
 /**
- * Abschnitt 2 – Jahr 1 / Level 1
- * Thema: Arbeits- & Wegeunfälle, Unfallverhütung im Salon
+ * Abschnitt 2 - Jahr 1 / Level 1
+ * Thema: Arbeits- & Wegeunfaelle, Unfallverhuetung im Salon
  */
 const ABSCHNITT_2 = {
   id: "j1_l1_a2",
   jahr: 1,
   level: 1,
   index: 2,
-  title: "Arbeits- & Wegeunfälle, Unfallverhütung",
+  title: "Arbeits- & Wegeunfaelle, Unfallverhuetung",
   description:
-    "Was ist ein Arbeits- oder Wegeunfall und wie verhinderst du Unfälle im Salonalltag: Ordnung, Ruhe, Körperhaltung, Kabel & Werkzeuge.",
-  videoUrl: "./media/videos/Abschnitte/abschnitt_arbeitsunfälle.mp4",
+    "Was ist ein Arbeits- oder Wegeunfall und wie verhinderst du Unfaelle im Salonalltag: Ordnung, Ruhe, Koerperhaltung, Kabel und Werkzeuge.",
+  video: getLevel1SectionVideoConfig("j1_l1_a2"),
   lessons: [
     LEKTION_1,
     LEKTION_2,

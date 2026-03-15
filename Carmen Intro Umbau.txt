@@ -1,0 +1,95 @@
+Lass uns Carmen Intro ausbauen.
+In der heutigen zeit sehen sich junge Menschen überwiegend kurz Videos an.
+
+Mit diesem Prozess wir der User durch den Start geführt.
+Wir ersetzen den bisherigen Textbloc, das Audio und das Bild durch Einen Videocontainer. 
+
+Unter dem Video soll es einen kleinen button geben, wo man das skript mit lesen kann. Alternativ kannst du es auch als art untertitel machen, allerdings standardmäßig ausblenden.
+
+Der user gibt dann mithilfe des Buttons Feedback und das nächste Video kommt.
+
+
+Carmen Intro kommt ja grundsätzlich nur einmal bei ersten kennenlernen der App. Baue also alles aus und lege mir den Ablauf im Lernpfad menü.
+
+Die Videos findest du hier: C:\Users\York\Desktop\Azubi App mit Claude\media\videos\Einführung
+
+Erstelle dir alle notwenigen Datein zum Ablauf und Prozess. Nimm nur die Texte von Sie sagt. Der rest waren Anweisungen für Grok.
+
+Ich habe folgenden Ablauf erstellt
+
+
+Carmen Intro und Einführung
+
+Video 1:
+
+Hi, ich bin Carmen. Ich bin 18 Jahre Alt und starte genau wie du meine Ausbildung im Friseurberuf.
+
+Button für weiter: Hi Carmen.
+
+Video 2:
+
+
+"In dieser App lernen wir gemeinsam alles, was du für Schule, Salon und Prüfung brauchst:
+
+Button für weiter: Erzähl mir mehr Carmen!
+
+
+Video 3:
+
+"Ok, gerne! Du lernst alles über den ersten Tag im Salon, über Hygiene,  Kundenempfang bis hin zu Haar- und Kopfhaut-Wissen."
+
+Button für weiter: Wow! Was noch?
+
+
+Video 4:
+Sie sagt: Du bekommst kurze Erklärungen, viele Fragen zum Üben und echte Situationen aus dem Salon – so, wie sie wirklich passieren. 
+Anweisung: Bitte ohne Texteinblendung, keine winkenden arme oder komische bewegungen. Bewegungen sollten zum gesprochenen Text passen
+
+Button für Weiter: Das kling spannen!
+
+
+
+Video 5:
+
+Sie sagt: "Wenn du bereit bist, begleite ich dich Schritt für Schritt durch deine Ausbildung. Lass uns jetzt den Lernpfad genauer ansehen."
+Anweisung: Bitte ohne Texteinblendung, keine winkenden arme oder komische bewegungen. Bewegungen sollten zum gesprochenen Text passen
+
+Button für Weiter: Zeig mir den Lernpfad.
+
+Video 6:
+
+Sie sagt: Das ist der Lernpfad. Auf diesen durchläufst du die verschiedenen Lehrjahre mit den Abschnitten zu den Themen. 
+Am Ende jedes Abschnittes kommt nochmal eine Frage-Quiz Runde.
+
+Button für weiter: Easy, Ich verstehe.
+
+Video 7:
+Sie sagt: "Im unteren Bereich findest du das Short Menü. Dort findest du die Profileinstellungen und Shortcuts zu deinen täglichen Aufgaben"
+Anweisung: Bitte ohne Texteinblendung, keine winkenden arme oder komische bewegungen. Bewegungen sollten zum gesprochenen Text passen.
+Animation: Das Menü im unteren Bild soll aufleuchten, wenn sie dort hin zeigt.
+
+Button für weiter: Sehr hilfreich! wie gehts weiter?
+
+Video 8
+
+Sie sagt: "Jetzt kennst du die wichtigsten Grundlagen der Lern-App. Aber, ich bin nicht alleine: Bebrüßen wir unsere Ausbilderin Gisela"
+Anweisung: Bitte ohne Texteinblendung, keine winkenden arme oder komische bewegungen. Bewegungen sollten zum gesprochenen Text passen.
+Animation: Beim aufruf zur Begrüßung schwenkt sie die arme nach rechts.
+
+Button für weiter: Begrüßen wir Gisela.
+
+
+Video 9
+
+Sie sagt: "Vielen liebe Dank für die herzliche Begrüßung Carmen." -> Animation: Sie Blickt nach links und freut sich. 
+Sie sagt: "Ich freue mich dich kennenzulernen. Ich bin Gisela und bin schon sehr gespannt, wie du die Lern-App findest. Lass uns starten" Animation: Sie Blickt nach vorne und freut sich dich kennenzulernen. 
+Anweisung: Bitte ohne Texteinblendung, keine winkenden arme oder komische bewegungen. Bewegungen sollten zum gesprochenen Text passen.
+
+Button für weiter: Ich bin Bereit.
+
+Video 10:
+
+Sie sagt: "Danke Gisela. Beginnen wir nun mit dem ersten Abschnitt: Grundlagen im Salon. Ich wünsche dir viel Erfolg und wir sehen uns bald wieder." 
+Anweisung: Bitte ohne Texteinblendung, keine winkenden arme oder komische bewegungen. Bewegungen sollten zum gesprochenen Text passen.
+
+Button für weiter: Endlich geht´s los! -> Automatischer Start mit Grundlagen im Salon
